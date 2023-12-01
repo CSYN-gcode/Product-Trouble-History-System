@@ -1,48 +1,53 @@
 <!-- Navbar -->
 <nav class="main-header navbar navbar-expand navbar-white navbar-light">
     <!-- Left navbar links -->
-    <ul class="navbar-nav mr-auto">
+    <ul class="navbar-nav">
         <li class="nav-item">
             <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
-            <a href="" class="nav-link">Laravel 8 Template</a>
+            <a href="{{ route('dashboard') }}" class="nav-link">DMR & PQC</a>
         </li>
     </ul>
 
     <!-- Right navbar links -->
-    <div class="navbar-nav">
+    <ul class="navbar-nav ml-auto">
         <li class="nav-item dropdown">
-            <button class="btn dropdown-toggle theme-color" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                {{-- {{ ucwords($_SESSION["session_firstname"]) .' '. ucwords($_SESSION["session_lastname"]) }}&nbsp;<i class="far fa-user"></i> --}}
-            </button>
-            <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-left">
-                <li>
-                    <a class="dropdown-item theme-color" href="#" style="cursor: not-allowed"><i class="fas fa-user mr-2"></i>Profile</a>
-                </li>
-                <li>
-                    <a class="dropdown-item theme-color" data-bs-toggle="modal" data-bs-target="#modalLogout"><i class="fa-solid fa-arrow-right mr-2"></i>Logout</a>
-                </li>
-            </ul>
+            <a class="nav-link" data-toggle="" href="#">
+                <i class="far fa-user"></i>
+                @php
+                    echo $_SESSION['rapidx_name'];
+                @endphp
+            </a>
+            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                <div class="dropdown-divider"></div>
+                <span href="#" class="dropdown-item" id="aLogout" data-toggle="modal" data-target="#modalLogout">
+                    <i class="fas fa-user mr-2"></i>Logout
+                </span>
+            </div>
         </li>
-    </div>
+    </ul>
 </nav>
 
 <div class="modal fade" id="modalLogout">
     <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title"><i class="fa fa-info-circle"></i> Logout</h4>
-                <button type="button" class="btn-close" style="margin-top: 3px;" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-content modal-sm">
+            <div class="modal-header bg-dark">
+                <h4 class="modal-title"><i class="fa fa-user"></i> Logout</h4>
+                <button type="button" style="color: #fff" class="close" data-dismiss="modal"
+                    aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <form id="formSignOut">
                 @csrf
                 <div class="modal-body">
-                    <p id="lblSignOut" class="mt-2 theme-color">Are you sure to logout your account?</p>
+                    <label id="lblSignOut" class="text-secondary mt-2">Are you sure to logout your account?</label>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default theme-color" data-bs-dismiss="modal">No</button>
-                    <button type="button" id="btnLogout" class="btn theme-color-bg text-white"><i id="iconLogout" class="fa fa-check"></i> Yes</button>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                    <button type="submit" id="btnSignOut" class="btn btn-dark"><i id="iBtnSignOutIcon"
+                            class="fa fa-check"></i> Yes</button>
                 </div>
             </form>
         </div>

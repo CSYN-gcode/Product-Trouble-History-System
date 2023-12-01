@@ -1,0 +1,50 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateProductIdentificationsTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('p1_product_identifications', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('device_name');
+            $table->string('po_number');
+            $table->string('item_code');
+            $table->string('die_no')->nullable();
+            $table->string('drawing_no')->nullable();
+            $table->string('rev_no')->nullable();
+            $table->string('request_type')->nullable()->comment = '1 - For Maintenance, 2 - Temporary Stop';
+            $table->string('start_date_time');
+            $table->unsignedTinyInteger('status')->default(0)->comment = '0 - For Submission, 1 - For Conformance, 2 - Ongoing Condition Checking, 3 - Request Completed';
+            $table->unsignedTinyInteger('process_status')->default(1)->comment = '1 - Product Identification, 2 - Dieset Condition, 3 - Dieset Condition Checking, 4 - Machine Setup';
+
+            // Defaults
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('last_updated_by')->nullable();
+            $table->tinyInteger('logdel')->default(0)->comment = '0-Active, 1-Deleted';
+            $table->timestamps();
+
+            // Foreign Key
+            $table->foreign('created_by')->references('id')->on('tbl_users');
+            $table->foreign('last_updated_by')->references('id')->on('tbl_users');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('p1_product_identifications');
+    }
+}

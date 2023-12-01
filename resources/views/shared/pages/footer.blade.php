@@ -2,7 +2,7 @@
     <div class="float-right d-none d-sm-block">
         <b id="footerTimer"></b>
     </div>
-    <strong>Laravel 8 Template</strong>&nbsp;<small>Ver. 1.0</small>
+    <strong><a href="https://www.pricon.com.ph/index.php/en/" target="_blank">Pricon Microelectronics, Inc.</a></strong>
 </footer>
 
 <script type="text/javascript">

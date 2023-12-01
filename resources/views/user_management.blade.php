@@ -1,6 +1,20 @@
-@extends('layouts.admin_layout')
+@php $layout = 'layouts.super_user_layout'; @endphp
+@auth
+    @php
+    if (Auth::user()->user_level_id == 1) {
+        $layout = 'layouts.super_user_layout';
+    } elseif (Auth::user()->user_level_id == 2) {
+        $layout = 'layouts.admin_layout';
+    } elseif (Auth::user()->user_level_id == 3) {
+        $layout = 'layouts.user_layout';
+    }
+    @endphp
+@endauth
 
+@extends($layout)
 @section('title', 'Dashboard')
+
+{{-- CONTENT PAGE--}}
 @section('content_page')
     <div class="content-wrapper">
         <!-- Main content -->
@@ -27,63 +41,28 @@
                         <div class="card">
                             <div class="card-header">
                                 <h3 class="card-title" style="margin-top: 8px;">User Management</h3>
-                                {{-- <button class="btn float-right reload"><i class="fas fa-sync-alt"></i></button> --}}
                             </div>
                             <div class="card-body">
+                                <div class="text-right mt-4">
+                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAddUser"
+                                        id="addUserModalbtn"><i class="fa fa-plus fa-md"></i> Add Staff</button>
+                                </div><br>
 
-                                <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#user" type="button" role="tab">Verified User Tab</button>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#pendingUser" type="button" role="tab">Pending User Tab</button>
-                                    </li>
-                                </ul>
-                                <div class="tab-content" id="myTabContent">
-                                    <div class="tab-pane fade show active" id="user" role="tabpanel">
-                                        <div class="text-right mt-4">                   
-                                            <button type="button" class="btn btn-primary mb-3" id="buttonAddUser" data-bs-toggle="modal" data-bs-target="#modalAddUser"><i class="fa fa-plus fa-md"></i> New User</button>
-                                        </div>
-                                        <div class="table-responsive">
-                                            <table id="tableUsers" class="table table-bordered table-hover nowrap" style="width: 100%;">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Action</th>
-                                                        <th>Status</th>
-                                                        <th>Authentication</th>
-                                                        <th>First Name</th>
-                                                        <th>Last Name</th>
-                                                        <th>Middle Initial</th>
-                                                        <th>Email</th>
-                                                        <th>Username</th>
-                                                        <th>User Level</th>
-                                                    </tr>
-                                                </thead>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <div class="tab-pane fade" id="pendingUser" role="tabpanel">
-                                        <div class="table-responsive" style="margin-top: 8.5%;">
-                                            <table id="tablePendingUsers" class="table table-bordered table-hover nowrap" style="width: 100%;">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Action</th>
-                                                        <th>Status</th>
-                                                        <th>Authentication</th>
-                                                        <th>First Name</th>
-                                                        <th>Last Name</th>
-                                                        <th>Middle Initial</th>
-                                                        <th>Email</th>
-                                                        <th>Username</th>
-                                                        <th>User Level</th>
-                                                    </tr>
-                                                </thead>
-                                            </table>
-                                        </div>
-                                    </div>
+                                <div class="table-responsive">
+                                    <table id="tableUsers" class="table table-sm table-bordered table-striped table-hover display nowrap text-center" style="width: 100%;">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 20%;">Name</th>
+                                                <th style="display: none">Section_Name</th>
+                                                <th style="width: 15%;">Section</th>
+                                                <th style="width: 20%;">Position</th>
+                                                <th style="width: 20%;">User Level</th>
+                                                <th style="width: 10%;">Status</th>
+                                                <th style="width: 15%;">Action</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
                                 </div>
-
-                                
                             </div>
                         </div>
                     </div>
@@ -91,283 +70,474 @@
             </div>
         </section>
     </div>
-    
-    <!-- Add User Modal Start -->
-    <div class="modal fade" id="modalAddUser" data-bs-keyboard="false" data-bs-backdrop="static">
-        <div class="modal-dialog modal-lg">
+
+    <!-- ADD USER MODAL START -->
+    <div class="modal fade" id="modalAddUser">
+        <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title"><i class="fas fa-info-circle"></i>&nbsp;Add User</h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-header bg-dark">
+                    <h4 class="modal-title"><i class="fa fa-user"></i>&nbsp;&nbsp;Add Staff</h4>
+                    <button type="button" style="color: #fff;" class="close" data-bs-dismiss="modal"
+                        aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-                <form method="post" id="formAddUser" autocomplete="off">
+                <form method="post" id="addUserForm">
                     @csrf
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-md-12">
-                                <div class="card-body">
-                                    <!-- For User Id -->
-                                    <input type="text" class="form-control" style="display: none" name="user_id" id="userId" aria-label="Default" aria-describedby="inputGroup-sizing-default">
-                                    
-                                    <div class="mb-3">
-                                        <label for="firstname" class="form-label">First Name<span class="text-danger" title="Required">*</span></label>
-                                        <input type="text" class="form-control" name="firstname" id="textFirstname" placeholder="Firstname">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="lastname" class="form-label">Last Name<span class="text-danger" title="Required">*</span></label>
-                                        <input type="text" class="form-control" name="lastname" id="textLastname" placeholder="Lastname">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="middleInitial" class="form-label">Middle Initial</label>
-                                        <input type="text" class="form-control" name="middle_initial" id="textMiddleInitial" placeholder="Middle Initial">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="email" class="form-label">Email address<span class="text-danger" title="Required">*</span></label>
-                                        <input type="text" class="form-control" name="email" id="textEmail" placeholder="Email Address">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="userLevel" class="form-label">User Level<span class="text-danger" title="Required">*</span></label>
-                                        <select class="form-select" id="userLevel" name="user_level">
-                                            <!-- Auto Generated -->
-                                        </select>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="username" class="form-label">Username<span class="text-danger" title="Required">*</span></label>
-                                        <input type="text" class="form-control" name="username" id="textUsername" placeholder="Username">
-                                    </div>
-                                    <div class="mb-3" id="divPassword">
-                                        <label for="password" class="form-label">Password<span class="text-danger" title="Required">*</span></label>
-                                        <input type="password" class="form-control" name="password" id="textPassword" placeholder="Password">
-                                    </div>
-                                    <div class="mb-3" id="divConfirmPassword">
-                                        <label for="confirmPassword" class="form-label">Confirm Password<span class="text-danger" title="Required">*</span></label>
-                                        <input type="password" class="form-control" name="confirm_password" id="textConfirmPassword" placeholder="Confirm Password">
-                                    </div>
+                            <div class="col-sm-12">
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label>Name</label>
+                                    <select class="form-control" id="selAddUserAccessUserId"
+                                    name="user_id" style="width: 100%;">
+                                    <option disabled selected>-- Select User --</option>
+                                    <!-- <option disabled selected>-- Select User --</option> <option value="AL">Alabama</option> -->
+                                    <!-- <option value="WY">Wyoming</option> -->
+                                    </select>
+                                </div>
+                            </div>
 
-                                    <!-- Other fields -->
-                                    {{-- <div class="input-group mb-3">
-                                        <div class="input-group-prepend w-50">
-                                            <span class="input-group-text w-100" id="inputGroup-sizing-default">First Name</span>
-                                        </div>
-                                        <input type="text" class="form-control" name="first_name" id="txtAddFirstName" aria-label="Default" aria-describedby="inputGroup-sizing-default">
-                                    </div>
-                                    <div class="input-group mb-3">
-                                        <div class="input-group-prepend w-50">
-                                            <span class="input-group-text w-100" id="inputGroup-sizing-default">Middle Initial</span>
-                                        </div>
-                                        <input type="text" class="form-control" name="middle_initial" id="txtAddMiddleInitial" aria-label="Default" aria-describedby="inputGroup-sizing-default">
-                                    </div>
-                                    <div class="input-group mb-3">
-                                        <div class="input-group-prepend w-50">
-                                            <span class="input-group-text w-100" id="inputGroup-sizing-default">Last Name</span>
-                                        </div>
-                                        <input type="text" class="form-control" name="last_name" id="txtAddLastName" aria-label="Default" aria-describedby="inputGroup-sizing-default">
-                                    </div>
-                                    <div class="input-group mb-3">
-                                        <div class="input-group-prepend w-50">
-                                            <span class="input-group-text w-100" id="inputGroup-sizing-default">Email Address</span>
-                                        </div>
-                                        <input type="text" class="form-control" name="email_address" id="txtAddEmailAddress" aria-label="Default" aria-describedby="inputGroup-sizing-default">
-                                    </div>
-                                    <div class="input-group mb-3">
-                                        <div class="input-group-prepend w-50">
-                                            <span class="input-group-text w-100" id="inputGroup-sizing-default">Username</span>
-                                        </div>
-                                        <input type="text" class="form-control" name="username" id="txtAddUsername" aria-label="Default" aria-describedby="inputGroup-sizing-default">
-                                    </div>
-                                    <div class="input-group mb-3">
-                                        <div class="input-group-prepend w-50">
-                                            <span class="input-group-text w-100" id="inputGroup-sizing-default">Username</span>
-                                        </div>
-                                        <input type="text" class="form-control" name="username" id="txtAddUsername" aria-label="Default" aria-describedby="inputGroup-sizing-default">
-                                    </div> --}}
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label><strong>Section :</strong></label>
+                                    <select class="form-control" name="section_id"
+                                        id="selSection" style="width: 100%;">
+                                        <option value="0" disabled selected>-- Select Department --</option>
+                                        <option value="1">PPS-TS</option>
+                                        <option value="2">PPS-CN</option>
+                                        <option value="3">PPS-ADMIN</option>
+                                        <option value="4">ADIMINISTRATOR</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label><strong>Position:</strong></label>
+                                    <select class="form-control" name="position_id"
+                                        id="selPosition" style="width: 100%;">
+                                        <option value="0" disabled selected>-- Select Position --</option>
+                                        <option value="1">Production Operator</option>
+                                        <option value="2">Die Maintenance Engineering</option>
+                                        <option value="3">Process Technician</option>
+                                        <option value="4">Process Engineering</option>
+                                        <option value="5">LQC</option>
+                                        <option value="6">Sr. Engineer</option>
+                                        <option value="7">Manager</option>
+                                        <option value="8">Administrator</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label>User Level</label>
+                                    <select class="form-control" name="userLevel"
+                                        id="selAddUserLevelId" style="width: 100%;">
+                                        <option disabled selected>-- Select Userlevel --</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" id="btnAddUser" class="btn btn-primary"><i id="btnAddUserIcon"
+                                class="fa fa-check"></i> Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- ADD USER MODAL END -->
+
+    <!-- DEACTIVATE USER MODAL START -->
+    <div class="modal fade" id="modalDeactivateUser">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-dark">
+                    <h4 class="modal-title"><i class="fa fa-user"></i>&nbsp;&nbsp;Deactivate Staff</h4>
+                    <button type="button" style="color: #fff" class="close" data-bs-dismiss="modal"
+                        aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form method="post" id="deactivateUserForm">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="row d-flex justify-content-center">
+                            <label class="text-secondary mt-2">Are you sure you want to deactivate this user?</label>
+                            <input type="hidden" class="form-control" name="user_id" id="deactivateUserID">
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" id="btnDeactivateUser" class="btn btn-primary"><i id="deactivateIcon"
+                                class="fa fa-check"></i> Deactivate</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- DEACTIVATE USER MODAL END -->
+
+    <!-- ACTIVATE USER MODAL START -->
+    <div class="modal fade" id="modalActivateUser">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-dark">
+                    <h4 class="modal-title"><i class="fa fa-user"></i>&nbsp;&nbsp;Activate Staff</h4>
+                    <button type="button" style="color: #fff" class="close" data-bs-dismiss="modal"
+                        aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form method="post" id="activateUserForm">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="row d-flex justify-content-center">
+                            <label class="text-secondary mt-2">Activate this user?</label>
+                            <input type="hidden" class="form-control" name="user_id" id="activateUserID">
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" id="btnActivateUser" class="btn btn-primary"><i id="activateIcon"
+                                class="fa fa-check"></i> Activate</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- ACTIVATE USER MODAL END -->
+
+    <!-- EDIT USER MODAL START -->
+    <div class="modal fade" id="modalEditUser">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-dark">
+                    <h4 class="modal-title"><i class="fa fa-user"></i>&nbsp;&nbsp;Edit Staff</h4>
+                    <button type="button" style="color: #fff;" class="close" data-bs-dismiss="modal"
+                        aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form method="post" id="editUserForm">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <input type="hidden" class="form-control" id="txtEditUserAccessId" name="user_access_id">
+                                    <label for="projectinput1">User</label>
+                                    <select class="form-control" id="selEditUserAccessUserId" name="user_id"
+                                    style="width: 100%;">
+                                    <option disabled selected>-- Select User --</option>
+                                    <!-- <option value="AL">Alabama</option> -->
+                                    <!-- <option value="WY">Wyoming</option> -->
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label><strong>Section :</strong></label>
+                                    <select class="form-control" name="section_id"
+                                        id="selSection" style="width: 100%;">
+                                        <option value="0" disabled selected>-- Select Department --</option>
+                                        <option value="1">PPS-TS</option>
+                                        <option value="2">PPS-CN</option>
+                                        <option value="3">PPS-ADMIN</option>
+                                        <option value="4">ADIMINISTRATOR</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label><strong>Position:</strong></label>
+                                    <select class="form-control" name="position_id"
+                                        id="selPosition" style="width: 100%;">
+                                        <option value="0" disabled selected>-- Select Position --</option>
+                                        <option value="1">Production Operator</option>
+                                        <option value="2">Die Maintenance Engineering</option>
+                                        <option value="3">Process Technician</option>
+                                        <option value="4">Process Engineering</option>
+                                        <option value="5">LQC</option>
+                                        <option value="6">Sr. Engineer</option>
+                                        <option value="7">Manager</option>
+                                        <option value="8">Administrator</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label>User Level</label>
+                                    <select class="form-control " id="selEditUserLevelId" name="user_level_id">
+                                        <option disabled selected>-- Select User Level --</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
                     <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" id="btnAddUser" class="btn btn-primary"><i id="iBtnAddUserIcon" class="fa fa-check"></i> Save</button>
+                        <button type="submit" id="btnEditUser" class="btn btn-primary"><i id="btnEditUserIcon"
+                                class="fa fa-check"></i> Save</button>
                     </div>
                 </form>
             </div>
         </div>
-    </div><!-- Add User Modal End -->
-    
-    <!-- Edit User Status Modal Start -->
-    <div class="modal fade" id="modalEditUserStatus" data-bs-keyboard="false" data-bs-backdrop="static">
-        <div class="modal-dialog modal-md">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="editUserStatusTitle"><i class="fas fa-info-circle"></i> Edit User Status</h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form method="post" id="formEditUserStatus" autocomplete="off">
-                    @csrf
-                    <div class="modal-body">
-                        <p id="paragraphEditUserStatus"></p>
-                        <input type="hidden" name="user_id" placeholder="User Id" id="textEditUserStatusUserId">
-                        <input type="hidden" name="status" placeholder="Status" id="textEditUserStatus">
-                    </div>
-                    
-                    <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" id="buttonEditUserStatus" class="btn btn-primary"><i id="iBtnAddUserIcon" class="fa fa-check"></i> Save</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div><!-- Edit User Status Modal End -->
+    </div>
+    <!-- EDIT USER MODAL END -->
 
-    <!-- Edit User Request Modal Start -->
-    <div class="modal fade" id="modalEditUserAuthentication" data-bs-keyboard="false" data-bs-backdrop="static">
-        <div class="modal-dialog modal-md">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="editUserAuthenticationTitle"><i class="fas fa-info-circle"></i></h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form method="post" id="formEditUserAuthentication" autocomplete="off">
-                    @csrf
-                    <div class="modal-body">
-                        <p id="paragraphEditUserAuthentication"></p>
-                        <input type="hidden" name="user_id" placeholder="User Id" id="textEditUserAuthenticationUserId">
-                        <input type="hidden" name="authentication" placeholder="Authentication" id="textEditUserAuthentication">
-                    </div>
-                    
-                    <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" id="buttonEditUserAuthentication" class="btn btn-primary"><i id="iBtnEditUserAuthenticationIcon" class="fa fa-check"></i> Save</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div><!-- Edit User Request Modal End -->
 @endsection
 
-<!--     {{-- JS CONTENT --}} -->
+
+{{-- JS CONTENT --}}
 @section('js_content')
     <script type="text/javascript">
+
         $(document).ready(function () {
-            // Initialize Select2 Elements
-            // $('.bootstrap-5').select2();
-            $('.bootstrap-5').select2({
-                theme: 'bootstrap-5'
-            });
 
-            getUsers($('#userLevel'));
+        $('.select2bs4').select2({
+            theme: 'bootstrap4'
+        });
 
-            $("#formAddUser").submit(function(event){
-                event.preventDefault();
-                addUserAsAdmin();
-            });
+        GetUsersByStat(1, $("#selAddUserAccessUserId"));
+        GetUserLevel(1, $("#selAddUserLevelId"));
+        GetUsersByStat(1, $("#selEditUserAccessUserId"));
+        GetUserLevel(1, $("#selEditUserLevelId"));
 
-            dataTablesUsers = $("#tableUsers").DataTable({
-                "processing" : false,
-                "serverSide" : true,
-                "responsive": true,
-                // "order": [[ 0, "desc" ],[ 4, "desc" ]],
-                "language": {
-                    "info": "Showing _START_ to _END_ of _TOTAL_ user records",
-                    "lengthMenu": "Show _MENU_ user records",
+        function GetUsersByStat(userStat, cboElement) {
+            let result = '<option value="0" disabled selected>--Select User--</option>';
+            $.ajax({
+                url: 'get_users_by_stat',
+                method: 'get',
+                data: {
+                    'user_stat': userStat
                 },
-                "ajax" : {
+                dataType: 'json',
+                beforeSend: function() {
+                    result = '<option value="0" disabled selected>--Loading--</option>';
+                    cboElement.html(result);
+                },
+                success: function(JsonObject) {
+                    if (JsonObject['users'].length > 0) {
+                        result = '<option value="0" disabled selected>--Select User--</option>';
+                        for (let index = 0; index < JsonObject['users'].length; index++) {
+                            result += '<option value="' + JsonObject['users'][index].id + '">' + JsonObject[
+                                'users'][index].name + '</option>';
+                        }
+                    } else {
+                        result = '<option value="0" selected disabled> -- No record found -- </option>';
+                    }
+                    cboElement.html(result);
+                    $("#selAddUserAccessUserId").select2();
+                },
+                error: function(data, xhr, status) {
+                    result = '<option value="0" selected disabled> -- Reload Again -- </option>';
+                    cboElement.html(result);
+                    console.log('Data: ' + data + "\n" + "XHR: " + xhr + "\n" + "Status: " + status);
+                }
+            });
+        }
+
+        function GetUserLevel(userLevelStat, cboElement) {
+            let result = '<option value="0" selected disabled> -- Select User Level -- </option>';
+            $.ajax({
+                url: 'get_user_level',
+                method: 'get',
+                // data: {
+                //     'user_level_stat': userLevelStat
+                // },
+                dataType: 'json',
+                beforeSend: function () {
+                    result = '<option value="0" selected disabled> -- Loading -- </option>';
+                    cboElement.html(result);
+                },
+                success: function (JsonObject) {
+                    // alert(JSON.stringify(JsonObject));
+                    // alert(JsonObject['user_levels'][0].module_id);
+                    if (JsonObject['user_levels'].length > 0) {
+                        result = '<option value="0" selected disabled> -- Select User Level -- </option>';
+                        for (let index = 0; index < JsonObject['user_levels'].length; index++) {
+                            result += '<option value="' + JsonObject['user_levels'][index].id + '">' + JsonObject['user_levels'][index].name + '</option>';
+                        }
+                    }
+                    else {
+                        result = '<option value="0" selected disabled> -- No record found -- </option>';
+                    }
+
+                    cboElement.html(result);
+                    // $('#').select2();
+
+                },
+                error: function (data, xhr, status) {
+                    result = '<option value="0" selected disabled> -- Reload Again -- </option>';
+                    cboElement.html(result);
+                    console.log('Data: ' + data + "\n" + "XHR: " + xhr + "\n" + "Status: " + status);
+                }
+            });
+        }
+
+        // ADD USER
+        $("#addUserForm").submit(function(event) {
+            event.preventDefault(); // to stop the form submission
+            AddUser();
+        });
+
+        // $('#addUserModalbtn').on('click', function(e) {
+        //         console.log('qwe');
+        //         $('select[name="user_id"]', $("#addUserForm")).val('');
+        //         $('select[name="userLevel"]', $("#addUserForm")).val('');
+            // });
+
+        $("#addUserModalbtn").click(function() {
+            // console.log('qwe');
+            $("#idname").removeClass('is-invalid');
+            $("#idname").attr('title', '');
+            $("#idemail").removeClass('is-invalid');
+            $("#idemail").attr('title', '');
+            $("#idusername").removeClass('is-invalid');
+            $("#idusername").attr('title', '');
+            $("#selSection").removeClass('is-invalid');
+            $("#selSection").attr('title', '');
+            $("#selPosition").removeClass('is-invalid');
+            $("#selPosition").attr('title', '');
+            $("#selUserLevelId").removeClass('is-invalid');
+            $("#selUserLevelId").attr('title', '');
+            $("#idname").focus();
+        });
+        // ADD USER END
+
+            //===== DATATABLES OF INK FIN CONSUMPTION ================
+            dataTableusersTable = $("#tableUsers").DataTable({
+                "processing": false,
+                "serverSide": true,
+                "responsive": true,
+                "ajax": {
                     url: "view_users",
                 },
-                "columns":[
-                    { "data" : "action", orderable:false, searchable:false},
-                    { "data" : "status"},
-                    { "data" : "is_authenticated"},
-                    { "data" : "firstname"},
-                    { "data" : "lastname"},
-                    { "data" : "middle_initial"},
-                    { "data" : "email"},
-                    { "data" : "username"},
-                    { "data" : "user_levels.name"},
-                ],
-            });
-
-            dataTablesPendingUsers = $("#tablePendingUsers").DataTable({
-                "processing" : false,
-                "serverSide" : true,
-                "responsive": true,
-                // "order": [[ 0, "desc" ],[ 4, "desc" ]],
-                "language": {
-                    "info": "Showing _START_ to _END_ of _TOTAL_ pending user records",
-                    "lengthMenu": "Show _MENU_ pending user records",
+                "columns": [
+                {
+                    "data": "name",
                 },
-                "ajax" : {
-                    url: "view_pending_users",
+                {
+                    "data": "section_name",
+                    visible: false,
                 },
-                "columns":[
-                    { "data" : "action", orderable:false, searchable:false},
-                    { "data" : "status"},
-                    { "data" : "is_authenticated"},
-                    { "data" : "firstname"},
-                    { "data" : "lastname"},
-                    { "data" : "middle_initial"},
-                    { "data" : "email"},
-                    { "data" : "username"},
-                    { "data" : "user_levels.name"},
-                ],
-            });
-
-            $("#buttonAddUser").on('click', function(){
-                $("#divPassword").removeClass('d-none');
-                $("#divConfirmPassword").removeClass('d-none');
-            });
-
-            $(document).on('click', '.actionEditUser', function(){
-                let id = $(this).attr('user-id');
-                $("input[name='user_id'", $("#formAddUser")).val(id);
-                $("#divPassword").addClass('d-none');
-                $("#divConfirmPassword").addClass('d-none');
-                getCustomerById(id);
-            });
-
-            $(document).on('click', '.actionEditUserStatus', function(){
-                let userStatus = $(this).attr('user-status');
-                let userId = $(this).attr('user-id');
-
-                $("#textEditUserStatus").val(userStatus);
-                $("#textEditUserStatusUserId").val(userId);
-
-                if(userStatus == 1){
-                    $("#paragraphEditUserStatus").text('Are you sure to deactivate the user?');
+                {
+                    "data": "section",
+                        render: function(data) {
+                            if(data == 0){
+                                return '--undefined--'
+                            }
+                            else if(data == 1){
+                                return 'PPS-TS'
+                            }
+                            else if(data == 2){
+                                return 'PPS-CN'
+                            }
+                            else if(data == 3){
+                                return 'PPS-ADMIN'
+                            }
+                            else if(data == 4){
+                                return 'ADMINISTRATOR'
+                            }
+                        }
+                },
+                {
+                    "data": "position",
+                    render: function(data) {
+                            if(data == 0){
+                                return '--undefined--'
+                            }
+                            else if(data == 1){
+                                return 'Production Operator'
+                            }
+                            else if(data == 2){
+                                return 'Die Maintenance Engineering'
+                            }
+                            else if(data == 3){
+                                return 'Process Technician'
+                            }
+                            else if(data == 4){
+                                return 'Process Engineering'
+                            }
+                            else if(data == 5){
+                                return 'LQC'
+                            }
+                            else if(data == 6){
+                                return 'Sr. Engineer'
+                            }
+                            else if(data == 7){
+                                return 'Manager'
+                            }
+                            else if(data == 8){
+                                return 'Administrator'
+                            }
+                        }
+                },
+                {
+                    "data": "user_level",
+                },
+                {
+                    "data": "status",
+                    orderable: false
+                },
+                {
+                    "data": "action",
+                    orderable: false,
+                    searchable: false
                 }
-                else{
-                    $("#paragraphEditUserStatus").text('Are you sure to activate the user?');
-                }
+            ],
+                "order": [0, 'desc']
             });
 
-            $("#formEditUserStatus").submit(function(event){
-                event.preventDefault();
-                editUserStatus();
-            });
 
-            $("#tablePendingUsers").on('click', '.actionEditUserAuthentication', function(){
-                let userAuthentication = $(this).attr('user-authentication');
-                let userId = $(this).attr('user-id');
+        // DEACTIVATE USER
+        $(document).on('click', '.actionDeactivateUser', function() {
 
-                $("#textEditUserAuthentication").val(userAuthentication);
-                $("#textEditUserAuthenticationUserId").val(userId);
+            let userId = $(this).attr('user-id');
 
-                if(userAuthentication == 1){
-                    $("#paragraphEditUserAuthentication").text('Are you sure to disapprove the request?');
-                    $("#editUserAuthenticationTitle").text('Disapprove User');
-                }
-                else{
-                    $("#paragraphEditUserAuthentication").text('Are you sure to approve the request?');
-                    $("#editUserAuthenticationTitle").text('Approve User');
-                }
-            });
-
-            $("#formEditUserAuthentication").submit(function(event){
-                event.preventDefault();
-                editUserAuthentication();
-            });
+            $("#deactivateUserID").val(userId);
         });
+        $("#deactivateUserForm").submit(function(event) {
+            event.preventDefault();
+            DeactivateUser();
+        });
+        // DEACTIVATE USER END
+
+        // ACTIVATE USER
+        $(document).on('click', '.actionActivateUser', function() {
+            let userId = $(this).attr('user-id');
+            $("#activateUserID").val(userId);
+        });
+
+        $("#activateUserForm").submit(function(event) {
+            event.preventDefault();
+            ActivateUser();
+        });
+        // ACTIVATE USER END
+
+        // EDIT USER
+        $(document).on('click', '.actionEditUser', function() {
+            let userId = $(this).attr('user-id');
+            $("#txtEditUserAccessId").val(userId);
+            GetUserId(userId);
+        });
+
+        $("#editUserForm").submit(function(event) {
+            event.preventDefault(); // to stop the form submission
+            EditUser();
+        });
+        // EDIT USER END
+    });
     </script>
 @endsection
-

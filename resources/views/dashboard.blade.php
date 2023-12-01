@@ -1,4 +1,17 @@
-@extends('layouts.admin_layout')
+@php $layout = 'layouts.super_user_layout'; @endphp
+@auth
+    @php
+    if (Auth::user()->user_level_id == 1) {
+        $layout = 'layouts.super_user_layout';
+    } elseif (Auth::user()->user_level_id == 2) {
+        $layout = 'layouts.admin_layout';
+    } elseif (Auth::user()->user_level_id == 3) {
+        $layout = 'layouts.user_layout';
+    }
+    @endphp
+@endauth
+
+@extends($layout)
 
 @section('title', 'Dashboard')
 @section('content_page')
@@ -10,20 +23,9 @@
                     <h2 class="my-3">Dashboard</h2>
                     <div class="col-xl-4 col-lg-4">
                         <div class="info-box shadow bg-white rounded">
-                            {{-- <span class="info-box-icon bg-info"><i class="fas fa-tachometer-alt"></i></span> --}}
-                            <span class="info-box-icon bg-info"><i class="fa-brands fa-bitcoin"></i></span>
-                            
-                            <div class="info-box-content">
-                                <span class="info-box-text">Total Users</span>
-                                <span class="info-box-number" id="totalUsers">0</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-4 col-lg-4">
-                        <div class="info-box shadow bg-white rounded">
                             <span class="info-box-icon bg-warning"><i class="fa-brands fa-bitcoin"></i></span>
                             <div class="info-box-content">
-                                <span class="info-box-text">Total Pending Request</span>
+                                <span class="info-box-text">Total Pending Dieset Preparation Request</span>
                                 <span class="info-box-number" id="totalPendingUsers">0</span>
                             </div>
                         </div>
@@ -32,34 +34,7 @@
                         <div class="info-box shadow bg-white rounded">
                             <span class="info-box-icon bg-success"><i class="fa-brands fa-bitcoin"></i></span>
                             <div class="info-box-content">
-                                <span class="info-box-text">Total Residents</span>
-                                <span class="info-box-number">0</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-4 col-lg-4">
-                        <div class="info-box shadow bg-white rounded">
-                            <span class="info-box-icon bg-info"><i class="fa-brands fa-bitcoin"></i></span>
-                            <div class="info-box-content">
-                                <span class="info-box-text">Total Blotter</span>
-                                <span class="info-box-number">0</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-4 col-lg-4">
-                        <div class="info-box shadow bg-white rounded">
-                            <span class="info-box-icon bg-black"><i class="fa-brands fa-bitcoin"></i></span>
-                            <div class="info-box-content">
-                                <span class="info-box-text">Total Households</span>
-                                <span class="info-box-number">0</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-4 col-lg-4">
-                        <div class="info-box shadow bg-white rounded">
-                            <span class="info-box-icon bg-danger"><i class="fa-brands fa-bitcoin"></i></span>
-                            <div class="info-box-content">
-                                <span class="info-box-text">Total Business Permit</span>
+                                <span class="info-box-text">Total Completed Dieset Preparation Request</span>
                                 <span class="info-box-number">0</span>
                             </div>
                         </div>
@@ -86,7 +61,7 @@
                     },
                 });
             }
-            getDataForDashboard();
+            // getDataForDashboard(); //comment for now
         });
     </script>
 @endsection
