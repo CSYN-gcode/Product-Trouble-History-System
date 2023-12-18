@@ -14,4 +14,9 @@ class ProductIdentification extends Model
     public function users(){
         return $this->hasOne(User::class, 'id', 'created_by');
     }
+
+    public function created_by()
+    {
+    	return $this->hasOne(User::class, 'id', 'created_by');
+    }
 }

@@ -63,7 +63,7 @@
                             </div>
 
                             <div class="table-responsive">
-                                <table class="table table-sm table-bordered text-center table-hover" id="tbl_dmrpqc" style="min-width: 900px;">
+                                <table class="table table-sm table-bordered text-center table-hover" id="tbl_dmrpqc" style="min-width: 900px; width: 100%;">
                                 <thead>
                                     <tr class="bg-light">
                                         <th style="width: 10%;">Action</th>
@@ -80,6 +80,7 @@
                                 <tbody>
                                 </tbody>
                                 </table>
+                                <br>
                             </div>
                         </div>
                     </div>
@@ -102,8 +103,8 @@
                 <form id="frm_prod_identification" method="post">
                   @csrf
                   <div class="modal-body">
-                    {{-- <div class="row d-none"> --}}
-                    <div class="row">
+                    <div class="row d-none">
+                    {{-- <div class="row"> --}}
                         <div class="col-sm-3">
                             <div class="input-group input-group-sm mb-2">
                                 <div class="input-group-prepend w-50">
@@ -140,106 +141,119 @@
                     </div>
 
                         <div class="accordion" id="accordionMain">
-                            {{-- <h5 class="modal-title"> I. Product Identification & Drawing Revision Checking <strong>(Responsible:Machine Operator)</strong></h5> --}}
-                            <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                <h5 class="modal-title"> I. Product Identification & Drawing Revision Checking <strong>(Responsible:Production Operator)</strong></h5>
-                            </button>
+                            <div class="Part1">
+                                {{-- <h5 class="modal-title"> I. Product Identification & Drawing Revision Checking <strong>(Responsible:Machine Operator)</strong></h5> --}}
+                                <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    <h5 class="modal-title"> I. Product Identification & Drawing Revision Checking <strong>(Responsible:Production Operator)</strong></h5>
+                                </button>
 
-                            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne">
-                                <div class="row"><!-- 1st row -->
-                                    <div class="col-sm-4">
-                                        <div class="input-group input-group-sm mb-2">
-                                            <div class="input-group-prepend w-50">
-                                                <span class="input-group-text w-100" id="basic-addon1">Device Name</span>
+                                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne">
+                                    <div class="row"><!-- 1st row -->
+                                        <div class="col-sm-4">
+                                            <div class="input-group input-group-sm mb-2">
+                                                <div class="input-group-prepend w-50">
+                                                    <span class="input-group-text w-100" id="basic-addon1">Device Name</span>
+                                                </div>
+                                                <input type="text" class="form-control form-control-sm" index="1.0" id="frm_txt_device_name" name="device_name" style="color: blue; font-weight: bold;" readonly>
                                             </div>
-                                            <input type="text" class="form-control form-control-sm" id="frm_txt_device_name" name="device_name" style="color: blue; font-weight: bold;" readonly>
+                                        </div>
+
+                                        <div class="col-sm-3">
+                                            <div class="input-group input-group-sm mb-2">
+                                                <div class="input-group-prepend w-50">
+                                                    <span class="input-group-text w-100" id="basic-addon1">Item Code</span>
+                                                </div>
+                                                <input type="text" class="form-control form-control-sm" id="frm_txt_item_code" name="item_code" readonly>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-2">
+                                            <div class="input-group input-group-sm mb-2">
+                                                <div class="input-group-prepend w-50">
+                                                    <span class="input-group-text w-100" id="basic-addon1">Rev No.</span>
+                                                </div>
+                                                <input type="text" class="form-control form-control-sm" id="frm_txt_rev_no" name="rev_no" readonly>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-3">
+                                            <div class="input-group input-group-sm mb-2">
+                                                <div class="input-group-prepend w-50">
+                                                    <span class="input-group-text w-100" id="basic-addon1">Drawing No.</span>
+                                                </div>
+                                                <input type="text" class="form-control form-control-sm" id="frm_txt_drawing_no" name="drawing_no" readonly>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-3">
-                                        <div class="input-group input-group-sm mb-2">
-                                            <div class="input-group-prepend w-50">
-                                                <span class="input-group-text w-100" id="basic-addon1">Item Code</span>
+                                    <div class="row"><!-- 2nd row -->
+
+                                        <div class="col-sm-4">
+                                            <div class="input-group input-group-sm mb-2">
+                                                <div class="input-group-prepend w-50">
+                                                    <span class="input-group-text w-100 bg-primary" id="basic-addon1">P.O #: (Press Enter to Search)</span>
+                                                </div>
+                                                <input type="text" class="form-control form-control-sm" id="frm_txt_po_no" name="po_no" placeholder="Insert PO Number">
                                             </div>
-                                            <input type="text" class="form-control form-control-sm" id="frm_txt_item_code" name="item_code" readonly>
                                         </div>
+
+                                        <div class="col-sm-3">
+                                            <div class="input-group input-group-sm mb-2">
+                                                <div class="input-group-prepend w-50">
+                                                    <span class="input-group-text w-100 bg-primary" id="basic-addon1">Request Type</span>
+                                                </div>
+                                                    <select class="form-control" type="text" name="request_type" id="frm_request_type">
+                                                        <option value="" disabled selected>Select Request type</option>
+                                                        <option value="1">For Maintenance</option>
+                                                        <option value="2">Temporary Stop</option>
+                                                    </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-2">
+                                            <div class="input-group input-group-sm mb-2">
+                                                <div class="input-group-prepend w-50">
+                                                    <span class="input-group-text w-100" id="basic-addon1">Die No.</span>
+                                                </div>
+                                                <input type="text" class="form-control form-control-sm" id="frm_txt_die_no" name="die_no" readonly>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-3">
+                                            <div class="input-group input-group-sm mb-2">
+                                                <div class="input-group-prepend w-50">
+                                                    <span class="input-group-text w-100" id="basic-addon1">Date/Time</span>
+                                                </div>
+                                                <input class="form-control form-control-sm" id="frm_txt_start_datetime" name="txt_start_datetime" placeholder="(Auto Generate)" readonly>
+                                            </div>
+                                        </div>
+
                                     </div>
 
-                                    <div class="col-sm-2">
-                                        <div class="input-group input-group-sm mb-2">
-                                            <div class="input-group-prepend w-50">
-                                                <span class="input-group-text w-100" id="basic-addon1">Rev No.</span>
+                                    <div class="row">
+                                        <div class="col-sm-9">
+                                            <div class="input-group input-group-sm mb-2">
+                                                <div class="input-group-prepend w-30">
+                                                    <p class="input-group-text" id="basic-addon1">Drawing & rev# validation:</p>
+                                                </div>
+                                                <p class="input-group-text" id="basic-addon1">Using PO balance from PPC with drawing & rev#, compare it versus RAPID.</p>
+                                                <p class="input-group-text" id="basic-addon1">if not tally, inform Supervisor & do not proceed the production </p>
                                             </div>
-                                            <input type="text" class="form-control form-control-sm" id="frm_txt_rev_no" name="rev_no" readonly>
                                         </div>
-                                    </div>
 
-                                    <div class="col-sm-3">
-                                        <div class="input-group input-group-sm mb-2">
-                                            <div class="input-group-prepend w-50">
-                                                <span class="input-group-text w-100" id="basic-addon1">Drawing No.</span>
+                                        <div class="col-sm-3">
+                                            <div class="input-group input-group-sm mb-2">
+                                                <div class="input-group-prepend w-50">
+                                                    <span class="input-group-text w-100" id="basic-addon1">Requested By:</span>
+                                                    <input type="hidden" class="form-control form-control-sm" name="requested_by_id" id="frm_txt_requested_by_id">
+                                                </div>
+                                                <input type="text" class="form-control form-control-sm" name="requested_by" id="frm_txt_requested_by" placeholder="(Auto Generate)" readonly>
                                             </div>
-                                            <input type="text" class="form-control form-control-sm" id="frm_txt_drawing_no" name="drawing_no" readonly>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row"><!-- 2nd row -->
-
-                                    <div class="col-sm-4">
-                                        <div class="input-group input-group-sm mb-2">
-                                            <div class="input-group-prepend w-50">
-                                                <span class="input-group-text w-100 bg-primary" id="basic-addon1">P.O #: (Press Enter to Search)</span>
-                                            </div>
-                                            <input type="text" class="form-control form-control-sm" id="frm_txt_po_no" name="po_no" placeholder="Insert PO Number">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-3">
-                                        <div class="input-group input-group-sm mb-2">
-                                            <div class="input-group-prepend w-50">
-                                                <span class="input-group-text w-100 bg-primary" id="basic-addon1">Request Type</span>
-                                            </div>
-                                                <select class="form-control" type="text" name="request_type" id="frm_request_type">
-                                                    <option value="" disabled selected>Select Request type</option>
-                                                    <option value="1">For Maintenance</option>
-                                                    <option value="2">Temporary Stop</option>
-                                                </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-2">
-                                        <div class="input-group input-group-sm mb-2">
-                                            <div class="input-group-prepend w-50">
-                                                <span class="input-group-text w-100" id="basic-addon1">Die No.</span>
-                                            </div>
-                                            <input type="text" class="form-control form-control-sm" id="frm_txt_die_no" name="die_no" readonly>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-3">
-                                        <div class="input-group input-group-sm mb-2">
-                                            <div class="input-group-prepend w-50">
-                                                <span class="input-group-text w-100" id="basic-addon1">Date/Time</span>
-                                            </div>
-                                            <input class="form-control form-control-sm" id="frm_txt_start_datetime" name="txt_start_datetime" placeholder="(Auto Generate)" readonly>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <div class="input-group input-group-sm mb-2">
-                                            <div class="input-group-prepend w-30">
-                                                <p class="input-group-text" id="basic-addon1">Drawing & rev# validation:<strong>(Responsible:Machine Operator)</strong></p>
-                                            </div>
-                                            <p class="input-group-text" id="basic-addon1">Using PO balance from PPC with drawing & rev#, compare it versus RAPID.</p>
-                                            <p class="input-group-text" id="basic-addon1">if not tally, inform Supervisor & do not proceed the production </p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                {{-- </form> --}}
                             <div class="Part2"><!-- PART II Division Start-->
                                     {{-- <h5 class="modal-title">II. Dieset Condition <strong>(Responsible:Die Maintenance Engineering)</strong></h5> --}}
                                     <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
@@ -351,7 +365,7 @@
                                                                     <label class="form-check-label dieset_condition_data"> 7. Parts change</label>
                                                                 </td>
                                                                 <td>
-                                                                    <button type="button" id="btnPartsDrawing" class="btn btn-primary btn-xs float-right d-none">Parts Drawing Section</button>
+                                                                    <button type="button" id="btnPartsDrawing" class="btn btn-primary btn-xs float-right">Parts Drawing Section</button>
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -435,7 +449,7 @@
                                                 </div>
 
                                                 <div class="table-responsive col-sm-12">
-                                                    <table id="tblViewEnergyConsumption" class="table table-sm table-bordered table-hover display nowrap" style="width: 100%;">
+                                                    <table id="tbl_date_start_finish" class="table table-sm table-bordered table-hover display nowrap" style="width: 100%;">
                                                         <tbody>
                                                             <tr class="text-center align-middle">
                                                                 <td>
@@ -463,13 +477,12 @@
                                                             <tr class="text-center align-middle">
                                                                 <td>
                                                                     <label class="form-check-label" style="margin-top: 5%" > In-charged</label>
-                                                                    <input type="text" class="form-control dieset_condition_data" name="in_charged_id" id="frm_txt_action_in_charged_id" hidden>
+                                                                    <input type="text" class="form-control dieset_condition_data" name="action_done_in_charged_id" id="frm_txt_action_done_in_charged_id" hidden>
                                                                 </td>
                                                                 <td colspan="2">
-                                                                    <input type="text" class="form-control dieset_condition_data" name="in_charged" id="frm_txt_action_in_charged" readonly>
+                                                                    <input type="text" class="form-control dieset_condition_data" name="action_done_in_charged" id="frm_txt_action_done_in_charged" placeholder="(Auto Generate)" readonly>
                                                                 </td>
                                                             </tr>
-
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -633,7 +646,7 @@
                                             <div class="col-sm-4 border border-right-0 border-dark">
                                                 <strong><label class="form-check-label"> Mold check prior endorse to production:</label></strong>
                                                 <div class="table-responsive col-sm-12">
-                                                    <table id="tblViewEnergyConsumption" class="table table-sm table-borderless table-hover display nowrap" style="width: 100%;">
+                                                    <table id="tbl_mold_check" class="table table-sm table-borderless table-hover display nowrap" style="width: 100%;">
                                                         <tbody>
                                                             <tr>
                                                                 <td colspan="2"></td>
@@ -745,7 +758,7 @@
                                             <div class="col-sm-4 border border-left-0 border-dark">
                                                 <div class="table-responsive col-sm-12">
                                                     <strong><label class="form-check-label">References Used </label></strong>
-                                                    <table id="tblViewEnergyConsumption" class="table table-sm table-bordered table-hover display nowrap" style="width: 100%;">
+                                                    <table id="tbl_references_used" class="table table-sm table-bordered table-hover display nowrap" style="width: 100%;">
                                                         <tbody>
                                                             <tr class="align-middle">
                                                                 <td width="25">
@@ -787,7 +800,7 @@
                                         <div class="row col-sm-12">
                                             <div class="col-sm-12 border border-top-0 border-dark">
                                                 <div class="table-responsive col-sm-8">
-                                                    <table id="tblViewEnergyConsumption" class="table table-sm table-borderless display nowrap" style="width: 100%;">
+                                                    <table id="tbl_checked_by" class="table table-sm table-borderless display nowrap" style="width: 100%;">
                                                         <tbody>
                                                             <tr class="text-center align-middle">
                                                                 <td>
@@ -806,10 +819,10 @@
                                                             </tr>
                                                             <tr>
                                                                 <td>
-                                                                    <input type="text" class="form-control text-center align-middle dieset_condition_data" name="mold_check_checked_by" id="frm_txt_mold_check_checked_by" readonly>
+                                                                    <input type="text" class="form-control text-center align-middle dieset_condition_data" name="mold_check_checked_by" id="frm_txt_mold_check_checked_by" placeholder="(Auto Generate)" readonly>
                                                                 </td>
                                                                 <td>
-                                                                    <input type="datetime" class="form-control text-center align-middle dieset_condition_data" name="mold_check_date_time" id="frm_mold_check_date_time" readonly>
+                                                                    <input type="datetime" class="form-control text-center align-middle dieset_condition_data" name="mold_check_date_time" id="frm_mold_check_date_time" placeholder="(Auto Generate)" readonly>
                                                                 </td>
                                                                 {{-- <td>
                                                                     <input type="text" class="form-control" id="mold_check_time" readonly>
@@ -826,7 +839,7 @@
                                         <div class="row col-sm-12">
                                             <div class="col-sm-12 border border-top-0 border-dark">
                                                 <div class="table-responsive col-sm-12" style="margin-bottom: -1%">
-                                                    <table id="tblViewEnergyConsumption" class="table table-sm table-borderless" style="width: 100%;">
+                                                    <table id="tbl_final_remarks" class="table table-sm table-borderless" style="width: 100%;">
                                                         <tbody>
                                                             <tr>
                                                                 <td class="text-center align-middle">
@@ -863,11 +876,11 @@
                                             <br>
                                             <div class="col-sm-6">
                                                 <div class="table-responsive col-sm-12">
-                                                    <table id="tblViewEnergyConsumption" class="table table-sm table-bordered table-hover display nowrap" style="width: 100%;">
+                                                    <table id="tbl_dieset_condition_checking" class="table table-sm table-bordered table-hover display nowrap" style="width: 100%;">
                                                         <tbody>
                                                             <tr class="align-middle">
                                                                 <td width="25">
-                                                                    <input style="margin-left:0" class="form-check-input" type="checkbox" value="option1">
+                                                                    <input style="margin-left:0" class="form-check-input dieset_condition_checking_data" type="checkbox" id="frm_txt_good_condition" name="good_condition" value="1">
                                                                 </td>
                                                                 <td colspan="3">
                                                                     <label class="form-check-label"> Good Condition</label>
@@ -875,7 +888,7 @@
                                                             </tr>
                                                             <tr class="align-middle">
                                                                 <td>
-                                                                    <input style="margin-left:0" class="form-check-input" type="checkbox" value="option1">
+                                                                    <input style="margin-left:0" class="form-check-input dieset_condition_checking_data" type="checkbox" id="frm_txt_under_longevity" name="under_longevity" value="1">
                                                                 </td>
                                                                 <td colspan="3">
                                                                     <label class="form-check-label"> Under Longevity</label>
@@ -883,7 +896,7 @@
                                                             </tr>
                                                             <tr class="align-middle">
                                                                 <td>
-                                                                    <input style="margin-left:0" class="form-check-input" type="checkbox" value="option1">
+                                                                    <input style="margin-left:0" class="form-check-input dieset_condition_checking_data" type="checkbox" id="frm_txt_problematic" name="problematic" value="1">
                                                                 </td>
                                                                 <td colspan="3">
                                                                     <label class="form-check-label"> Problematic Die set</label>
@@ -892,6 +905,7 @@
                                                             <tr class="text-center align-middle">
                                                                 <td colspan="2">
                                                                     <label class="form-check-label"> Checked by:</label>
+                                                                    <input type="text" class="form-control text-center align-middle dieset_condition_checking_data" name="dieset_checking_checked_by_id" id="frm_txt_dieset_checking_checked_by_id" hidden>
                                                                 </td>
                                                                 <td>
                                                                     <label class="form-check-label"> Date</label>
@@ -899,10 +913,10 @@
                                                             </tr>
                                                             <tr>
                                                                 <td colspan="2">
-                                                                    <input type="text" class="form-control" readonly>
+                                                                    <input type="text" class="form-control text-center align-middle dieset_condition_checking_data" name="dieset_checking_checked_by" id="frm_txt_dieset_checking_checked_by" placeholder="(Auto Generate)" readonly>
                                                                 </td>
                                                                 <td>
-                                                                    <input type="datetime-local" class="form-control text-center" readonly>
+                                                                    <input class="form-control text-center" id="frm_txt_dieset_condition_checking_date" name="dieset_condition_checking_date" placeholder="(Auto Generate)" readonly>
                                                                 </td>
                                                             </tr>
                                                         </tbody>
@@ -922,62 +936,137 @@
                                 </button>
                                 <div id="collapseFour" class="collapse show" aria-labelledby="headingOne">
                                     <div class="row col-sm-12">
-                                        <div class="col-sm-12 border border-dark">
-                                            <br>
-                                            <div class="col-sm-6">
+                                        <div class="col-sm-12 border border-dark d-flex justify-content-center">
+                                            <div class="col-sm-10 mt-3">
                                                 <div class="table-responsive col-sm-12">
-                                                    <table id="tblViewEnergyConsumption" class="table table-sm table-bordered table-hover display nowrap" style="width: 100%;">
+                                                    <table id="tbl_machine_setup" class="table table-sm table-bordered table-hover display nowrap" style="width: 100%;">
                                                         <thead>
                                                             <th colspan="2">Machine Adjustment</th>
                                                             <th class="text-center">In-Charge</th>
                                                             <th class="text-center">Date / Time</th>
+                                                            <th class="text-center" style="width: 20%;">Remarks</th>
                                                         </thead>
                                                         <tbody>
                                                             <tr class="align-middle">
                                                                 <td width="30">
-                                                                    <input style="margin-left:0; width:20px; height:20px;" class="form-check-input" type="checkbox" value="option1">
+                                                                    <input style="margin-left:0; width:20px; height:20px;" class="form-check-input machine_setup_data" type="checkbox" id="frm_txt_machine_setup_1st_adjustment" name="machine_setup_1st_adjustment" value="1">
                                                                 </td>
                                                                 <td class="align-middle">
                                                                     <label class="form-check-label"> 1st Adjustment</label>
                                                                 </td>
                                                                 <td>
-                                                                    <input type="text" class="form-control">
+                                                                    {{-- <input type="hidden" class="form-control machine_setup_data" id="frm_txt_machine_setup_1st_in_charged_id" name="machine_setup_1st_in_charged_id">
+                                                                    <input type="text" class="form-control machine_setup_data text-center" id="frm_txt_machine_setup_1st_in_charged" name="machine_setup_1st_in_charged" placeholder="(Auto Generate)" readonly> --}}
+                                                                    <select class="form-control machine_setup_data" id="selProductionUser" name="machine_setup_1st_in_charged" style="width: 100%;">
+                                                                        <option disabled selected>-- Select Production --</option>
+                                                                        {{-- <option value="">-- N/A --</option> --}}
+                                                                    </select>
                                                                 </td>
                                                                 <td>
-                                                                    <input type="datetime-local" class="form-control text-center align-middle">
+                                                                    <input type="datetime" class="form-control text-center align-middle machine_setup_data" id="frm_txt_machine_setup_1st_datetime" name="machine_setup_1st_datetime" placeholder="(Auto Generate)" readonly>
+                                                                </td>
+                                                                <td>
+                                                                    {{-- <input type="text" class="form-control machine_setup_data" id="frm_txt_machine_setup_1st_remarks" name="machine_setup_1st_remarks"> --}}
+                                                                    <select type="text" class="form-control machine_setup_data text-center" id="frm_txt_machine_setup_1st_remarks" name="machine_setup_1st_remarks" style="width: 100%;">
+                                                                        <option value="" disabled selected>Please Select One</option>
+                                                                        <option value="1">For Qualification</option>
+                                                                        <option value="2">NG</option>
+                                                                    </select>
                                                                 </td>
                                                             </tr>
                                                             <tr class="align-middle">
                                                                 <td width="30">
-                                                                    <input style="margin-left:0; width:20px; height:20px;" class="form-check-input" type="checkbox" value="option1">
+                                                                    <input style="margin-left:0; width:20px; height:20px;" class="form-check-input machine_setup_data" type="checkbox" id="frm_txt_machine_setup_2nd_adjustment" name="machine_setup_2nd_adjustment" value="1">
                                                                 </td>
                                                                 <td class="align-middle">
                                                                     <label class="form-check-label"> 2nd Adjustment</label>
                                                                 </td>
                                                                 <td>
-                                                                    <input type="text" class="form-control">
+                                                                    <select class="form-control machine_setup_data" id="selTechnicianUser" name="machine_setup_2nd_in_charged" style="width: 100%;">
+                                                                        <option disabled selected>-- Select Technician --</option>
+                                                                        {{-- <option value="">-- N/A --</option> --}}
+                                                                    </select>
+                                                                    {{-- <input type="hidden" class="form-control machine_setup_data" id="frm_txt_machine_setup_2nd_in_charged_id" name="machine_setup_2nd_in_charged_id">
+                                                                    <input type="text" class="form-control machine_setup_data text-center" id="frm_txt_machine_setup_2nd_in_charged" name="machine_setup_2nd_in_charged" placeholder="(Auto Generate)" readonly> --}}
+                                                                    {{-- <div class="col-sm-12">
+                                                                        <div class="form-group">
+                                                                            <label>Name</label>
+                                                                            <select class="form-control" id="selAddUserAccessUserId" name="user_id" style="width: 100%;">
+                                                                            <option disabled selected>-- Select User --</option>
+                                                                            <!-- <option disabled selected>-- Select User --</option> <option value="AL">Alabama</option> -->
+                                                                            <!-- <option value="WY">Wyoming</option> -->
+                                                                            </select>
+                                                                        </div>
+                                                                    </div> --}}
                                                                 </td>
                                                                 <td>
-                                                                    <input type="datetime-local" class="form-control text-center align-middle">
+                                                                    <input type="datetime" class="form-control text-center align-middle machine_setup_data" id="frm_txt_machine_setup_2nd_datetime" name="machine_setup_2nd_datetime" placeholder="(Auto Generate)" readonly>
+                                                                </td>
+                                                                <td>
+                                                                    {{-- <input type="text" class="form-control machine_setup_data" id="frm_txt_machine_setup_2nd_remarks" name="machine_setup_2nd_remarks"> --}}
+                                                                    <select type="text" class="form-control machine_setup_data text-center" id="frm_txt_machine_setup_2nd_remarks" name="machine_setup_2nd_remarks" style="width: 100%;">
+                                                                        <option value="" disabled selected>Please Select One</option>
+                                                                        <option value="1">For Qualification</option>
+                                                                        <option value="2">NG</option>
+                                                                    </select>
                                                                 </td>
                                                             </tr>
                                                             <tr class="align-middle">
                                                                 <td width="30">
-                                                                    <input style="margin-left:0; width:20px; height:20px;" class="form-check-input" type="checkbox" value="option1">
+                                                                    <input style="margin-left:0; width:20px; height:20px;" class="form-check-input machine_setup_data" type="checkbox" id="frm_txt_machine_setup_3rd_adjustment" name="machine_setup_3rd_adjustment" value="1">
                                                                 </td>
                                                                 <td class="align-middle">
                                                                     <label class="form-check-label"> 3rd Adjustment</label>
                                                                 </td>
                                                                 <td>
-                                                                    <input type="text" class="form-control">
+                                                                    {{-- <input type="hidden" class="form-control machine_setup_data" id="frm_txt_machine_setup_3rd_in_charged_id" name="machine_setup_3rd_in_charged_id"> --}}
+                                                                    {{-- <input type="text" class="form-control machine_setup_data text-center" id="frm_txt_machine_setup_3rd_in_charged" name="machine_setup_3rd_in_charged" placeholder="(Auto Generate)" readonly> --}}
+                                                                    <select class="form-control machine_setup_data" id="selSupervisorEngrUser" name="machine_setup_3rd_in_charged" style="width: 100%;">
+                                                                        <option disabled selected>-- Select Supervisor/Engr. --</option>
+                                                                        {{-- <option value="">-- N/A --</option> --}}
+                                                                    </select>
                                                                 </td>
                                                                 <td>
-                                                                    <input type="datetime-local" class="form-control text-center align-middle">
+                                                                    <input type="datetime" class="form-control text-center align-middle machine_setup_data" id="frm_txt_machine_setup_3rd_datetime" name="machine_setup_3rd_datetime" placeholder="(Auto Generate)" readonly>
+                                                                </td>
+                                                                <td>
+                                                                    {{-- <input type="text" class="form-control machine_setup_data" id="frm_txt_machine_setup_3rd_remarks" name="machine_setup_3rd_remarks"> --}}
+                                                                    <select type="text" class="form-control machine_setup_data text-center" id="frm_txt_machine_setup_3rd_remarks" name="machine_setup_3rd_remarks" style="width: 100%;">
+                                                                        <option value="" disabled selected>Please Select One</option>
+                                                                        <option value="1">For Qualification</option>
+                                                                        <option value="2">NG</option>
+                                                                    </select>
                                                                 </td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
                                                 </div>
+
+                                                {{-- <div class="col-sm-10"> --}}
+                                                    {{-- <div class="col-sm-12 border border-top-0 border-dark"> --}}
+                                                        <div class="table-responsive col-sm-4">
+                                                            <table id="tbl_machine_setup_category" class="table table-sm table-bordered" style="width: 100%;">
+                                                                <tbody>
+                                                                    <tr class="text-center align-middle">
+                                                                        <td>
+                                                                            <label class="form-check-label"> Category:</label>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div class="form-check form-check-inline">
+                                                                                <input class="form-check-input machine_setup_data" type="radio" value="1" name="machine_setup_category" id="frm_machine_setup_category_1">
+                                                                                <label class="form-check-label"> HVM</label>
+                                                                            </div>
+                                                                            <div class="form-check form-check-inline">
+                                                                                <input class="form-check-input machine_setup_data" type="radio" value="2" name="machine_setup_category" id="frm_machine_setup_category_2">
+                                                                                <label class="form-check-label"> SM P.O</label>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    {{-- </div> --}}
+                                                {{-- </div> --}}
                                             </div>
                                         </div>
                                     </div>
@@ -1041,14 +1130,14 @@
                                                     <div class="row col-sm-12 d-flex justify-content-center" style="padding-left:15px; padding-right:0">
                                                         <div class="col-sm-12 text-center" style="padding:0">
                                                             <div class="table-responsive col-sm-12" style="padding:0">
-                                                                <table id="tblViewEnergyConsumption" class="table table-sm table-bordered table-hover display nowrap" style="width: 100%;">
+                                                                <table id="tblProdReqProduction" class="table table-sm table-bordered table-hover display nowrap" style="width: 100%;">
                                                                     <tbody>
                                                                         <tr>
                                                                             <td style="padding:0" width="32%"><label class="form-check-label">Activity Sequence</label></td>
                                                                             <td style="padding:0" colspan="4"><strong><label class="form-check-label">1.0 Production</label></strong></td>
                                                                         </tr>
                                                                         <tr>
-                                                                            <td rowspan="13" class="align-middle">
+                                                                            <td rowspan="14" class="align-middle">
                                                                                 <label class="form-check-label">STANDARD</label>
                                                                                 <br>
                                                                                 <label class="form-check-label">REFERENCES</label>
@@ -1062,19 +1151,19 @@
                                                                         </tr>
                                                                         <tr>
                                                                             <td width="30">
-                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex prod_req_checking_data" index="1.0" type="checkbox" name="prod_eval_sample" id="frm_txt_prod_eval_sample" value="1">
                                                                             </td>
                                                                             <td colspan="3" class="text-left">1.1 Evaluation Sample</td>
                                                                         </tr>
                                                                         <tr>
                                                                             <td width="30">
-                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex prod_req_checking_data" index="1.1" type="checkbox" name="prod_japan_sample" id="frm_txt_prod_japan_sample" value="1">
                                                                             </td>
                                                                             <td colspan="3" class="text-left">1.2 Japan Sample</td>
                                                                         </tr>
                                                                         <tr>
                                                                             <td width="30">
-                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex prod_req_checking_data" index="1.2" type="checkbox" name="prod_last_prodn_sample" id="prod_last_prodn_sample" value="1">
                                                                             </td>
                                                                             <td colspan="3" class="text-left">1.3 Last Prodn Sample</td>
                                                                         </tr>
@@ -1086,7 +1175,7 @@
                                                                         </tr>
                                                                         <tr>
                                                                             <td width="30">
-                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex prod_req_checking_data" index="1.3" type="checkbox" name="prod_dieset_eval_report" id="frm_txt_action_1" value="1">
                                                                             </td>
                                                                             <td colspan="3" class="text-left">2.2 Die set Evaluation Report</td>
                                                                         </tr>
@@ -1095,7 +1184,7 @@
                                                                         </tr>
                                                                         <tr>
                                                                             <td width="30">
-                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex prod_req_checking_data" index="1.4" type="checkbox" name="prod_cosmetic_defect" id="frm_txt_action_1" value="1">
                                                                             </td>
                                                                             <td colspan="3" class="text-left">2.3 Cosmetic Defect(Point Panel)</td>
                                                                         </tr>
@@ -1116,22 +1205,28 @@
                                                                         </tr>
                                                                         <tr>
                                                                             <td width="30">
-                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex prod_req_checking_data" index="1.5" type="checkbox" name="prod_pingauges" id="frm_txt_prod_pingauges" value="1">
                                                                             </td>
                                                                             <td colspan="3" class="text-left">3.1 Pingauges</td>
                                                                         </tr>
                                                                         <tr>
                                                                             <td width="30">
-                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex prod_req_checking_data" index="1.6" type="checkbox" name="prod_measurescope" id="frm_txt_prod_measurescope" value="1">
                                                                             </td>
                                                                             <td colspan="3" class="text-left">3.2 Measurescope</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td width="30">
+                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex prod_req_checking_data" index="1.7" type="checkbox" name="prod_na" id="frm_txt_prod_na" value="1">
+                                                                            </td>
+                                                                            <td colspan="3" class="text-left">3.3 N/A</td>
                                                                         </tr>
                                                                         <tr>
                                                                             <td rowspan="2" class="align-middle">
                                                                                 <label class="form-check-label"> ACTIVITY</label>
                                                                             </td>
                                                                             <td rowspan="2" colspan="2" class="align-middle">
-                                                                                <label class="form-check-label"> Process Engr. Name/</label>
+                                                                                <label class="form-check-label"> Machine Operator Name/</label>
                                                                                 <br>
                                                                                 <label class="form-check-label"> Date/Time</label>
                                                                             </td>
@@ -1152,13 +1247,25 @@
                                                                                 <label class="form-check-label">1. Visual Insp.</label>
                                                                             </td>
                                                                             <td colspan="2">
-                                                                                <input type="text" class="form-control dieset_condition_data" index="2.9" name="check_point_7" id="frm_check_point_7">
+                                                                                {{-- <input type="text" class="form-control" index="2.9" name="check_point_7" id="frm_check_point_7"> --}}
+                                                                                <div class="input-group input-group-sm">
+                                                                                    <select class="form-control prod_req_checking_data text-center" id="selProductionVisualUser" name="prod_visual_insp_name" style="width: 100%;">
+                                                                                        <option disabled selected>-- Production --</option>
+                                                                                        {{-- <option value="">-- N/A --</option> --}}
+                                                                                    </select>
+                                                                                    {{-- <select class="form-control" type="text" name="request_type" id="frm_request_type">
+                                                                                        <option value="" disabled="" selected="">Select Engr.</option>
+                                                                                        <option value="1">Clark Chester Casuyon</option>
+                                                                                        <option value="2">Miguel Legaspi</option>
+                                                                                    </select> --}}
+                                                                                    <input readonly type="datetime" placeholder="Date/Time" class="form-control prod_req_checking_data text-center" name="prod_visual_insp_datetime" id="frm_txt_prod_visual_insp_datetime" style="padding:1%">
+                                                                                </div>
                                                                             </td>
-                                                                            <td style="padding-left:18px;">
-                                                                                <input style="width:25px; height:25px;" class="form-check-input" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                            <td class="pl-4 pt-3">
+                                                                                <input style="width:20px; height:20px;" class="form-check-input prod_req_checking_data" type="radio" index="1.8" name="prod_visual_insp_result" id="frm_txt_prod_visual_insp_result_ok" value="1">
                                                                             </td>
-                                                                            <td style="padding-left:18px;">
-                                                                                <input style="width:25px; height:25px;" class="form-check-input" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                            <td class="pl-4 pt-3">
+                                                                                <input style="width:20px; height:20px;" class="form-check-input prod_req_checking_data" type="radio" index="1.8" name="prod_visual_insp_result" id="frm_txt_prod_visual_insp_result_ng" value="0">
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
@@ -1166,13 +1273,25 @@
                                                                                 <label class="form-check-label">2. Dimension Insp.</label>
                                                                             </td>
                                                                             <td colspan="2">
-                                                                                <input type="text" class="form-control dieset_condition_data" index="2.9" name="check_point_7" id="frm_check_point_7">
+                                                                                {{-- <input type="text" class="form-control" index="2.9" name="check_point_7" id="frm_check_point_7"> --}}
+                                                                                <div class="input-group input-group-sm">
+                                                                                    <select class="form-control prod_req_checking_data text-center" id="selProductionDimentionUser" name="prod_dimension_insp_name" style="width: 100%;">
+                                                                                        <option disabled selected>-- Production --</option>
+                                                                                        {{-- <option value="">-- N/A --</option> --}}
+                                                                                    </select>
+                                                                                    {{-- <select class="form-control" type="text" name="request_type" id="frm_request_type">
+                                                                                        <option value="" disabled="" selected="">Select Engr.</option>
+                                                                                        <option value="1">Clark Chester Casuyon</option>
+                                                                                        <option value="2">Miguel Legaspi</option>
+                                                                                    </select> --}}
+                                                                                    <input readonly type="datetime" placeholder="Date/Time" class="form-control prod_req_checking_data text-center" name="prod_dimension_insp_datetime" id="frm_txt_prod_dimension_insp_datetime" style="padding:1%">
+                                                                                </div>
                                                                             </td>
-                                                                            <td style="padding-left:18px;">
-                                                                                <input style="width:25px; height:25px;" class="form-check-input" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                            <td class="pl-4 pt-3">
+                                                                                <input style="width:20px; height:20px;" class="form-check-input prod_req_checking_data" type="radio" index="1.9" name="prod_dimension_insp_result" id="frm_txt_prod_dimension_insp_result_ok" value="1">
                                                                             </td>
-                                                                            <td style="padding-left:18px;">
-                                                                                <input style="width:25px; height:25px;" class="form-check-input" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                            <td class="pl-4 pt-3">
+                                                                                <input style="width:20px; height:20px;" class="form-check-input prod_req_checking_data" type="radio" index="1.9" name="prod_dimension_insp_result" id="frm_txt_prod_dimension_insp_result_ng" value="0">
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
@@ -1180,7 +1299,7 @@
                                                                                 <label class="form-check-label">Remarks/Result</label>
                                                                             </td>
                                                                             <td colspan="4">
-                                                                                <input type="text" class="form-control dieset_condition_data" index="2.9" name="check_point_7" id="frm_check_point_7">
+                                                                                <input type="text" class="form-control prod_req_checking_data" style="height:30px" name="prod_actual_checking_remarks" id="frm_txt_prod_actual_checking_remarks">
                                                                             </td>
                                                                         </tr>
                                                                     </tbody>
@@ -1206,19 +1325,19 @@
                                                                         </tr>
                                                                         <tr>
                                                                             <td width="30">
-                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex prod_req_checking_data" type="checkbox" index="2.0" name="engr_tech_eval_sample" id="frm_txt_engr_tech_eval_sample" value="1">
                                                                             </td>
                                                                             <td width="30" colspan="3" class="text-left">1.1 Evaluation Sample</td>
                                                                         </tr>
                                                                         <tr>
                                                                             <td width="30">
-                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex prod_req_checking_data" type="checkbox" index="2.1" name="engr_tech_japan_sample" id="frm_txt_engr_tech_japan_sample" value="1">
                                                                             </td>
                                                                             <td colspan="3" class="text-left">1.2 Japan Sample</td>
                                                                         </tr>
                                                                         <tr>
                                                                             <td width="30">
-                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex prod_req_checking_data" type="checkbox" index="2.2" name="engr_tech_last_prodn_sample" id="frm_txt_engr_tech_last_prodn_sample" value="1">
                                                                             </td>
                                                                             <td colspan="3" class="text-left">1.3 Last Prodn Sample</td>
                                                                         </tr>
@@ -1230,7 +1349,7 @@
                                                                         </tr>
                                                                         <tr>
                                                                             <td width="30">
-                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex prod_req_checking_data" type="checkbox" index="2.3" name="engr_tech_material_drawing" id="frm_txt_engr_tech_material_drawing" value="1">
                                                                             </td>
                                                                             <td colspan="3" class="text-left">2.1 Material/Product Drawing</td>
                                                                         </tr>
@@ -1239,19 +1358,19 @@
                                                                             <td>
                                                                                 <div class="input-group input-group-sm">
                                                                                     <span class="input-group-text">Drawing #: </span>
-                                                                                    <input type="text" class="form-control dieset_condition_data" index="2.9" name="check_point_7" id="frm_check_point_7">
+                                                                                    <input type="text" class="form-control prod_req_checking_data" name="engr_tech_material_drawing_no" id="frm_txt_engr_tech_material_drawing_no">
                                                                                 </div>
                                                                             </td>
                                                                             <td colspan="2">
                                                                                 <div class="input-group input-group-sm">
-                                                                                    <span class="input-group-text">Rev #: </span>
-                                                                                    <input type="text" class="form-control dieset_condition_data" index="2.9" name="check_point_7" id="frm_check_point_7">
+                                                                                    <span class="input-group-text" style="padding:3%">Rev #: </span>
+                                                                                    <input type="text" class="form-control prod_req_checking_data" name="engr_tech_material_rev_no" id="frm_txt_engr_tech_material_rev_no">
                                                                                 </div>
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
                                                                             <td width="30">
-                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex prod_req_checking_data" type="checkbox" index="2.4" name="engr_tech_insp_guide" id="frm_txt_engr_tech_insp_guide" value="1">
                                                                             </td>
                                                                             <td colspan="3" class="text-left">2.2 Inspection Guide</td>
                                                                         </tr>
@@ -1260,25 +1379,25 @@
                                                                             <td>
                                                                                 <div class="input-group input-group-sm">
                                                                                     <span class="input-group-text">Drawing #: </span>
-                                                                                    <input type="text" class="form-control dieset_condition_data" index="2.9" name="check_point_7" id="frm_check_point_7">
+                                                                                    <input type="text" class="form-control prod_req_checking_data" name="engr_tech_insp_guide_drawing_no" id="frm_txt_engr_tech_insp_guide_drawing_no">
                                                                                 </div>
                                                                             </td>
                                                                             <td colspan="2">
                                                                                 <div class="input-group input-group-sm">
-                                                                                    <span class="input-group-text">Rev #: </span>
-                                                                                    <input type="text" class="form-control dieset_condition_data" index="2.9" name="check_point_7" id="frm_check_point_7">
+                                                                                    <span class="input-group-text" style="padding:3%">Rev #: </span>
+                                                                                    <input type="text" class="form-control prod_req_checking_data" name="engr_tech_insp_guide_rev_no" id="frm_txt_engr_tech_insp_guide_rev_no">
                                                                                 </div>
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
                                                                             <td width="30">
-                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex prod_req_checking_data" type="checkbox" index="2.5" name="engr_tech_dieset_eval_report" id="frm_txt_engr_tech_dieset_eval_report" value="1">
                                                                             </td>
                                                                             <td colspan="3" class="text-left">2.3 Die set Evaluation Report</td>
                                                                         </tr>
                                                                         <tr>
                                                                             <td width="30">
-                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex prod_req_checking_data" type="checkbox" index="2.6" name="engr_tech_cosmetic_defect" id="frm_txt_engr_tech_cosmetic_defect" value="1">
                                                                             </td>
                                                                             <td colspan="3" class="text-left">2.4 Cosmetic Defect(Point Panel)</td>
                                                                         </tr>
@@ -1290,19 +1409,25 @@
                                                                         </tr>
                                                                         <tr>
                                                                             <td width="30">
-                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex prod_req_checking_data" type="checkbox" index="2.7" name="engr_tech_pingauges" id="frm_txt_engr_tech_pingauges" value="1">
                                                                             </td>
                                                                             <td colspan="3" class="text-left">3.1 Pingauges</td>
                                                                         </tr>
                                                                         <tr>
                                                                             <td width="30">
-                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex prod_req_checking_data" type="checkbox" index="2.8" name="engr_tech_measurescope" id="frm_txt_engr_tech_measurescope" value="1">
                                                                             </td>
                                                                             <td colspan="3" class="text-left">3.2 Measurescope</td>
                                                                         </tr>
                                                                         <tr>
+                                                                            <td width="30">
+                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex prod_req_checking_data" type="checkbox" index="2.9" name="engr_tech_na" id="frm_txt_engr_tech_na" value="1">
+                                                                            </td>
+                                                                            <td colspan="3" class="text-left">3.3 N/A</td>
+                                                                        </tr>
+                                                                        <tr>
                                                                             <td rowspan="2" colspan="2" class="align-middle">
-                                                                                <label class="form-check-label"> Process Engr. Name/</label>
+                                                                                <label class="form-check-label"> Technician Name/</label>
                                                                                 <br>
                                                                                 <label class="form-check-label"> Date/Time</label>
                                                                             </td>
@@ -1320,29 +1445,53 @@
                                                                         </tr>
                                                                         <tr>
                                                                             <td colspan="2">
-                                                                                <input type="text" class="form-control dieset_condition_data" index="2.9" name="check_point_7" id="frm_check_point_7">
+                                                                                {{-- <input type="text" class="form-control dieset_condition_data" name="check_point_7" id="frm_check_point_7"> --}}
+                                                                                <div class="input-group input-group-sm">
+                                                                                    <select class="form-control prod_req_checking_data text-center" id="selTechnicianVisualUser" name="engr_tech_visual_insp_name" style="width: 100%;">
+                                                                                        <option disabled selected>-- Technician --</option>
+                                                                                        {{-- <option value="">-- N/A --</option> --}}
+                                                                                    </select>
+                                                                                    {{-- <select class="form-control" type="text" name="request_type" id="frm_request_type">
+                                                                                        <option value="" disabled="" selected="">Select Engr.</option>
+                                                                                        <option value="1">Clark Chester Casuyon</option>
+                                                                                        <option value="2">Miguel Legaspi</option>
+                                                                                    </select> --}}
+                                                                                    <input readonly type="datetime" placeholder="Date/Time" class="form-control prod_req_checking_data text-center" name="engr_tech_visual_insp_datetime" id="frm_txt_engr_tech_visual_insp_datetime" style="padding:1%">
+                                                                                </div>
                                                                             </td>
-                                                                            <td style="padding-left:15px;">
-                                                                                <input style="width:25px; height:25px;" class="form-check-input" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                            <td class="pl-4 pt-3">
+                                                                                <input style="width:20px; height:20px;" class="form-check-input prod_req_checking_data" type="radio" index="2.10" name="engr_tech_visual_insp_result" id="frm_txt_engr_tech_visual_insp_result_ok" value="1">
                                                                             </td>
-                                                                            <td style="padding-left:15px;">
-                                                                                <input style="width:25px; height:25px;" class="form-check-input" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                            <td class="pl-4 pt-3">
+                                                                                <input style="width:20px; height:20px;" class="form-check-input prod_req_checking_data" type="radio" index="2.10" name="engr_tech_visual_insp_result" id="frm_txt_engr_tech_visual_insp_result_ng" value="0">
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
                                                                             <td colspan="2">
-                                                                                <input type="text" class="form-control dieset_condition_data" index="2.9" name="check_point_7" id="frm_check_point_7">
+                                                                                {{-- <input type="text" class="form-control prod_req_checking_data" name="check_point_7" id="frm_check_point_7"> --}}
+                                                                                <div class="input-group input-group-sm">
+                                                                                    <select class="form-control prod_req_checking_data text-center" id="selTechnicianDimensionUser" name="engr_tech_dimension_insp_name" style="width: 100%;">
+                                                                                        <option disabled selected>-- Technician --</option>
+                                                                                        {{-- <option value="">-- N/A --</option> --}}
+                                                                                    </select>
+                                                                                    {{-- <select class="form-control" type="text" name="request_type" id="frm_request_type">
+                                                                                        <option value="" disabled="" selected="">Select Engr.</option>
+                                                                                        <option value="1">Clark Chester Casuyon</option>
+                                                                                        <option value="2">Miguel Legaspi</option>
+                                                                                    </select> --}}
+                                                                                    <input readonly type="datetime" placeholder="Date/Time" class="form-control prod_req_checking_data text-center" name="engr_tech_dimension_insp_datetime" id="frm_txt_engr_tech_dimension_insp_datetime" style="padding:1%">
+                                                                                </div>
                                                                             </td>
-                                                                            <td style="padding-left:15px;">
-                                                                                <input style="width:25px; height:25px;" class="form-check-input" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                            <td class="pl-4 pt-3">
+                                                                                <input style="width:20px; height:20px;" class="form-check-input prod_req_checking_data" type="radio" index="2.11" name="engr_tech_dimension_insp_result" id="frm_txt_engr_tech_dimension_insp_result_ok" value="1">
                                                                             </td>
-                                                                            <td style="padding-left:15px;">
-                                                                                <input style="width:25px; height:25px;" class="form-check-input" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                            <td class="pl-4 pt-3">
+                                                                                <input style="width:20px; height:20px;" class="form-check-input prod_req_checking_data" type="radio" index="2.11" name="engr_tech_dimension_insp_result" id="frm_txt_engr_tech_dimension_insp_result_ng" value="0">
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
                                                                             <td colspan="4">
-                                                                                <input type="text" class="form-control dieset_condition_data" index="2.9" name="check_point_7" id="frm_check_point_7">
+                                                                                <input type="text" style="height:30px" class="form-control prod_req_checking_data" name="engr_tech_actual_checking_remarks" id="frm_txt_engr_tech_actual_checking_remarks">
                                                                             </td>
                                                                         </tr>
                                                                     </tbody>
@@ -1368,19 +1517,19 @@
                                                                         </tr>
                                                                         <tr>
                                                                             <td width="30">
-                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex prod_req_checking_data" type="checkbox" index="3.0" name="lqc_eval_sample" id="frm_txt_lqc_eval_sample" value="1">
                                                                             </td>
                                                                             <td colspan="3" class="text-left">1.1 Evaluation Sample</td>
                                                                         </tr>
                                                                         <tr>
                                                                             <td width="30">
-                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex prod_req_checking_data" type="checkbox" index="3.1" name="lqc_japan_sample" id="frm_txt_lqc_japan_sample" value="1">
                                                                             </td>
                                                                             <td colspan="3" class="text-left">1.2 Japan Sample</td>
                                                                         </tr>
                                                                         <tr>
                                                                             <td width="30">
-                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex prod_req_checking_data" type="checkbox" index="3.2" name="lqc_last_prodn_sample" id="frm_txt_lqc_last_prodn_sample" value="1">
                                                                             </td>
                                                                             <td colspan="3" class="text-left">1.3 Last Prodn Sample</td>
                                                                         </tr>
@@ -1392,7 +1541,7 @@
                                                                         </tr>
                                                                         <tr>
                                                                             <td width="30">
-                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex prod_req_checking_data" type="checkbox" index="3.3" name="lqc_material_drawing" id="frm_txt_lqc_material_drawing" value="1">
                                                                             </td>
                                                                             <td colspan="3" class="text-left">2.1 Material/Product Drawing</td>
                                                                         </tr>
@@ -1401,19 +1550,19 @@
                                                                             <td>
                                                                                 <div class="input-group input-group-sm">
                                                                                     <span class="input-group-text">Drawing #: </span>
-                                                                                    <input type="text" class="form-control dieset_condition_data" index="2.9" name="check_point_7" id="frm_check_point_7">
+                                                                                    <input type="text" class="form-control prod_req_checking_data" name="lqc_material_drawing_no" id="frm_txt_lqc_material_drawing_no">
                                                                                 </div>
                                                                             </td>
                                                                             <td colspan="2">
                                                                                 <div class="input-group input-group-sm">
-                                                                                    <span class="input-group-text">Rev #: </span>
-                                                                                    <input type="text" class="form-control dieset_condition_data" index="2.9" name="check_point_7" id="frm_check_point_7">
+                                                                                    <span class="input-group-text" style="padding:3%">Rev #: </span>
+                                                                                    <input type="text" class="form-control prod_req_checking_data" name="lqc_material_rev_no" id="frm_txt_lqc_material_rev_no">
                                                                                 </div>
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
                                                                             <td width="30">
-                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex prod_req_checking_data" type="checkbox" index="3.4" name="lqc_insp_guide" id="frm_txt_lqc_insp_guide" value="1">
                                                                             </td>
                                                                             <td colspan="3" class="text-left">2.2 Inspection Guide</td>
                                                                         </tr>
@@ -1422,25 +1571,25 @@
                                                                             <td>
                                                                                 <div class="input-group input-group-sm">
                                                                                     <span class="input-group-text">Drawing #: </span>
-                                                                                    <input type="text" class="form-control dieset_condition_data" index="2.9" name="check_point_7" id="frm_check_point_7">
+                                                                                    <input type="text" class="form-control prod_req_checking_data" name="lqc_insp_guide_drawing_no" id="frm_txt_lqc_insp_guide_drawing_no">
                                                                                 </div>
                                                                             </td>
                                                                             <td colspan="2">
                                                                                 <div class="input-group input-group-sm">
-                                                                                    <span class="input-group-text">Rev #: </span>
-                                                                                    <input type="text" class="form-control dieset_condition_data" index="2.9" name="check_point_7" id="frm_check_point_7">
+                                                                                    <span class="input-group-text" style="padding:3%">Rev #: </span>
+                                                                                    <input type="text" class="form-control prod_req_checking_data" name="lqc_insp_guide_rev_no" id="frm_txt_lqc_insp_guide_rev_no">
                                                                                 </div>
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
                                                                             <td width="30">
-                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex prod_req_checking_data" type="checkbox" index="3.5" name="lqc_dieset_eval_report" id="frm_txt_lqc_dieset_eval_report" value="1">
                                                                             </td>
                                                                             <td colspan="3" class="text-left">2.3 Die set Evaluation Report</td>
                                                                         </tr>
                                                                         <tr>
                                                                             <td width="30">
-                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex prod_req_checking_data" type="checkbox" index="3.6" name="lqc_cosmetic_defect" id="frm_txt_lqc_cosmetic_defect" value="1">
                                                                             </td>
                                                                             <td colspan="3" class="text-left">2.4 Cosmetic Defect(Point Panel)</td>
                                                                         </tr>
@@ -1452,19 +1601,25 @@
                                                                         </tr>
                                                                         <tr>
                                                                             <td width="30">
-                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex prod_req_checking_data" type="checkbox" index="3.7" name="lqc_pingauges" id="frm_txt_lqc_pingauges" value="1">
                                                                             </td>
                                                                             <td colspan="3" class="text-left">3.1 Pingauges</td>
                                                                         </tr>
                                                                         <tr>
                                                                             <td width="30">
-                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex prod_req_checking_data" type="checkbox" index="3.8" name="lqc_measurescope" id="frm_txt_lqc_measurescope" value="1">
                                                                             </td>
                                                                             <td colspan="3" class="text-left">3.2 Measurescope</td>
                                                                         </tr>
                                                                         <tr>
+                                                                            <td width="30">
+                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex prod_req_checking_data" type="checkbox" index="3.9" name="lqc_na" id="frm_txt_lqc_na" value="1">
+                                                                            </td>
+                                                                            <td colspan="3" class="text-left">3.3 N/A</td>
+                                                                        </tr>
+                                                                        <tr>
                                                                             <td rowspan="2" colspan="2" class="align-middle">
-                                                                                <label class="form-check-label"> Process Engr. Name/</label>
+                                                                                <label class="form-check-label"> QC Inspector Name/</label>
                                                                                 <br>
                                                                                 <label class="form-check-label"> Date/Time</label>
                                                                             </td>
@@ -1482,29 +1637,53 @@
                                                                         </tr>
                                                                         <tr>
                                                                             <td colspan="2">
-                                                                                <input type="text" class="form-control dieset_condition_data" index="2.9" name="check_point_7" id="frm_check_point_7">
+                                                                                {{-- <input type="text" class="form-control dieset_condition_data" index="2.9" name="check_point_7" id="frm_check_point_7"> --}}
+                                                                                <div class="input-group input-group-sm">
+                                                                                    <select class="form-control prod_req_checking_data text-center" id="selQcVisualUser" name="lqc_visual_insp_name" style="width: 100%;">
+                                                                                        <option disabled selected>-- QC Inspector --</option>
+                                                                                        {{-- <option value="">-- N/A --</option> --}}
+                                                                                    </select>
+                                                                                    {{-- <select class="form-control" type="text" name="request_type" id="frm_request_type">
+                                                                                        <option value="" disabled="" selected="">Select Engr.</option>
+                                                                                        <option value="1">Clark Chester Casuyon</option>
+                                                                                        <option value="2">Miguel Legaspi</option>
+                                                                                    </select> --}}
+                                                                                    <input type="datetime" placeholder="Date/Time" class="form-control prod_req_checking_data text-center" name="lqc_visual_insp_datetime" id="frm_txt_lqc_visual_insp_datetime" style="padding:1%">
+                                                                                </div>
                                                                             </td>
-                                                                            <td style="padding-left:15px;">
-                                                                                <input style="width:25px; height:25px;" class="form-check-input" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                            <td class="pl-4 pt-3">
+                                                                                <input style="width:20px; height:20px;" class="form-check-input prod_req_checking_data" type="radio" index="3.10" name="lqc_visual_insp_result" id="frm_txt_lqc_visual_insp_result_ok" value="1">
                                                                             </td>
-                                                                            <td style="padding-left:15px;">
-                                                                                <input style="width:25px; height:25px;" class="form-check-input" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                            <td class="pl-4 pt-3">
+                                                                                <input style="width:20px; height:20px;" class="form-check-input prod_req_checking_data" type="radio" index="3.10" name="lqc_visual_insp_result" id="frm_txt_lqc_visual_insp_result_ng" value="0">
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
                                                                             <td colspan="2">
-                                                                                <input type="text" class="form-control dieset_condition_data" index="2.9" name="check_point_7" id="frm_check_point_7">
+                                                                                {{-- <input type="text" class="form-control prod_req_checking_data" name="check_point_7" id="frm_check_point_7"> --}}
+                                                                                <div class="input-group input-group-sm">
+                                                                                    <select class="form-control prod_req_checking_data text-center" id="selQcDimensionUser" name="lqc_dimension_insp_name" style="width: 100%;">
+                                                                                        <option disabled selected>-- QC Inspector --</option>
+                                                                                        {{-- <option value="">-- N/A --</option> --}}
+                                                                                    </select>
+                                                                                    {{-- <select class="form-control" type="text" name="request_type" id="frm_request_type">
+                                                                                        <option value="" disabled="" selected="">Select Engr.</option>
+                                                                                        <option value="1">Clark Chester Casuyon</option>
+                                                                                        <option value="2">Miguel Legaspi</option>
+                                                                                    </select> --}}
+                                                                                    <input type="datetime" placeholder="Date/Time" class="form-control prod_req_checking_data text-center" name="lqc_dimension_insp_datetime" id="frm_txt_lqc_dimension_insp_datetime" style="padding:1%">
+                                                                                </div>
                                                                             </td>
-                                                                            <td style="padding-left:15px;">
-                                                                                <input style="width:25px; height:25px;" class="form-check-input" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                            <td class="pl-4 pt-3">
+                                                                                <input style="width:20px; height:20px;" class="form-check-input prod_req_checking_data" type="radio" index="3.11" name="lqc_dimension_insp_result" id="frm_txt_lqc_dimension_insp_result_ok" value="1">
                                                                             </td>
-                                                                            <td style="padding-left:15px;">
-                                                                                <input style="width:25px; height:25px;" class="form-check-input" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                            <td class="pl-4 pt-3">
+                                                                                <input style="width:20px; height:20px;" class="form-check-input prod_req_checking_data" type="radio" index="3.11" name="lqc_dimension_insp_result" id="frm_txt_lqc_dimension_insp_result_ng" value="0">
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
                                                                             <td colspan="4">
-                                                                                <input type="text" class="form-control dieset_condition_data" index="2.9" name="check_point_7" id="frm_check_point_7">
+                                                                                <input type="text" style="height:30px" class="form-control prod_req_checking_data" index="2.9" name="lqc_actual_checking_remarks" id="frm_txt_lqc_actual_checking_remarks">
                                                                             </td>
                                                                         </tr>
                                                                     </tbody>
@@ -1530,19 +1709,19 @@
                                                                         </tr>
                                                                         <tr>
                                                                             <td width="30">
-                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex prod_req_checking_data" type="checkbox" index="4.0" name="process_engr_eval_sample" id="frm_txt_process_engr_eval_sample" value="1">
                                                                             </td>
                                                                             <td colspan="3" class="text-left">1.1 Evaluation Sample</td>
                                                                         </tr>
                                                                         <tr>
                                                                             <td width="30">
-                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex prod_req_checking_data" type="checkbox" index="4.1" name="process_engr_japan_sample" id="frm_txt_process_engr_japan_sample" value="1">
                                                                             </td>
                                                                             <td colspan="3" class="text-left">1.2 Japan Sample</td>
                                                                         </tr>
                                                                         <tr>
                                                                             <td width="30">
-                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex prod_req_checking_data" type="checkbox" index="4.2" name="process_engr_last_prodn_sample" id="frm_txt_process_engr_last_prodn_sample" value="1">
                                                                             </td>
                                                                             <td colspan="3" class="text-left">1.3 Last Prodn Sample</td>
                                                                         </tr>
@@ -1554,7 +1733,7 @@
                                                                         </tr>
                                                                         <tr>
                                                                             <td width="30">
-                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex prod_req_checking_data" type="checkbox" index="4.3" name="process_engr_material_drawing" id="frm_txt_process_engr_material_drawing" value="1">
                                                                             </td>
                                                                             <td colspan="3" class="text-left">2.1 Material/Product Drawing</td>
                                                                         </tr>
@@ -1563,19 +1742,19 @@
                                                                             <td>
                                                                                 <div class="input-group input-group-sm">
                                                                                     <span class="input-group-text">Drawing #: </span>
-                                                                                    <input type="text" class="form-control dieset_condition_data" index="2.9" name="check_point_7" id="frm_check_point_7">
+                                                                                    <input type="text" class="form-control prod_req_checking_data" name="process_engr_material_drawing_no" id="frm_txt_process_engr_material_drawing_no">
                                                                                 </div>
                                                                             </td>
                                                                             <td colspan="2">
                                                                                 <div class="input-group input-group-sm">
-                                                                                    <span class="input-group-text">Rev #: </span>
-                                                                                    <input type="text" class="form-control dieset_condition_data" index="2.9" name="check_point_7" id="frm_check_point_7">
+                                                                                    <span class="input-group-text" style="padding:3%">Rev #: </span>
+                                                                                    <input type="text" class="form-control prod_req_checking_data" name="process_engr_material_rev_no" id="frm_txt_process_engr_material_rev_no">
                                                                                 </div>
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
                                                                             <td width="30">
-                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex prod_req_checking_data" type="checkbox" index="4.4" name="process_engr_insp_guide" id="frm_txt_process_engr_insp_guide" value="1">
                                                                             </td>
                                                                             <td colspan="3" class="text-left">2.2 Inspection Guide</td>
                                                                         </tr>
@@ -1584,25 +1763,25 @@
                                                                             <td>
                                                                                 <div class="input-group input-group-sm">
                                                                                     <span class="input-group-text">Drawing #: </span>
-                                                                                    <input type="text" class="form-control dieset_condition_data" index="2.9" name="check_point_7" id="frm_check_point_7">
+                                                                                    <input type="text" class="form-control prod_req_checking_data" name="process_engr_insp_guide_drawing_no" id="frm_txt_process_engr_insp_guide_drawing_no">
                                                                                 </div>
                                                                             </td>
                                                                             <td colspan="2">
                                                                                 <div class="input-group input-group-sm">
-                                                                                    <span class="input-group-text">Rev #: </span>
-                                                                                    <input type="text" class="form-control dieset_condition_data" index="2.9" name="check_point_7" id="frm_check_point_7">
+                                                                                    <span class="input-group-text" style="padding:3%">Rev #: </span>
+                                                                                    <input type="text" class="form-control prod_req_checking_data" name="process_engr_insp_guide_rev_no" id="frm_txt_process_engr_insp_guide_rev_no">
                                                                                 </div>
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
                                                                             <td width="30">
-                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex prod_req_checking_data" type="checkbox" index="4.5" name="process_engr_dieset_eval_report" id="frm_txt_process_engr_dieset_eval_report" value="1">
                                                                             </td>
                                                                             <td colspan="3" class="text-left">2.3 Die set Evaluation Report</td>
                                                                         </tr>
                                                                         <tr>
                                                                             <td width="30">
-                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex prod_req_checking_data" type="checkbox" index="4.6" name="process_engr_cosmetic_defect" id="frm_txt_process_engr_cosmetic_defect" value="1">
                                                                             </td>
                                                                             <td colspan="3" class="text-left">2.4 Cosmetic Defect(Point Panel)</td>
                                                                         </tr>
@@ -1614,15 +1793,21 @@
                                                                         </tr>
                                                                         <tr>
                                                                             <td width="30">
-                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex prod_req_checking_data" type="checkbox" index="4.7" name="process_engr_pingauges" id="frm_txt_process_engr_pingauges" value="1">
                                                                             </td>
                                                                             <td colspan="3" class="text-left">3.1 Pingauges</td>
                                                                         </tr>
                                                                         <tr>
                                                                             <td width="30">
-                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex prod_req_checking_data" type="checkbox" index="4.8" name="process_engr_measurescope" id="frm_txt_process_engr_measurescope" value="1">
                                                                             </td>
                                                                             <td colspan="3" class="text-left">3.2 Measurescope</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td width="30">
+                                                                                <input style="margin-left:0; width:20px; height:20px;" class="form-check-input d-flex prod_req_checking_data" type="checkbox" index="4.9" name="process_engr_na" id="frm_txt_process_engr_na" value="1">
+                                                                            </td>
+                                                                            <td colspan="3" class="text-left">3.3 N/A</td>
                                                                         </tr>
                                                                         <tr>
                                                                             <td rowspan="2" colspan="2" class="align-middle">
@@ -1643,30 +1828,54 @@
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
+                                                                            {{-- OGAB --}}
                                                                             <td colspan="2">
-                                                                                <input type="text" class="form-control dieset_condition_data" index="2.9" name="check_point_7" id="frm_check_point_7">
+                                                                                <div class="input-group input-group-sm">
+                                                                                    <select class="form-control prod_req_checking_data text-center" id="selEngrVisualUser" name="process_engr_visual_insp_name" style="width: 100%;">
+                                                                                        <option disabled selected>-- Process Engr --</option>
+                                                                                        {{-- <option value="">-- N/A --</option> --}}
+                                                                                    </select>
+                                                                                    {{-- <select class="form-control" type="text" name="request_type" id="frm_request_type">
+                                                                                        <option value="" disabled="" selected="">Select Engr.</option>
+                                                                                        <option value="1">Clark Chester Casuyon</option>
+                                                                                        <option value="2">Miguel Legaspi</option>
+                                                                                    </select> --}}
+                                                                                    <input type="datetime" placeholder="Date/Time" class="form-control prod_req_checking_data text-center" name="process_engr_visual_insp_datetime" id="frm_txt_process_engr_visual_insp_datetime" style="padding:1%">
+                                                                                </div>
                                                                             </td>
-                                                                            <td style="padding-left:15px;">
-                                                                                <input style="width:25px; height:25px;" class="form-check-input" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                            <td class="pl-4 pt-3">
+                                                                                <input style="width:20px; height:20px;" class="form-check-input prod_req_checking_data" type="radio" index="4.10" name="process_engr_visual_insp_result" id="frm_txt_process_engr_visual_insp_resul_ok" value="1">
                                                                             </td>
-                                                                            <td style="padding-left:15px;">
-                                                                                <input style="width:25px; height:25px;" class="form-check-input" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                            <td class="pl-4 pt-3">
+                                                                                <input style="width:20px; height:20px;" class="form-check-input prod_req_checking_data" type="radio" index="4.10" name="process_engr_visual_insp_result" id="frm_txt_process_engr_visual_insp_result_ng" value="0">
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
-                                                                            <td colspan="2">
-                                                                                <input type="text" class="form-control dieset_condition_data" index="2.9" name="check_point_7" id="frm_check_point_7">
+                                                                            <td colspan="2" class="text-center">
+                                                                                {{-- <input type="text" class="form-control prod_req_checking_data" name="check_point_7" id="frm_check_point_7"> --}}
+                                                                                <div class="input-group input-group-sm">
+                                                                                    <select class="form-control prod_req_checking_data text-center" id="selEngrDimensionUser" name="process_engr_dimension_insp_name" style="width: 100%;">
+                                                                                        <option disabled selected>-- Process Engr --</option>
+                                                                                        {{-- <option value="">-- N/A --</option> --}}
+                                                                                    </select>
+                                                                                    {{-- <select class="form-control" type="text" name="request_type" id="frm_request_type">
+                                                                                        <option value="" disabled="" selected="">Select Engr.</option>
+                                                                                        <option value="1">Clark Chester Casuyon</option>
+                                                                                        <option value="2">Miguel Legaspi</option>
+                                                                                    </select> --}}
+                                                                                    <input type="datetime" placeholder="Date/Time" class="form-control prod_req_checking_data text-center" name="process_engr_dimension_insp_datetime" id="frm_txt_process_engr_dimension_insp_datetime" style="padding:1%">
+                                                                                </div>
                                                                             </td>
-                                                                            <td style="padding-left:15px;">
-                                                                                <input style="width:25px; height:25px;" class="form-check-input" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                            <td class="pl-4 pt-3">
+                                                                                <input style="width:20px; height:20px;" class="form-check-input prod_req_checking_data" type="radio" index="4.11" name="process_engr_dimension_insp_result" id="frm_txt_process_engr_dimension_insp_result_ok" value="1">
                                                                             </td>
-                                                                            <td style="padding-left:15px;">
-                                                                                <input style="width:25px; height:25px;" class="form-check-input" type="checkbox" index="1.0" name="action_1" id="frm_txt_action_1" value="1">
+                                                                            <td class="pl-4 pt-3">
+                                                                                <input style="width:20px; height:20px;" class="form-check-input prod_req_checking_data" type="radio" index="4.11" name="process_engr_dimension_insp_result" id="frm_txt_process_engr_dimension_insp_result_ng" value="0">
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
                                                                             <td colspan="4">
-                                                                                <input type="text" class="form-control dieset_condition_data" index="2.9" name="check_point_7" id="frm_check_point_7">
+                                                                                <input type="text" style="height:30px" class="form-control prod_req_checking_data" name="process_engr_actual_checking_remarks" id="frm_txt_process_engr_actual_checking_remarks">
                                                                             </td>
                                                                         </tr>
                                                                     </tbody>
@@ -1690,7 +1899,7 @@
                           <button type="button" id="id_btn_close" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
                       </div>
                   </div>
-                </form>
+                {{-- </form> --}}
 
               </div>
             </div>
@@ -1886,15 +2095,21 @@
                                         <div class="col-sm-6">
                                             <br>
                                             <label class="form-check-label"> Fabricated by:</label>
-                                            <input type="text" class="form-control text-center align-middle dieset_condition_data" name="fabricated_by_id" id="frm_txt_fabricated_by_id" hidden>
-                                            <input type="text" class="form-control text-center align-middle dieset_condition_data" name="fabricated_by" id="frm_txt_fabricated_by" readonly>
+                                            <select class="form-control machine_setup_data" id="selFabricatedBy" name="fabricated_by" style="width: 100%;">
+                                                <option disabled selected>-- Select Engr. --</option>
+                                            </select>
+                                            {{-- <input type="text" class="form-control text-center align-middle dieset_condition_data" name="fabricated_by_id" id="frm_txt_fabricated_by_id" hidden>
+                                            <input type="text" class="form-control text-center align-middle dieset_condition_data" name="fabricated_by" id="frm_txt_fabricated_by" readonly> --}}
                                             <br>
                                         </div>
                                         <div class="col-sm-6">
                                             <br>
                                             <label class="form-check-label"> Measurement validated by:</label>
-                                            <input type="text" class="form-control text-center align-middle dieset_condition_data" name="m_validated_by_id" id="frm_m_validated_by_id" hidden>
-                                            <input type="text" class="form-control text-center align-middle dieset_condition_data" name="m_validated_by" id="frm_m_validated_by" readonly>
+                                            <select class="form-control machine_setup_data" id="selValidatedBy" name="m_validated_by" style="width: 100%;">
+                                                <option disabled selected>-- Select Engr. --</option>
+                                            </select>
+                                            {{-- <input type="text" class="form-control text-center align-middle dieset_condition_data" name="m_validated_by_id" id="frm_m_validated_by_id" hidden>
+                                            <input type="text" class="form-control text-center align-middle dieset_condition_data" name="m_validated_by" id="frm_m_validated_by" readonly> --}}
                                             <br>
                                         </div>
                                     </div>
@@ -1903,7 +2118,7 @@
                                 <div class="table-responsive col-sm-6 border border-dark">
                                     <div class="text-right mt-2">
                                         <button type="button" class="btn btn-primary btn-sm float-right" id="btnPartsDrawingAddRow"><i class="fa fa-check fa-xs icon_save"></i> Add Row</button>
-                                        <button type="button" class="btn btn-sm btn-danger d-none float-right mr-2" id="btnPartsDrawingRemoveRow"><i class="fas fa-times"></i> Remove Row</button>
+                                        <button type="button" class="btn btn-sm btn-danger float-right mr-2" id="btnPartsDrawingRemoveRow"><i class="fas fa-times"></i> Remove Row</button>
                                     </div>
                                     <table id="tblPartsDrawingData" class="table table-sm table-bordered table-hover display nowrap mt-1" style="width: 100%;">
                                         <thead>
@@ -1965,11 +2180,251 @@
 
 $(document).ready(function() {
 
+    $('.select2bs4').select2({
+            theme: 'bootstrap4'
+        });
+
+
+    GetProductionUsers(1, $("#selProductionUser"));
+    GetTechnicianUser(3, $("#selTechnicianUser"));
+    GetSupervisorEngrUser(4, $("#selSupervisorEngrUser"));
+
+    GetProductionUsers(1, $("#selProductionVisualUser"));
+    GetProductionUsers(1, $("#selProductionDimentionUser"));
+    GetTechnicianUser(3, $("#selTechnicianVisualUser"));
+    GetTechnicianUser(3, $("#selTechnicianDimensionUser"));
+    GetSupervisorEngrUser(4, $("#selEngrVisualUser"));
+    GetSupervisorEngrUser(4, $("#selEngrDimensionUser"));
+    GetQcInspectorUser(5, $("#selQcVisualUser"));
+    GetQcInspectorUser(5, $("#selQcDimensionUser"));
+
     $(document).on('hidden.bs.modal', '.modal',
     () => $('.modal:visible').length && $(document.body).addClass('modal-open'));
 
     var frmProdIdentification = $('#frm_prod_identification');
         // GetUserIDBySession();
+
+    function GetProductionUsers(position, cboElement){
+        // console.log
+        var selUserPositionElement = $('#selProductionUser');
+        GetUserByPosition(position, cboElement, selUserPositionElement);
+    }
+
+    function GetTechnicianUser(position, cboElement){
+        var selUserPositionElement = $('#selTechnicianUser');
+        GetUserByPosition(position, cboElement, selUserPositionElement);
+    }
+
+    function GetQcInspectorUser(position, cboElement){
+        var selUserPositionElement = $('#selQcInspectorUser');
+        GetUserByPosition(position, cboElement, selUserPositionElement);
+    }
+
+    function GetSupervisorEngrUser(position, cboElement){
+        var selUserPositionElement = $('#selSupervisorEngrUser');
+        GetUserByPosition(position, cboElement, selUserPositionElement);
+    }
+
+    function GetUserByPosition(position, cboElement, selUserPositionElement){
+        if(position == 1){
+            let result = '<option value="" disabled selected>--Select Production--</option>';
+        }else if(position == 3){
+            let result = '<option value="" disabled selected>--Select Technician--</option>';
+        }else if(position == 4){
+            let result = '<option value="" disabled selected>--Select Supervisor/Engr.--</option>';
+        }else if(position == 5){
+            let result = '<option value="" disabled selected>--Select QC Inspector--</option>';
+        }
+        $.ajax({
+            url: 'get_users_by_position',
+            method: 'get',
+            data: {
+                'position': position
+            },
+            dataType: 'json',
+            beforeSend: function() {
+                    result = '<option value="0" disabled selected>--Loading--</option>';
+                    cboElement.html(result);
+            },
+            success: function(JsonObject) {
+                if (JsonObject['users'].length > 0) {
+                    if(JsonObject['users'][0].position == 1){
+                    result = '<option value="" disabled selected>--Select Production--</option>';
+                    }else if(JsonObject['users'][0].position == 3){
+                    result = '<option value="" disabled selected>--Select Technician--</option>';
+                    }else if(JsonObject['users'][0].position == 4){
+                    result = '<option value="" disabled selected>--Select Supervisor/Engr.--</option>';
+                    }else if(JsonObject['users'][0].position == 5){
+                    result = '<option value="" disabled selected>--Select QC Inspector--</option>';
+                    }
+                    result += '<option value="N/A"> N/A </option>';
+                    // result = '<option value="" selected>-- N/A --</option>';
+                    for (let index = 0; index < JsonObject['users'].length; index++) {
+                        result += '<option value="' + JsonObject['users'][index].id + '">' + JsonObject['users'][index].rapidx_user_details.name + '</option>';
+                    }
+                } else {
+                    result = '<option value="0" selected disabled> -- No record found -- </option>';
+                }
+                cboElement.html(result);
+                // selUserPositionElement.select2();
+            },
+            error: function(data, xhr, status) {
+                result = '<option value="0" selected disabled> -- Reload Again -- </option>';
+                cboElement.html(result);
+                console.log('Data: ' + data + "\n" + "XHR: " + xhr + "\n" + "Status: " + status);
+            }
+        });
+    }
+
+    // function GetTechnicianUser(position, cboElement, selUserPositionElement){
+    //     if(position == 1){
+    //         let result = '<option value="" disabled selected>--Select Production--</option>';
+    //     }else if(position == 3){
+    //         let result = '<option value="" disabled selected>--Select Technician--</option>';
+    //     }else if(position == 4){
+    //         let result = '<option value="" disabled selected>--Select Supervisor/Engr.--</option>';
+    //     }
+    //     $.ajax({
+    //         url: 'get_users_by_position',
+    //         method: 'get',
+    //         data: {
+    //             'position': position
+    //         },
+    //         dataType: 'json',
+    //         beforeSend: function() {
+    //                 result = '<option value="0" disabled selected>--Loading--</option>';
+    //                 cboElement.html(result);
+    //         },
+    //         success: function(JsonObject) {
+    //             if (JsonObject['users'].length > 0) {
+    //                 if(JsonObject['users'][0].position == 1){
+    //                 result = '<option value="" disabled selected>--Select Production--</option>';
+    //                 }else if(JsonObject['users'][0].position == 3){
+    //                 result = '<option value="" disabled selected>--Select Technician--</option>';
+    //                 }else if(JsonObject['users'][0].position == 4){
+    //                 result = '<option value="" disabled selected>--Select Supervisor/Engr.--</option>';
+    //                 }
+    //                 result += '<option value="N/A"> N/A </option>';
+    //                 // result = '<option value="" selected>-- N/A --</option>';
+    //                 for (let index = 0; index < JsonObject['users'].length; index++) {
+    //                     result += '<option value="' + JsonObject['users'][index].id + '">' + JsonObject['users'][index].rapidx_user_details.name + '</option>';
+    //                 }
+    //             } else {
+    //                 result = '<option value="0" selected disabled> -- No record found -- </option>';
+    //             }
+    //             cboElement.html(result);
+    //             // selUserPositionElement.select2();
+    //         },
+    //         error: function(data, xhr, status) {
+    //             result = '<option value="0" selected disabled> -- Reload Again -- </option>';
+    //             cboElement.html(result);
+    //             console.log('Data: ' + data + "\n" + "XHR: " + xhr + "\n" + "Status: " + status);
+    //         }
+    //     });
+    // }
+
+    // function GetSupervisorEngrUser(position, cboElement, selUserPositionElement){
+    //     if(position == 1){
+    //         let result = '<option value="" disabled selected>--Select Production--</option>';
+    //     }else if(position == 3){
+    //         let result = '<option value="" disabled selected>--Select Technician--</option>';
+    //     }else if(position == 4){
+    //         let result = '<option value="" disabled selected>--Select Supervisor/Engr.--</option>';
+    //     }
+    //     $.ajax({
+    //         url: 'get_users_by_position',
+    //         method: 'get',
+    //         data: {
+    //             'position': position
+    //         },
+    //         dataType: 'json',
+    //         beforeSend: function() {
+    //                 result = '<option value="0" disabled selected>--Loading--</option>';
+    //                 cboElement.html(result);
+    //         },
+    //         success: function(JsonObject) {
+    //             if (JsonObject['users'].length > 0) {
+    //                 if(JsonObject['users'][0].position == 1){
+    //                 result = '<option value="" disabled selected>--Select Production--</option>';
+    //                 }else if(JsonObject['users'][0].position == 3){
+    //                 result = '<option value="" disabled selected>--Select Technician--</option>';
+    //                 }else if(JsonObject['users'][0].position == 4){
+    //                 result = '<option value="" disabled selected>--Select Supervisor/Engr.--</option>';
+    //                 }
+    //                 result += '<option value="N/A"> N/A </option>';
+    //                 // result = '<option value="" selected>-- N/A --</option>';
+    //                 for (let index = 0; index < JsonObject['users'].length; index++) {
+    //                     result += '<option value="' + JsonObject['users'][index].id + '">' + JsonObject['users'][index].rapidx_user_details.name + '</option>';
+    //                 }
+    //             } else {
+    //                 result = '<option value="0" selected disabled> -- No record found -- </option>';
+    //             }
+    //             cboElement.html(result);
+    //             // selUserPositionElement.select2();
+    //         },
+    //         error: function(data, xhr, status) {
+    //             result = '<option value="0" selected disabled> -- Reload Again -- </option>';
+    //             cboElement.html(result);
+    //             console.log('Data: ' + data + "\n" + "XHR: " + xhr + "\n" + "Status: " + status);
+    //         }
+    //     });
+    // }
+
+    // function GetTechnicianUser(position, cboElement){
+    //     let result = '<option value="0" disabled selected>--Select Production--</option>';
+    //     $.ajax({
+    //         url: 'get_users_by_position',
+    //         method: 'get',
+    //         data: {
+    //             'position': position
+    //         },
+    //         dataType: 'json',
+    //         success: function(JsonObject) {
+    //             if (JsonObject['users'].length > 0) {
+    //                 for (let index = 0; index < JsonObject['users'].length; index++) {
+    //                     result += '<option value="' + JsonObject['users'][index].id + '">' + JsonObject['users'][index].rapidx_user_details.name + '</option>';
+    //                 }
+    //             } else {
+    //                 result = '<option value="0" selected disabled> -- No record found -- </option>';
+    //             }
+    //             cboElement.html(result);
+    //             $("#selUserByPosition").select2();
+    //         },
+    //         error: function(data, xhr, status) {
+    //             result = '<option value="0" selected disabled> -- Reload Again -- </option>';
+    //             cboElement.html(result);
+    //             console.log('Data: ' + data + "\n" + "XHR: " + xhr + "\n" + "Status: " + status);
+    //         }
+    //     });
+    // }
+
+    // function GetSupervisorEngrUser(position, cboElement){
+    //     let result = '<option value="0" disabled selected>--Select Production--</option>';
+    //     $.ajax({
+    //         url: 'get_users_by_position',
+    //         method: 'get',
+    //         data: {
+    //             'position': position
+    //         },
+    //         dataType: 'json',
+    //         success: function(JsonObject) {
+    //             if (JsonObject['users'].length > 0) {
+    //                 for (let index = 0; index < JsonObject['users'].length; index++) {
+    //                     result += '<option value="' + JsonObject['users'][index].id + '">' + JsonObject['users'][index].rapidx_user_details.name + '</option>';
+    //                 }
+    //             } else {
+    //                 result = '<option value="0" selected disabled> -- No record found -- </option>';
+    //             }
+    //             cboElement.html(result);
+    //             $("#selUserByPosition").select2();
+    //         },
+    //         error: function(data, xhr, status) {
+    //             result = '<option value="0" selected disabled> -- Reload Again -- </option>';
+    //             cboElement.html(result);
+    //             console.log('Data: ' + data + "\n" + "XHR: " + xhr + "\n" + "Status: " + status);
+    //         }
+    //     });
+    // }
 
     // GET PREPARED BY FOR MATERIAL ISSUANCE
     function GetUserIDBySession(){
@@ -2215,7 +2670,7 @@ $(document).ready(function() {
         // else{
             // $('input', frmProdIdentification).val('');
             // $('select', frmProdIdentification).val('');
-            $("#frm_prod_identification")[0].reset();
+            frmProdIdentification[0].reset();
             frmProdIdentification.find('.Part2').attr('hidden',true);
             frmProdIdentification.find('.Part3').attr('hidden',true);
             frmProdIdentification.find('.Part4').attr('hidden',true);
@@ -2272,23 +2727,6 @@ $(document).ready(function() {
         // }
     });
 
-    //ClarkGG
-    // $("#id_btn_save").click(function(){
-    //     if(){
-
-    //     }
-    // });
-
-    //Assign Value clark gggg commented
-    // $('[type="checkbox"]').click(function(){
-    //     let isChecked = 0;
-    //     if($(this).prop('checked')){
-    //         isChecked = 1;
-    //     }
-    //     $(this).val(isChecked);
-    //     console.log('click mo', isChecked);
-    // });
-
     var ActionDonePartsNoArr = [];
     var ActionDoneQuantityArr = [];
 
@@ -2300,9 +2738,6 @@ $(document).ready(function() {
             AddDmrpqc();
         }
         else if(process_status == 2){
-            // console.log(process_status);
-            // console.table('form', $('#frm_prod_identification').serialize());
-
             for(let index = 1; index <= $('#row_counter').val(); index++){
                 let parts_no = $('.dieset_condition_data[index="4.'+index+'"][name="parts_no"]').val();
                 let quantity = $('.dieset_condition_data[index="4.'+index+'"][name="quantity"]').val();
@@ -2310,36 +2745,15 @@ $(document).ready(function() {
                 ActionDonePartsNoArr.push(parts_no);
                 ActionDoneQuantityArr.push(quantity);
             }
-            // ActionDonePartsNoArr = implode(",",ActionDonePartsNoArr);
-            // ActionDoneQuantityArr = implode(",",ActionDoneQuantityArr);
-            console.log('parts_no', ActionDonePartsNoArr);
-            console.log('quantity', ActionDoneQuantityArr);
-            // var action_name;
-            // $('.dieset_condition_data').each(function(){
-            //     // action_name = $(this).attr('name');
-            //     // obj = {};
-            //     // obj[action_name] = $(this).val();
-            //     // DiesetConditionData.push(obj);
-            //     DiesetConditionData.push({
-            //         name: $(this).attr('name'),
-            //         value: $(this).val(),
-            //     });
-            // });
-            // var objDiesetConditionData = DiesetConditionData.reduce(function(o, val) { o[val] = val; return o; }, {});
-            // console.table(objDiesetConditionData);
-
-            // var myObject = Object.assign({}, DiesetConditionData);
-
-            // var myObject = JSON.stringify(Object.assign({}, DiesetConditionData));
-            // console.log(JSON.stringify(myObject));
-            // console.log(DiesetConditionData.serialize());
-
-            // UpdateDiesetConditionData();
-            console.log($('.dieset_condition_data').serialize());
             UpdateDiesetConditionData(ActionDonePartsNoArr, ActionDoneQuantityArr, $('#txt_global_dmrpqc_id').val(), $('#txt_global_status').val(), $('#txt_user_id').val());
 
         }else if(process_status == 3){
-
+            UpdateDiesetConditionCheckingData($('#txt_global_dmrpqc_id').val(), $('#txt_global_status').val(), $('#txt_user_id').val());
+        }else if(process_status == 4){
+            UpdateMachineSetupData($('#txt_global_dmrpqc_id').val(), $('#txt_global_status').val(), $('#txt_user_id').val());
+        }else if(process_status == 5){
+            console.log('test');
+            UpdateProdReqCheckingData($('#txt_global_dmrpqc_id').val(), $('#txt_global_status').val(), $('#txt_user_id').val());
         }
     });
 
@@ -2351,9 +2765,6 @@ $(document).ready(function() {
     let process_status = $('#txt_global_status').val();
 
     if(process_status == 2){
-            // console.log(process_status);
-            // console.table('form', $('#frm_prod_identification').serialize());
-
             for(let index = 1; index <= $('#PartsDrawingRowCounter').val(); index++){
                 let specification = $('.PartsDrawing[index="10.'+index+'"][name="specification"]').val();
                 let actual_measurement = $('.PartsDrawing[index="10.'+index+'"][name="actual_measurement"]').val();
@@ -2361,15 +2772,7 @@ $(document).ready(function() {
                 SpecificationArr.push(specification);
                 ActualMeasurementArr.push(actual_measurement);
             }
-            // console.log('specification', SpecificationArr);
-            // console.log('actual_measurement', ActualMeasurementArr);
-            // console.log('teststaas', $('#txtAddFile').val());
-            // console.table($('#FrmPartsDrawing').serialize());
-            // console.log('');
             UpdatePartsDrawingData(SpecificationArr, ActualMeasurementArr, $('#txt_global_dmrpqc_id').val(), $('#txt_global_status').val(), $('#txt_user_id').val());
-            // var formData = new FormData($('#FrmPartsDrawing')[0]);
-            // console.log(formData);
-            // UpdatePartsDrawingData();
         }
     });
 
@@ -2492,7 +2895,6 @@ $(document).ready(function() {
         ActualMeasurementArr = [];
     }
 
-
     function UpdateDiesetConditionData(PartsNoArr, QuantityArr, request_id, process_status, user_id){
     // function UpdateDiesetConditionData(){
         let _token = "{{ csrf_token() }}";
@@ -2500,16 +2902,145 @@ $(document).ready(function() {
         $.ajax({
             url: "update_dieset_conditon_data",
             method: "post",
+            data: data,
+            dataType: "json",
+            beforeSend: function(){
+            },
+            success: function(JsonObject){
+                if(JsonObject['error'] == "Please Select Action Done"){
+                    // console.log(JsonObject['error']);
+                    toastr.error('Please Select Action Done');
+                    ActionDonePartsNoArr  = [];
+                    ActionDoneQuantityArr = [];
+                }else if(JsonObject['result'] == 'Success'){
+                    $("#modalProdIdentification").modal('hide');
+                    $("#frm_prod_identification")[0].reset();
+                    frmProdIdentification.find('input').removeClass('is-invalid');
+                    frmProdIdentification.find('input').attr('title','');
+                    frmProdIdentification.find('select').removeClass('is-invalid');
+                    frmProdIdentification.find('select').attr('title','');
+                    toastr.success('New Request was succesfully saved!');
+                }else if(JsonObject['result'] == 2){
+                    toastr.error('Saving Failed! Item Code Still Ongoing Preparation');
+                    ActionDonePartsNoArr  = [];
+                    ActionDoneQuantityArr = [];
+                }
+                else{
+                    toastr.error('Saving Failed! Please check all fields. Put N/A if not applicable. Check all radio button.');
+                    ActionDonePartsNoArr  = [];
+                    ActionDoneQuantityArr = [];
+                }
+                dataTableDmrpqc.draw();
+            },
+            error: function(data, xhr, status){
+                toastr.error('An error occured!\n' + 'Data: ' + data + "\n" + "XHR: " + xhr + "\n" + "Status: " + status);
+            }
+        });
+    }
+
+    function UpdateDiesetConditionCheckingData(request_id, process_status, user_id){
+    // function UpdateDiesetConditionData(){
+        let _token = "{{ csrf_token() }}";
+        var data = $.param({ _token, request_id, process_status, user_id}) + '&' + $('.dieset_condition_checking_data').serialize();
+        console.log(data);
+
+        $.ajax({
+            url: "update_dieset_conditon_checking_data",
+            method: "post",
             // _token: _token,
             data: data,
-            // data: $('#frm_prod_identification').serialize(),
-            // data: {
-            //     _token: _token,
-            //     request_id: request_id,
-            //     process_status: process_status,
-            //     user_id: user_id,
-            //     data: data
-            // },
+            dataType: "json",
+            beforeSend: function(){
+            },
+            success: function(JsonObject){
+                if(JsonObject['error'] == "Please Select Action Done"){
+                    // console.log(JsonObject['error']);
+                    toastr.error('Please Select Action Done');
+                    ActionDonePartsNoArr  = [];
+                    ActionDoneQuantityArr = [];
+                }else if(JsonObject['result'] == 'Success'){
+                    $("#modalProdIdentification").modal('hide');
+                    $("#frm_prod_identification")[0].reset();
+                    frmProdIdentification.find('input').removeClass('is-invalid');
+                    frmProdIdentification.find('input').attr('title','');
+                    frmProdIdentification.find('select').removeClass('is-invalid');
+                    frmProdIdentification.find('select').attr('title','');
+                    toastr.success('New Request was succesfully saved!');
+                }else if(JsonObject['result'] == 2){
+                    toastr.error('Saving Failed! Item Code Still Ongoing Preparation');
+                    ActionDonePartsNoArr  = [];
+                    ActionDoneQuantityArr = [];
+                }
+                else{
+                    toastr.error('Saving Failed! Please check all fields. Put N/A if not applicable. Check all radio button.');
+                    ActionDonePartsNoArr  = [];
+                    ActionDoneQuantityArr = [];
+                }
+                dataTableDmrpqc.draw();
+            },
+            error: function(data, xhr, status){
+                toastr.error('An error occured!\n' + 'Data: ' + data + "\n" + "XHR: " + xhr + "\n" + "Status: " + status);
+            }
+        });
+    }
+
+    function UpdateMachineSetupData(request_id, process_status, user_id){
+    // function UpdateDiesetConditionData(){
+        let _token = "{{ csrf_token() }}";
+        var data = $.param({ _token, request_id, process_status, user_id}) + '&' + $('.machine_setup_data').serialize();
+        console.log(data);
+
+        $.ajax({
+            url: "update_machine_setup_data",
+            method: "post",
+            // _token: _token,
+            data: data,
+            dataType: "json",
+            beforeSend: function(){
+            },
+            success: function(JsonObject){
+                if(JsonObject['error'] == "Please Select Action Done"){
+                    // console.log(JsonObject['error']);
+                    toastr.error('Please Select Action Done');
+                    ActionDonePartsNoArr  = [];
+                    ActionDoneQuantityArr = [];
+                }else if(JsonObject['result'] == 'Success'){
+                    $("#modalProdIdentification").modal('hide');
+                    $("#frm_prod_identification")[0].reset();
+                    frmProdIdentification.find('input').removeClass('is-invalid');
+                    frmProdIdentification.find('input').attr('title','');
+                    frmProdIdentification.find('select').removeClass('is-invalid');
+                    frmProdIdentification.find('select').attr('title','');
+                    toastr.success('New Request was succesfully saved!');
+                }else if(JsonObject['result'] == 2){
+                    toastr.error('Saving Failed! Item Code Still Ongoing Preparation');
+                    ActionDonePartsNoArr  = [];
+                    ActionDoneQuantityArr = [];
+                }
+                else{
+                    toastr.error('Saving Failed! Please check all fields. Put N/A if not applicable. Check all radio button.');
+                    ActionDonePartsNoArr  = [];
+                    ActionDoneQuantityArr = [];
+                }
+                dataTableDmrpqc.draw();
+            },
+            error: function(data, xhr, status){
+                toastr.error('An error occured!\n' + 'Data: ' + data + "\n" + "XHR: " + xhr + "\n" + "Status: " + status);
+            }
+        });
+    }
+
+    function UpdateProdReqCheckingData(request_id, process_status, user_id){
+    // function UpdateDiesetConditionData(){
+        let _token = "{{ csrf_token() }}";
+        var data = $.param({ _token, request_id, process_status, user_id}) + '&' + $('.prod_req_checking_data').serialize();
+        console.log(data);
+
+        $.ajax({
+            url: "update_product_req_checking_data",
+            method: "post",
+            // _token: _token,
+            data: data,
             dataType: "json",
             beforeSend: function(){
             },
@@ -2548,57 +3079,57 @@ $(document).ready(function() {
     $("#tbl_dmrpqc").on('click', '.actionViewBtn', function(e){
         let id = $(this).attr('dmrpqc_id');
         // GetDmrpqcDetails(id);
-        $.ajax({
-            url: "get_dmrpqc_details_id",
-            method: "get",
-            data: {
-                id: id,
-            },
-            dataType: "json",
-            success: function(response){
-                    let dmrpqc_details = response['dmrpqc_details'];
+        // $.ajax({
+        //     url: "get_dmrpqc_details_id",
+        //     method: "get",
+        //     data: {
+        //         id: id,
+        //     },
+        //     dataType: "json",
+        //     success: function(response){
+        //             let dmrpqc_details = response['dmrpqc_details'];
 
-                    $("#frm_txt_device_name").val(dmrpqc_details[0].device_name);
-                    $("#frm_txt_po_no").val(dmrpqc_details[0].po_number);
-                    $("#frm_txt_item_code").val(dmrpqc_details[0].item_code);
-                    $("#frm_txt_die_no").val(dmrpqc_details[0].die_no);
-                    $("#frm_txt_drawing_no").val(dmrpqc_details[0].drawing_no);
-                    $("#frm_txt_rev_no").val(dmrpqc_details[0].rev_no);
-                    $("#frm_txt_start_datetime").val(dmrpqc_details[0].start_date_time);
-                    $("#frm_request_type").val(dmrpqc_details[0].request_type);
+        //             $("#frm_txt_device_name").val(dmrpqc_details[0].device_name);
+        //             $("#frm_txt_po_no").val(dmrpqc_details[0].po_number);
+        //             $("#frm_txt_item_code").val(dmrpqc_details[0].item_code);
+        //             $("#frm_txt_die_no").val(dmrpqc_details[0].die_no);
+        //             $("#frm_txt_drawing_no").val(dmrpqc_details[0].drawing_no);
+        //             $("#frm_txt_rev_no").val(dmrpqc_details[0].rev_no);
+        //             $("#frm_txt_start_datetime").val(dmrpqc_details[0].start_date_time);
+        //             $("#frm_request_type").val(dmrpqc_details[0].request_type);
 
-                    let part2 = frmProdIdentification.find('.Part2')
-                    let part3 = frmProdIdentification.find('.Part3')
-                    let collapseTwo = frmProdIdentification.find('#collapseTwo')
-                    let collapseThree = frmProdIdentification.find('#collapseThree')
+        //             let part2 = frmProdIdentification.find('.Part2')
+        //             let part3 = frmProdIdentification.find('.Part3')
+        //             let collapseTwo = frmProdIdentification.find('#collapseTwo')
+        //             let collapseThree = frmProdIdentification.find('#collapseThree')
 
-                    //[Default]: All Part is Hidden and Div is Collapsed
-                    part2.attr('hidden',true);
-                    part3.attr('hidden',true);
-                    collapseTwo.removeClass('show',true);
-                    collapseThree.removeClass('show',true);
+        //             //[Default]: All Part is Hidden and Div is Collapsed
+        //             part2.attr('hidden',true);
+        //             part3.attr('hidden',true);
+        //             collapseTwo.removeClass('show',true);
+        //             collapseThree.removeClass('show',true);
 
-                    //Show Parts and Div where the current process status matches
-                    if(dmrpqc_details[0].process_status == 2){
-                        part2.removeAttr('hidden',true);
-                        collapseTwo.addClass('show',true);
-                    }else if(dmrpqc_details[0].process_status == 3){
-                        part2.removeAttr('hidden',true);
-                        part3.removeAttr('hidden',true);
-                        collapseTwo.addClass('show',true);
-                        collapseThree.addClass('show',true);
-                    }
-                    // else if(dmrpqc_details[0].process_status == 4){
+        //             //Show Parts and Div where the current process status matches
+        //             if(dmrpqc_details[0].process_status == 2){
+        //                 part2.removeAttr('hidden',true);
+        //                 collapseTwo.addClass('show',true);
+        //             }else if(dmrpqc_details[0].process_status == 3){
+        //                 part2.removeAttr('hidden',true);
+        //                 part3.removeAttr('hidden',true);
+        //                 collapseTwo.addClass('show',true);
+        //                 collapseThree.addClass('show',true);
+        //             }
+        //             // else if(dmrpqc_details[0].process_status == 4){
 
-                    // }
+        //             // }
 
-                    frmProdIdentification.find('input').attr('disabled',true);
-                    frmProdIdentification.find('select').attr('disabled',true);
-                    // frmProdIdentification.find('button').attr('disabled',true);
-                    frmProdIdentification.find('textarea').attr('readonly',true);
-                    $('#modalProdIdentification').modal('show');
-            }
-        });
+        //             frmProdIdentification.find('input').attr('disabled',true);
+        //             frmProdIdentification.find('select').attr('disabled',true);
+        //             // frmProdIdentification.find('button').attr('disabled',true);
+        //             frmProdIdentification.find('textarea').attr('readonly',true);
+        //             $('#modalProdIdentification').modal('show');
+        //     }
+        // });
       });
 
 
@@ -2657,76 +3188,93 @@ $(document).ready(function() {
                     let dmrpqc_details = response['dmrpqc_details'];
                     let dieset_condition_details = response['dieset_condition_details'];
 
-                    // $("#txt_global_dmrpqc_id").val(dmrpqc_details[0].id);
-                    // $("#txt_global_status").val(dmrpqc_details[0].process_status);
-                    $("#txtEditUploadedFile").removeClass('d-none');
-                    $("#btnReuploadTrigger").removeClass('d-none');
-                    $("#btnReuploadTrigger").prop('checked', false);
-                    $("#btnReuploadTriggerDiv").removeClass('d-none');
-                    $("#btnReuploadTriggerLabel").removeClass('d-none');
-                    $("#txtAddFile").addClass('d-none');
-                    $("#txtAddFile").removeAttr('required');
-                    $("#txtEditUploadedFile").val(dieset_condition_details[0].parts_drawing);
-				    let drawing_specification = dieset_condition_details[0].drawing_specification.split(",");
-                    let drawing_actual_measurement = dieset_condition_details[0].drawing_actual_measurement.split(",");
-
-                    if(dieset_condition_details[0].drawing_fabricated_by == null){
-                        $("#frm_txt_fabricated_by_id").val($("#txt_user_id").val());
-                        $("#frm_txt_fabricated_by").val($("#txt_user_name").val());
+                    if(dmrpqc_details[0].process_status == 2){
+                        $("#btnReuploadTriggerDiv").removeClass('d-none');
+                        $("#btnReuploadTrigger").removeClass('d-none');
+                        $("#btnReuploadTrigger").prop('checked', false);
+                        $("#btnReuploadTriggerLabel").removeClass('d-none');
+                        $("#btnPartsDrawingRemoveRow").removeClass("d-none");
                     }else{
-                        $("#frm_txt_fabricated_by_id").val(dieset_condition_details[0].drawing_fabricated_by.id);
-                        $("#frm_txt_fabricated_by").val(dieset_condition_details[0].drawing_fabricated_by.rapidx_user_details.name);
+                        $("#btnReuploadTriggerDiv").addClass("d-none");
+                        $("#btnPartsDrawingAddRow").addClass("d-none");
                     }
+                        // $("#txt_global_dmrpqc_id").val(dmrpqc_details[0].id);
+                        // $("#txt_global_status").val(dmrpqc_details[0].process_status);
 
-                    if(dieset_condition_details[0].drawing_validated_by == null){
-                        $("#frm_m_validated_by_id").val($("#txt_user_id").val());
-                        $("#frm_m_validated_by").val($("#txt_user_name").val());
-                    }else{
-                        $("#frm_m_validated_by_id").val(dieset_condition_details[0].drawing_validated_by.id);
-                        $("#frm_m_validated_by").val(dieset_condition_details[0].drawing_validated_by.rapidx_user_details.name);
-                    }
+                        $("#txtEditUploadedFile").removeClass('d-none');
+                        $("#txtAddFile").addClass('d-none');
+                        $("#txtAddFile").removeAttr('required');
+                        $("#txtEditUploadedFile").val(dieset_condition_details[0].parts_drawing);
+                        let drawing_specification = dieset_condition_details[0].drawing_specification.split(",");
+                        let drawing_actual_measurement = dieset_condition_details[0].drawing_actual_measurement.split(",");
 
-                    $('.PartsDrawing[index="10.1"][name="specification"]').val(drawing_specification[0]); //static set of value to static attr:index
-                    $('.PartsDrawing[index="10.1"][name="actual_measurement"]').val(drawing_actual_measurement[0]); //static set of value to static attr:index
+                        if(dieset_condition_details[0].drawing_fabricated_by == null){
+                            $("#frm_txt_fabricated_by_id").val($("#txt_user_id").val());
+                            $("#frm_txt_fabricated_by").val($("#txt_user_name").val());
+                        }else{
+                            $("#frm_txt_fabricated_by_id").val(dieset_condition_details[0].drawing_fabricated_by.id);
+                            $("#frm_txt_fabricated_by").val(dieset_condition_details[0].drawing_fabricated_by.rapidx_user_details.name);
+                        }
 
-                    let edit_row_counter = (drawing_specification.length);
-                    if(edit_row_counter > 1){
-                        $('#btnPartsDrawingRemoveRow').removeClass('d-none');
-                    }
-                    for(let index = 1; index < drawing_specification.length && index < 	drawing_actual_measurement.length; index++){
-                        var html = '<tr class="addRowforEdit" id="row_'+(index+1)+'">';
-                                // html += '<td>';
-                                //     html += '<input type="text" class="form-control" name="row_counter" id="row_counter" value="'+row_counter+'" readonly>';
-                                // html += '</td>';
-                                html += '<td hidden></td>';
-                                html += '<td class="text-center align-middle">'+(index+1)+'.</td>';
-                                html += '<td>';
-                                    html += '<input type="text" class="form-control PartsDrawing" index="10.'+(index+1)+'" name="specification" id="frm_specification_'+(index+1)+'" value="'+drawing_specification[index]+'">';
-                                html += '</td>';
-                                html += '<td>';
-                                    html += '<input type="text" class="form-control PartsDrawing" index="10.'+(index+1)+'" name="actual_measurement" id="frm_actual_measurement_'+(index+1)+'" value="'+drawing_actual_measurement[index]+'">';
-                                html += '</td>';
-                            html += '</tr>';
+                        if(dieset_condition_details[0].drawing_validated_by == null){
+                            $("#frm_m_validated_by_id").val($("#txt_user_id").val());
+                            $("#frm_m_validated_by").val($("#txt_user_name").val());
+                        }else{
+                            $("#frm_m_validated_by_id").val(dieset_condition_details[0].drawing_validated_by.id);
+                            $("#frm_m_validated_by").val(dieset_condition_details[0].drawing_validated_by.rapidx_user_details.name);
+                        }
 
-                        $('#PartsDrawingRowCounter').val(edit_row_counter);
-                        $('#tblPartsDrawingData tbody').append(html);
-                    }
+                        $('.PartsDrawing[index="10.1"][name="specification"]').val(drawing_specification[0]); //static set of value to static attr:index
+                        $('.PartsDrawing[index="10.1"][name="actual_measurement"]').val(drawing_actual_measurement[0]); //static set of value to static attr:index
 
-                    // var download = '<button type="button" href="download_file/'+dieset_condition_details.request_id+'" id="download_file" name="download_file" class="btn btn-primary btn-sm d-none">';
-                    // var download ='<a>';
-                    var download ='<a href="download_file/'+dieset_condition_details[0].request_id+'">';
-                        download +='<button type="button" id="download_file" name="download_file" class="btn btn-primary btn-sm d-none">';
-                        // download +='<a id="download_file" name="download_file" href="download_file/'+dieset_condition_details.request_id+'">';
-                        // href='download_file/".$employee_infos->cash_advance_details->id."'
-                        download +=     '<i class="fa-solid fa-file-arrow-down"></i>';
-                        download +=         '&nbsp;';
-                        download +=         'See Attachment';
-                        download +='</button>';
-                        download +='</a>';
-                    $('#AttachmentDiv').append(download);
-                    $("#download_file").removeClass('d-none');
-                    $('#frm_txt_request_id_for_parts_drawing').val(dieset_condition_details[0].request_id);
-                    $("#modalPartsDrawing").modal('show');
+                        let edit_row_counter = (drawing_specification.length);
+                        if(edit_row_counter > 1){
+                            if(dmrpqc_details[0].process_status == 2){
+                                $('#btnPartsDrawingRemoveRow').removeClass('d-none');
+                            }else{
+                                $('#btnPartsDrawingRemoveRow').addClass('d-none');
+                            }
+                        }else{
+                            $('#btnPartsDrawingRemoveRow').addClass('d-none');
+                        }
+                        for(let index = 1; index < drawing_specification.length && index < 	drawing_actual_measurement.length; index++){
+                            var html = '<tr class="addRowforEdit" id="row_'+(index+1)+'">';
+                                    // html += '<td>';
+                                    //     html += '<input type="text" class="form-control" name="row_counter" id="row_counter" value="'+row_counter+'" readonly>';
+                                    // html += '</td>';
+                                    html += '<td hidden></td>';
+                                    html += '<td class="text-center align-middle">'+(index+1)+'.</td>';
+                                    html += '<td>';
+                                        html += '<input type="text" class="form-control PartsDrawing" index="10.'+(index+1)+'" name="specification" id="frm_specification_'+(index+1)+'" value="'+drawing_specification[index]+'">';
+                                    html += '</td>';
+                                    html += '<td>';
+                                        html += '<input type="text" class="form-control PartsDrawing" index="10.'+(index+1)+'" name="actual_measurement" id="frm_actual_measurement_'+(index+1)+'" value="'+drawing_actual_measurement[index]+'">';
+                                    html += '</td>';
+                                html += '</tr>';
+
+                            $('#PartsDrawingRowCounter').val(edit_row_counter);
+                            $('#tblPartsDrawingData tbody').append(html);
+                        }
+
+                        if(dmrpqc_details[0].process_status != 2){
+                            $("#tblPartsDrawingData .PartsDrawing").attr('disabled', true);
+                        }else{
+                            $("#tblPartsDrawingData .PartsDrawing").attr('disabled', false);
+                        }
+
+                        var download ='<a href="download_file/'+dieset_condition_details[0].request_id+'">';
+                            download +='<button type="button" id="download_file" name="download_file" class="btn btn-primary btn-sm d-none">';
+                            download +=     '<i class="fa-solid fa-file-arrow-down"></i>';
+                            download +=         '&nbsp;';
+                            download +=         'See Attachment';
+                            download +='</button>';
+                            download +='</a>';
+
+                        $('#AttachmentDiv').append(download);
+                        $("#download_file").removeClass('d-none');
+                        $('#frm_txt_request_id_for_parts_drawing').val(dieset_condition_details[0].request_id);
+                        $("#modalPartsDrawing").modal('show');
+                    // }
             },
             error: function(data, xhr, status){
                 toastr.error('An error occured!\n' + 'Data: ' + data + "\n" + "XHR: " + xhr + "\n" + "Status: " + status);
@@ -2853,9 +3401,12 @@ $(document).ready(function() {
             'process_status' : process_status
         }
 
+        $("#frm_txt_po_no").attr('disabled', true);
+        $("#frm_request_type").attr('disabled', true);
+        $("#frm_prod_identification")[0].reset();
+
         if(process_status == 2){ //Dieset Condition Part
-            $("#frm_prod_identification")[0].reset();
-            frmProdIdentification.find('.Part2').removeAttr('hidden',true); //hide Part2
+            frmProdIdentification.find('.Part2').removeAttr('hidden',true); //show Part2
             frmProdIdentification.find('.Part3').attr('hidden',true);  //hide Part3
             frmProdIdentification.find('.Part4').attr('hidden',true);  //hide Part4
             frmProdIdentification.find('.Part5').attr('hidden',true);  //hide Part5
@@ -2863,60 +3414,84 @@ $(document).ready(function() {
             frmProdIdentification.find('#collapseThree').removeClass('show',true);
             frmProdIdentification.find('#collapseFour').removeClass('show',true);
             frmProdIdentification.find('#collapseFive').removeClass('show',true);
-            $('#btnPartsDrawing').removeClass('d-none');
-
-            $("#frm_prod_identification .dieset_condition_data").attr('disabled', false);
             $('#frm_txt_details_of_activity').removeAttr('readonly');
             $('#frm_mold_check_remarks').removeAttr('readonly');
+            $("#btn_add_row").removeClass("d-none");
+
+            $("#tbl_action_done .dieset_condition_data").attr('disabled', false);
+            $("#frm_txt_details_of_activity").attr('disabled', false);
+            $("#tbl_parts_no_and_qty .dieset_condition_data").attr('disabled', false);
+            $("#tbl_date_start_finish .dieset_condition_data").attr('disabled', false);
+            $("#tbl_mold_check .dieset_condition_data").attr('disabled', false);
+            $("#frm_mold_check_remarks").attr('disabled', false);
+            $("#tbl_references_used .dieset_condition_data").attr('disabled', false);
+            $("#tbl_checked_by .dieset_condition_data").attr('disabled', false);
+            $("#tbl_final_remarks .dieset_condition_data").attr('disabled', false);
 
             $("#tbl_action_done .ActionDoneChckbox").attr('required', true);
             $("#tbl_check_points .dieset_condition_data").attr('disabled', true);
             $("#frm_check_point_remarks").attr('disabled', true);
-            // $('#btnPartsDrawing').addClass('d-none');
+            $('#btnPartsDrawing').addClass('d-none');
+            $("#tbl_action_done .dieset_condition_data").css("color", "");
+            $("#tbl_action_done .dieset_condition_data").css("opacity", "");
             ActionDonePartsNoArr = [];
             ActionDoneQuantityArr = [];
         }else{
-            // $("#tbl_action_done .ActionDoneChckbox").attr('required', true);
+            frmProdIdentification.find('#collapseTwo').removeClass('show',true);
+            $('#btnPartsDrawing').removeClass('d-none');
             $("#tbl_action_done .dieset_condition_data").attr('disabled', true);
             $("#tbl_action_done .dieset_condition_data").css("color", "#6C757D");
             $("#tbl_action_done .dieset_condition_data").css("opacity", ".5");
-
-            // $("#tbl_parts_no_and_qty .dieset_condition_data").attr('disabled', true);
-
-            // $(".dieset_condition_data").find('input').attr('disabled',true);
-            // frmProdIdentification.find('select').attr('disabled',true);
+            $("#tbl_check_points .dieset_condition_data").attr('disabled', true);
+            $("#tbl_mold_check .dieset_condition_data").attr('disabled', true);
+            $("#tbl_references_used .dieset_condition_data").attr('disabled', true);
+            $("#tbl_checked_by .dieset_condition_data").attr('disabled', true);
+            $("#tbl_date_start_finish .dieset_condition_data").attr('disabled', true);
+            $("#tbl_final_remarks .dieset_condition_data").attr('disabled', true);
+            $("#btn_add_row").addClass("d-none");
+            $("#btn_remove_row").addClass("d-none");
+            $("#btnSavePartsDrawing").addClass("d-none");
             $("#frm_txt_details_of_activity").attr('disabled', true);
             $("#frm_check_point_remarks").attr('disabled', true);
-
-            frmProdIdentification.find('input').attr('disabled',true);
-            frmProdIdentification.find('select').attr('disabled',true);
-            // frmProdIdentification.find('button').attr('disabled',true);
-            frmProdIdentification.find('textarea').attr('readonly',true);
+            $("#frm_mold_check_remarks").attr('disabled', true);
         }
 
         if(process_status == 3){ //Dieset Condition Checking Part
-            $("#frm_prod_identification")[0].reset();
             frmProdIdentification.find('.Part3').removeAttr('hidden',true); //show Part3
             frmProdIdentification.find('.Part4').attr('hidden',true);   //hide Part4
             frmProdIdentification.find('.Part5').attr('hidden',true);   //hide Part5
             frmProdIdentification.find('#collapseThree').addClass('show',true); //collapse Part3 div
             frmProdIdentification.find('#collapseFour').removeClass('show',true); //remove/fold Part4 div
             frmProdIdentification.find('#collapseFive').removeClass('show',true); //remove/fold Part5 div
-            $('#btnPartsDrawing').removeClass('d-none');
+            $("#tbl_dieset_condition_checking .dieset_condition_checking_data").attr('disabled', false);
+            // $('#btnPartsDrawing').removeClass('d-none');
+        }else{
+            frmProdIdentification.find('#collapseThree').removeClass('show',true); //remove/fold Part3 div
+            $("#tbl_dieset_condition_checking .dieset_condition_checking_data").attr('disabled', true);
+        }
+
+        if(process_status == 4){ //Machine Setup
+            frmProdIdentification.find('.Part4').removeAttr('hidden',true); //show Part4
+            frmProdIdentification.find('.Part5').attr('hidden',true);   //hide Part5
+            frmProdIdentification.find('#collapseFour').addClass('show',true); //collapse Part4 div
+            frmProdIdentification.find('#collapseFive').removeClass('show',true); //remove/fold Part5 div
+            $("#tbl_machine_setup .machine_setup_data").attr('disabled', false);
+        }else{
+            frmProdIdentification.find('#collapseFour').removeClass('show',true); //remove/fold Part4 div
+            $("#tbl_machine_setup .machine_setup_data").attr('disabled', true);
+        }
+
+        if(process_status == 5){//Product Requirement Checking
+            frmProdIdentification.find('.Part2').removeAttr('hidden',true); //show Part2
+            frmProdIdentification.find('.Part3').removeAttr('hidden',true); //show Part3
+            frmProdIdentification.find('.Part4').removeAttr('hidden',true); //show Part4
+            frmProdIdentification.find('.Part5').removeAttr('hidden',true);   //show Part5
+            frmProdIdentification.find('#collapseFive').addClass('show',true); //remove/fold Part5 div
+        }else{
 
         }
-        // else if(process_status == 4){ //Dieset Condition Checking Part
-        //     $("#frm_prod_identification")[0].reset();
-        //     frmProdIdentification.find('.Part3').removeAttr('hidden',true);
-        //     frmProdIdentification.find('.Part4').attr('hidden',true);
-        //     frmProdIdentification.find('.Part5').attr('hidden',true);
-        //     frmProdIdentification.find('#collapseThree').addClass('show',true);
-        //     frmProdIdentification.find('#collapseFour').removeClass('show',true);
-        //     frmProdIdentification.find('#collapseFive').removeClass('show',true);
-        // }
 
         // $('#tbl_parts_no_and_qty tbody').empty();
-
         GetUserIDBySession();
         GetDmrpqcDetails(data);
     });
@@ -3067,11 +3642,14 @@ $(document).ready(function() {
                     let dmrpqc_details = response['dmrpqc_details'];
                     let dieset_condition_details = response['dieset_condition_details'];
                     let dieset_condition_checking_details = response['dieset_condition_checking_details'];
+                    let machine_setup_details = response['machine_setup_details'];
+                    let product_req_checking_details = response['product_req_checking_details'];
 
                     $("#txt_global_dmrpqc_id").val(dmrpqc_details[0].id);
                     $("#txt_global_status").val(dmrpqc_details[0].process_status);
 
-                    $("#frm_txt_device_name").val(dmrpqc_details[0].device_name);
+                    $('#frm_prod_identification .dieset_condition_data[index="1.1.1"]').val(dmrpqc_details[0].device_name);
+                    // $("#frm_txt_device_name").val(dmrpqc_details[0].device_name);
                     $("#frm_txt_po_no").val(dmrpqc_details[0].po_number);
                     $("#frm_txt_item_code").val(dmrpqc_details[0].item_code);
                     $("#frm_txt_die_no").val(dmrpqc_details[0].die_no);
@@ -3079,8 +3657,11 @@ $(document).ready(function() {
                     $("#frm_txt_rev_no").val(dmrpqc_details[0].rev_no);
                     $("#frm_txt_start_datetime").val(dmrpqc_details[0].start_date_time);
                     $("#frm_request_type").val(dmrpqc_details[0].request_type);
+                    $("#frm_txt_requested_by_id").val(dmrpqc_details[0].created_by.id);
+                    $("#frm_txt_requested_by").val(dmrpqc_details[0].created_by.rapidx_user_details.name);
 
                         if(dieset_condition_details != ''){
+                            $('#btnPartsDrawing').removeClass('d-none'); //test
                             let action_done_arr = [];
                             let check_point_arr = [];
                             let mold_check_arr  = [];
@@ -3191,7 +3772,13 @@ $(document).ready(function() {
 
                             let edit_row_counter = (parts_no.length);
                             if(edit_row_counter > 1){
-                                $('#btn_remove_row').removeClass('d-none');
+                                if(dmrpqc_details[0].process_status == 2){
+                                    $('#btn_remove_row').removeClass('d-none');
+                                }else{
+                                    $('#btn_remove_row').addClass('d-none');
+                                }
+                            }else{
+                                $('#btn_remove_row').addClass('d-none');
                             }
                             for(let index = 1; index < parts_no.length && index < quantity.length; index++){
                                 var html = '<tr class="addRowforEdit" id="row_'+(index+1)+'">';
@@ -3237,11 +3824,11 @@ $(document).ready(function() {
                             }
 
                             if(dieset_condition_details[0].in_charged == null){
-                                $("#frm_txt_action_in_charged_id").val($("#txt_user_id").val());
-                                $("#frm_txt_action_in_charged").val($("#txt_user_name").val());
+                                $("#frm_txt_action_done_in_charged_id").val($("#txt_user_id").val());
+                                $("#frm_txt_action_done_in_charged").val($("#txt_user_name").val());
                             }else{
-                                $("#frm_txt_action_in_charged_id").val(dieset_condition_details[0].in_charged.id);
-                                $("#frm_txt_action_in_charged").val(dieset_condition_details[0].in_charged.rapidx_user_details.name);
+                                $("#frm_txt_action_done_in_charged_id").val(dieset_condition_details[0].in_charged.id);
+                                $("#frm_txt_action_done_in_charged").val(dieset_condition_details[0].in_charged.rapidx_user_details.name);
                             }
 
                             if(dieset_condition_details[0].mold_check_checked_by == null){
@@ -3258,6 +3845,258 @@ $(document).ready(function() {
                                 case 3: $('.dieset_condition_data[name="references_used"][value="3"]').prop('checked', true); break;
                                 case 4: $('.dieset_condition_data[name="references_used"][value="4"]').prop('checked', true); break;
                                 default: $('.dieset_condition_data[name="references_used"]').prop('checked', false); break;
+                            }
+                        }
+
+                        if(dieset_condition_checking_details != ''){
+                            if(dieset_condition_checking_details[0].checked_by == null){
+                                $("#frm_txt_dieset_checking_checked_by_id").val($("#txt_user_id").val());
+                                $("#frm_txt_dieset_checking_checked_by").val($("#txt_user_name").val());
+                            }else{
+                                $("#frm_txt_dieset_checking_checked_by_id").val(dieset_condition_checking_details[0].checked_by.id);
+                                $("#frm_txt_dieset_checking_checked_by").val(dieset_condition_checking_details[0].checked_by.rapidx_user_details.name);
+                            }
+
+                            // $("#frm_txt_good_condition").val(dieset_condition_checking_details[0].good_condition);
+                            // $("#frm_txt_under_longevity").val(dieset_condition_checking_details[0].under_longevity);
+                            // $("#frm_txt_problematic").val(dieset_condition_checking_details[0].problematic_die_set);
+
+                            if(dieset_condition_checking_details[0].good_condition == 1){
+                                $('#frm_txt_good_condition').prop('checked', true);
+                            }else{
+                                $('#frm_txt_good_condition').prop('checked', false);
+                            }
+
+                            if(dieset_condition_checking_details[0].under_longevity == 1){
+                                $('#frm_txt_under_longevity').prop('checked', true);
+                            }else{
+                                $('#frm_txt_under_longevity').prop('checked', false);
+                            }
+
+                            if(dieset_condition_checking_details[0].problematic_die_set == 1){
+                                $('#frm_txt_problematic').prop('checked', true);
+                            }else{
+                                $('#frm_txt_problematic').prop('checked', false);
+                            }
+
+                            $("#frm_txt_dieset_condition_checking_date").val(dieset_condition_checking_details[0].date);
+                        }
+
+                        if(machine_setup_details != ''){
+                            if(machine_setup_details[0].first_adjustment == 1){
+                                $('#frm_txt_machine_setup_1st_adjustment').prop('checked', true);
+                            }else{
+                                $('#frm_txt_machine_setup_1st_adjustment').prop('checked', false);
+                            }
+
+                            if(machine_setup_details[0].second_adjustment == 1){
+                                $('#frm_txt_machine_setup_2nd_adjustment').prop('checked', true);
+                            }else{
+                                $('#frm_txt_machine_setup_2nd_adjustment').prop('checked', false);
+                            }
+
+                            if(machine_setup_details[0].third_adjustment == 1){
+                                $('#frm_txt_machine_setup_3rd_adjustment').prop('checked', true);
+                            }else{
+                                $('#frm_txt_machine_setup_3rd_adjustment').prop('checked', false);
+                            }
+
+                            $("#selProductionUser").val(machine_setup_details[0].first_in_charged);
+                            $("#selTechnicianUser").val(machine_setup_details[0].second_in_charged);
+                            $("#selSupervisorEngrUser").val(machine_setup_details[0].third_in_charged);
+
+                            switch(machine_setup_details[0].category){
+                                case 1: $('.machine_setup_data[name="machine_setup_category"][value="1"]').prop('checked', true); break;
+                                case 2: $('.machine_setup_data[name="machine_setup_category"][value="2"]').prop('checked', true); break;
+                                default: $('.machine_setup_data[name="machine_setup_category"]').prop('checked', false); break;
+                            }
+
+                            $("#frm_txt_machine_setup_1st_datetime").val(machine_setup_details[0].first_date_time);
+                            $("#frm_txt_machine_setup_2nd_datetime").val(machine_setup_details[0].second_date_time);
+                            $("#frm_txt_machine_setup_3rd_datetime").val(machine_setup_details[0].third_date_time);
+
+                            $("#frm_txt_machine_setup_1st_remarks").val(machine_setup_details[0].first_remarks);
+                            $("#frm_txt_machine_setup_2nd_remarks").val(machine_setup_details[0].second_remarks);
+                            $("#frm_txt_machine_setup_3rd_remarks").val(machine_setup_details[0].third_remarks);
+                        }
+
+                        if(product_req_checking_details != ''){
+                            let prchecking_production_arr  = [];
+                            let prchecking_engr_tech_arr  = [];
+                            let prchecking_lqc_arr  = [];
+                            let prchecking_process_engr_arr  = [];
+
+                            // if(product_req_checking_details[0].status == 0 || product_req_checking_details[0].status == 1){
+                                prchecking_production_arr.push(product_req_checking_details[0].prod_eval_sample,
+                                                        product_req_checking_details[0].prod_japan_sample,
+                                                        product_req_checking_details[0].prod_last_prodn_sample,
+                                                        product_req_checking_details[0].prod_dieset_eval_report,
+                                                        product_req_checking_details[0].prod_cosmetic_defect,
+                                                        product_req_checking_details[0].prod_pingauges,
+                                                        product_req_checking_details[0].prod_measurescope,
+                                                        product_req_checking_details[0].prod_na,
+                                                        product_req_checking_details[0].prod_visual_insp_result,
+                                                        product_req_checking_details[0].prod_dimension_insp_result
+                                );
+
+                                let prchecking_prod_index = 0;
+                                while(prchecking_prod_index < prchecking_production_arr.length){
+                                    if(prchecking_production_arr[prchecking_prod_index] == 1){
+                                        $('.prod_req_checking_data[index="1.'+prchecking_prod_index+'"]').prop('checked', true);
+                                    }else{
+                                        $('.prod_req_checking_data[index="1.'+prchecking_prod_index+'"]').prop('checked', false);
+                                    }
+                                    if(prchecking_prod_index == 8 || prchecking_prod_index == 9){
+                                        if(prchecking_production_arr[prchecking_prod_index] == 1){
+                                            $('.prod_req_checking_data[index="1.'+prchecking_prod_index+'"][value="1"]').prop('checked', true);
+                                        }else if(prchecking_production_arr[prchecking_prod_index] == 0){
+                                            $('.prod_req_checking_data[index="1.'+prchecking_prod_index+'"][value="0"]').prop('checked', true);
+                                        }else{
+                                            $('.prod_req_checking_data[index="1.'+prchecking_prod_index+'"]').prop('checked', false);
+                                        }
+                                    }
+                                    prchecking_prod_index++;
+                                }
+
+                                $("#selProductionVisualUser").val(product_req_checking_details[0].prod_visual_insp_name);
+                                $("#selProductionDimentionUser").val(product_req_checking_details[0].prod_dimension_insp_name);
+                                $("#frm_txt_prod_visual_insp_datetime").val(product_req_checking_details[0].prod_visual_insp_datetime);
+                                $("#frm_txt_prod_dimension_insp_datetime").val(product_req_checking_details[0].prod_dimension_insp_datetime);
+                                $("#frm_txt_prod_actual_checking_remarks").val(product_req_checking_details[0].prod_actual_checking_remarks);
+
+                            if(product_req_checking_details[0].status >= 1){
+                                prchecking_engr_tech_arr.push(product_req_checking_details[0].engr_tech_eval_sample,
+                                                        product_req_checking_details[0].engr_tech_japan_sample,
+                                                        product_req_checking_details[0].engr_tech_last_prodn_sample,
+                                                        product_req_checking_details[0].engr_tech_material_drawing,
+                                                        product_req_checking_details[0].engr_tech_insp_guide,
+                                                        product_req_checking_details[0].engr_tech_dieset_eval_report,
+                                                        product_req_checking_details[0].engr_tech_cosmetic_defect,
+                                                        product_req_checking_details[0].engr_tech_pingauges,
+                                                        product_req_checking_details[0].engr_tech_measurescope,
+                                                        product_req_checking_details[0].engr_tech_na,
+                                                        product_req_checking_details[0].engr_tech_visual_insp_result,
+                                                        product_req_checking_details[0].engr_tech_dimension_insp_result
+                                );
+
+                                let prchecking_engr_tech_index = 0;
+                                while(prchecking_engr_tech_index < prchecking_engr_tech_arr.length){
+                                    if(prchecking_engr_tech_arr[prchecking_engr_tech_index] == 1){
+                                        $('.prod_req_checking_data[index="2.'+prchecking_engr_tech_index+'"]').prop('checked', true);
+                                    }else{
+                                        $('.prod_req_checking_data[index="2.'+prchecking_engr_tech_index+'"]').prop('checked', false);
+                                    }
+                                    if(prchecking_engr_tech_index == 10 || prchecking_engr_tech_index == 11){
+                                        if(prchecking_engr_tech_arr[prchecking_engr_tech_index] == 1){
+                                            $('.prod_req_checking_data[index="2.'+prchecking_engr_tech_index+'"][value="1"]').prop('checked', true);
+                                        }else if(prchecking_engr_tech_arr[prchecking_engr_tech_index] == 0){
+                                            $('.prod_req_checking_data[index="2.'+prchecking_engr_tech_index+'"][value="0"]').prop('checked', true);
+                                        }else{
+                                            $('.prod_req_checking_data[index="2.'+prchecking_engr_tech_index+'"]').prop('checked', false);
+                                        }
+                                    }
+                                    prchecking_engr_tech_index++;
+                                }
+
+                                $("#frm_txt_engr_tech_material_drawing_no").val(product_req_checking_details[0].engr_tech_material_drawing_no);
+                                $("#frm_txt_engr_tech_material_rev_no").val(product_req_checking_details[0].engr_tech_material_rev_no);
+                                $("#frm_txt_engr_tech_insp_guide_drawing_no").val(product_req_checking_details[0].engr_tech_insp_guide_drawing_no);
+                                $("#frm_txt_engr_tech_insp_guide_rev_no").val(product_req_checking_details[0].engr_tech_insp_guide_rev_no);
+                                $("#selTechnicianVisualUser").val(product_req_checking_details[0].engr_tech_visual_insp_name);
+                                $("#selTechnicianDimensionUser").val(product_req_checking_details[0].engr_tech_dimension_insp_name);
+                                $("#frm_txt_engr_tech_visual_insp_datetime").val(product_req_checking_details[0].engr_tech_visual_insp_datetime);
+                                $("#frm_txt_engr_tech_dimension_insp_datetime").val(product_req_checking_details[0].engr_tech_dimension_insp_datetime);
+                                $("#frm_txt_engr_tech_actual_checking_remarks").val(product_req_checking_details[0].engr_tech_actual_checking_remarks);
+                            }
+
+                            if(product_req_checking_details[0].status >= 2){
+                                prchecking_lqc_arr.push(product_req_checking_details[0].lqc_eval_sample,
+                                                        product_req_checking_details[0].lqc_japan_sample,
+                                                        product_req_checking_details[0].lqc_last_prodn_sample,
+                                                        product_req_checking_details[0].lqc_material_drawing,
+                                                        product_req_checking_details[0].lqc_insp_guide,
+                                                        product_req_checking_details[0].lqc_dieset_eval_report,
+                                                        product_req_checking_details[0].lqc_cosmetic_defect,
+                                                        product_req_checking_details[0].lqc_pingauges,
+                                                        product_req_checking_details[0].lqc_measurescope,
+                                                        product_req_checking_details[0].lqc_na,
+                                                        product_req_checking_details[0].lqc_visual_insp_result,
+                                                        product_req_checking_details[0].lqc_dimension_insp_result
+                                );
+
+                                let prchecking_lqc_index = 0;
+                                while(prchecking_lqc_index < prchecking_lqc_arr.length){
+                                    if(prchecking_lqc_arr[prchecking_lqc_index] == 1){
+                                        $('.prod_req_checking_data[index="3.'+prchecking_lqc_index+'"]').prop('checked', true);
+                                    }else{
+                                        $('.prod_req_checking_data[index="3.'+prchecking_lqc_index+'"]').prop('checked', false);
+                                    }
+                                    if(prchecking_lqc_index == 10 || prchecking_lqc_index == 11){
+                                        if(prchecking_lqc_arr[prchecking_lqc_index] == 1){
+                                            $('.prod_req_checking_data[index="3.'+prchecking_lqc_index+'"][value="1"]').prop('checked', true);
+                                        }else if(prchecking_lqc_arr[prchecking_lqc_index] == 0){
+                                            $('.prod_req_checking_data[index="3.'+prchecking_lqc_index+'"][value="0"]').prop('checked', true);
+                                        }else{
+                                            $('.prod_req_checking_data[index="3.'+prchecking_lqc_index+'"]').prop('checked', false);
+                                        }
+                                    }
+                                    prchecking_lqc_index++;
+                                }
+
+                                $("#frm_txt_lqc_material_drawing_no").val(product_req_checking_details[0].lqc_material_drawing_no);
+                                $("#frm_txt_lqc_material_rev_no").val(product_req_checking_details[0].lqc_material_rev_no);
+                                $("#frm_txt_lqc_insp_guide_drawing_no").val(product_req_checking_details[0].lqc_insp_guide_drawing_no);
+                                $("#frm_txt_lqc_insp_guide_rev_no").val(product_req_checking_details[0].lqc_insp_guide_rev_no);
+                                $("#selQcVisualUser").val(product_req_checking_details[0].lqc_visual_insp_name);
+                                $("#selQcDimensionUser").val(product_req_checking_details[0].lqc_dimension_insp_name);
+                                $("#frm_txt_lqc_visual_insp_datetime").val(product_req_checking_details[0].lqc_visual_insp_datetime);
+                                $("#frm_txt_lqc_dimension_insp_datetime").val(product_req_checking_details[0].lqc_dimension_insp_datetime);
+                                $("#frm_txt_lqc_actual_checking_remarks").val(product_req_checking_details[0].lqc_actual_checking_remarks);
+                            }
+
+                            if(product_req_checking_details[0].status >= 3){
+                                prchecking_process_engr_arr.push(product_req_checking_details[0].process_engr_eval_sample,
+                                                        product_req_checking_details[0].process_engr_japan_sample,
+                                                        product_req_checking_details[0].process_engr_last_prodn_sample,
+                                                        product_req_checking_details[0].process_engr_material_drawing,
+                                                        product_req_checking_details[0].process_engr_insp_guide,
+                                                        product_req_checking_details[0].process_engr_dieset_eval_report,
+                                                        product_req_checking_details[0].process_engr_cosmetic_defect,
+                                                        product_req_checking_details[0].process_engr_pingauges,
+                                                        product_req_checking_details[0].process_engr_measurescope,
+                                                        product_req_checking_details[0].process_engr_na,
+                                                        product_req_checking_details[0].process_engr_visual_insp_result,
+                                                        product_req_checking_details[0].process_engr_dimension_insp_result
+                                );
+
+                                let prchecking_process_engr_index = 0;
+                                while(prchecking_process_engr_index < prchecking_process_engr_arr.length){
+                                    if(prchecking_process_engr_arr[prchecking_process_engr_index] == 1){
+                                        $('.prod_req_checking_data[index="4.'+prchecking_process_engr_index+'"]').prop('checked', true);
+                                    }else{
+                                        $('.prod_req_checking_data[index="4.'+prchecking_process_engr_index+'"]').prop('checked', false);
+                                    }
+                                    if(prchecking_process_engr_index == 10 || prchecking_process_engr_index == 11){
+                                        if(prchecking_process_engr_arr[prchecking_process_engr_index] == 1){
+                                            $('.prod_req_checking_data[index="4.'+prchecking_process_engr_index+'"][value="1"]').prop('checked', true);
+                                        }else if(prchecking_process_engr_arr[prchecking_process_engr_index] == 0){
+                                            $('.prod_req_checking_data[index="4.'+prchecking_process_engr_index+'"][value="0"]').prop('checked', true);
+                                        }else{
+                                            $('.prod_req_checking_data[index="4.'+prchecking_process_engr_index+'"]').prop('checked', false);
+                                        }
+                                    }
+                                    prchecking_process_engr_index++;
+                                }
+
+                                $("#frm_txt_process_engr_material_drawing_no").val(product_req_checking_details[0].process_engr_material_drawing_no);
+                                $("#frm_txt_process_engr_material_rev_no").val(product_req_checking_details[0].process_engr_material_rev_no);
+                                $("#frm_txt_process_engr_insp_guide_drawing_no").val(product_req_checking_details[0].process_engr_insp_guide_drawing_no);
+                                $("#frm_txt_process_engr_insp_guide_rev_no").val(product_req_checking_details[0].process_engr_insp_guide_rev_no);
+                                $("#selEngrVisualUser").val(product_req_checking_details[0].process_engr_visual_insp_name);
+                                $("#selEngrDimensionUser").val(product_req_checking_details[0].process_engr_dimension_insp_name);
+                                $("#frm_txt_process_engr_visual_insp_datetime").val(product_req_checking_details[0].process_engr_visual_insp_datetime);
+                                $("#frm_txt_process_engr_dimension_insp_datetime").val(product_req_checking_details[0].process_engr_dimension_insp_datetime);
+                                $("#frm_txt_process_engr_actual_checking_remarks").val(product_req_checking_details[0].process_engr_actual_checking_remarks);
                             }
                         }
                     $('#modalProdIdentification').modal('show');

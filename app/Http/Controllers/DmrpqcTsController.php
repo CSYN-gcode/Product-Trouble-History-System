@@ -19,6 +19,8 @@ use App\Models\PpsDbsPoReceived;
 use App\Models\ProductIdentification;
 use App\Models\DiesetCondition;
 use App\Models\DiesetConditionChecking;
+use App\Models\MachineSetup;
+use App\Models\ProductReqChecking;
 use App\Models\User;
 
 class DmrpqcTsController extends Controller
@@ -93,10 +95,10 @@ class DmrpqcTsController extends Controller
                         //             <i class="fas fa-eye fa-lg" title="View"></i></button>&nbsp;';
 
                 $action_btn_view = '<button class="btn btn-sm btn-outline-info border-0 text-center actionViewBtn" process_status="'.$dmrpqc_details->process_status.'"
-                                    dmrpqc_id="'.$dmrpqc_details->id.'"><i class="fas fa-eye fa-lg" title="View"></i></button>&nbsp;';
+                                    dmrpqc_id="'.$dmrpqc_details->id.'"><i class="fas fa-eye fa-lg" title="View"></i></button>';
 
                 $action_btn_submit = '<button class="btn btn-sm btn-outline-success border-0 text-center actionChangeStatusBtn" process_status="'.$dmrpqc_details->process_status.'"
-                                    dmrpqc_id="'.$dmrpqc_details->id.'"><i class="fa-solid fa-check-to-slot fa-xl" title="Submit"></i></button>&nbsp;';
+                                    dmrpqc_id="'.$dmrpqc_details->id.'"><i class="fa-solid fa-check-to-slot fa-xl" title="Submit"></i></button>';
 
                 $action_btn_delete = '<button class="btn btn-sm btn-outline-danger border-0 text-center actionDeleteBtn" process_status="'.$dmrpqc_details->process_status.'"
                                     dmrpqc_id="'.$dmrpqc_details->id.'"><i class="fa-solid fa-trash-can fa-xl" title="Cancel"></i></button>';
@@ -177,8 +179,25 @@ class DmrpqcTsController extends Controller
                             }
                         }else if($dmrpqc_details->status == 1 && $dmrpqc_details->process_status == 3){ //For Conformance in Part 3
                                 $result .= $action_btn_conform;
-                        }else if($dmrpqc_details->status == 2 && $dmrpqc_details->process_status == 3){ //For Conformance in Part 3
+                        }else if($dmrpqc_details->status == 2 && $dmrpqc_details->process_status == 3){ //Ongoing in Part 3
                                 $result .= $action_btn_update;
+                            if(DiesetConditionChecking::where('request_id', $dmrpqc_details->id)->where('status', 1)->where('logdel', 0)->exists()){
+                                $result .= $action_btn_submit;
+                            }
+                        }else if($dmrpqc_details->status == 1 && $dmrpqc_details->process_status == 4){ //For Conformance in Part 4
+                            $result .= $action_btn_conform;
+                        }else if($dmrpqc_details->status == 2 && $dmrpqc_details->process_status == 4){ //Ongoing in Part 4
+                                $result .= $action_btn_update;
+                            if(MachineSetup::where('request_id', $dmrpqc_details->id)->where('status', 1)->where('logdel', 0)->exists()){
+                                $result .= $action_btn_submit;
+                            }
+                        }else if($dmrpqc_details->status == 1 && $dmrpqc_details->process_status == 5){ //For Conformance in Part 4
+                            $result .= $action_btn_conform;
+                        }else if($dmrpqc_details->status == 2 && $dmrpqc_details->process_status == 5){ //Ongoing in Part 4
+                                $result .= $action_btn_update;
+                            if(ProductReqChecking::where('request_id', $dmrpqc_details->id)->whereNotNull(['prod_visual_insp_name','prod_dimension_insp_name'])->where('logdel', 0)->exists()){
+                                $result .= $action_btn_submit;
+                            }
                         }
                         break;
                 }
@@ -427,7 +446,7 @@ class DmrpqcTsController extends Controller
                             'action_done_date_start' => $request->action_done_date_start,
                             'action_done_start_time' => $request->action_done_start_time,
                             'action_done_finish_time' => $request->action_done_finish_time,
-                            'in_charged' => $request->in_charged_id,
+                            'in_charged' => $request->action_done_in_charged_id,
                             'check_point_1_marking_check' => $request->check_point_1,
                             'check_point_2_tanshi_pin' => $request->check_point_2,
                             'check_point_2a_crack' => $request->check_point_2a,
@@ -469,10 +488,211 @@ class DmrpqcTsController extends Controller
         }
     }
 
+    public function update_dieset_conditon_checking_data(Request $request){
+        date_default_timezone_set('Asia/Manila');
+        session_start();
+
+        $data = $request->all();
+        // return $data;
+
+        if(isset($_SESSION["rapidx_user_id"])){
+
+                if($request->good_condition == NULL && $request->under_longevity == NULL && $request->problematic == NULL){
+                    return response()->json(['error' => 'Please Select Condition']);
+                }else {
+                        DiesetConditionChecking::where('request_id', $request->request_id)
+                        ->update([
+                            'good_condition' => $request->good_condition,
+                            'under_longevity' => $request->under_longevity,
+                            'problematic_die_set' => $request->problematic,
+                            'checked_by' => $request->user_id,
+                            'date' => date('Y-m-d'),
+                            'last_updated_by' => $request->user_id,
+                            'updated_at' => date('Y-m-d H:i:s'),
+                            'status' => 1 //Change Status to Updated(1)
+                        ]);
+
+                        DB::commit();
+                        return response()->json(['result' => 'Success']);
+                }
+        }else{
+            return response()->json(['result' => 'Session Expired']);
+        }
+    }
+
+    public function update_machine_setup_data(Request $request){
+        date_default_timezone_set('Asia/Manila');
+        session_start();
+
+        $data = $request->all();
+
+        if(isset($_SESSION["rapidx_user_id"])){
+
+                if($request->machine_setup_1st_adjustment == NULL){
+                    return response()->json(['error' => 'Please Select Adjustment']);
+                }else {
+                        MachineSetup::where('request_id', $request->request_id)
+                        ->update([
+                            'first_adjustment' => $request->machine_setup_1st_adjustment,
+                            'second_adjustment' => $request->machine_setup_2nd_adjustment,
+                            'third_adjustment' => $request->machine_setup_3rd_adjustment,
+                            'first_in_charged' => $request->machine_setup_1st_in_charged,
+                            'second_in_charged' => $request->machine_setup_2nd_in_charged,
+                            'third_in_charged' => $request->machine_setup_3rd_in_charged,
+                            'first_date_time' => date('Y-m-d H:i:s'),
+                            'second_date_time' => date('Y-m-d H:i:s'),
+                            'third_date_time' => date('Y-m-d H:i:s'),
+                            'first_remarks' => $request->machine_setup_1st_remarks,
+                            'second_remarks' => $request->machine_setup_2nd_remarks,
+                            'third_remarks' => $request->machine_setup_3rd_remarks,
+                            'category' => $request->machine_setup_category,
+                            'last_updated_by' => $request->user_id,
+                            'updated_at' => date('Y-m-d H:i:s'),
+                            'status' => 1 //Change Status to Updated(1)
+                        ]);
+
+                        DB::commit();
+                        return response()->json(['result' => 'Success']);
+                }
+        }else{
+            return response()->json(['result' => 'Session Expired']);
+        }
+    }
+
+    public function update_product_req_checking_data(Request $request){
+        date_default_timezone_set('Asia/Manila');
+        session_start();
+        $data = $request->all();
+        // return $request->all();
+        if(isset($_SESSION["rapidx_user_id"])){
+            $status = ProductReqChecking::select('status')->where('request_id', $request->request_id)->first();
+            // return $status->status;
+                // if($request->machine_setup_1st_adjustment == NULL){
+                //     return response()->json(['error' => 'Please Select Adjustment']);
+                // }else {
+                    if($status->status == 0){
+                        ProductReqChecking::where('request_id', $request->request_id)
+                        ->update([
+                            'prod_eval_sample' => $request->prod_eval_sample,
+                            'prod_japan_sample' => $request->prod_japan_sample,
+                            'prod_last_prodn_sample' => $request->prod_last_prodn_sample,
+                            'prod_dieset_eval_report' => $request->prod_dieset_eval_report,
+                            'prod_cosmetic_defect' => $request->prod_cosmetic_defect,
+                            'prod_pingauges' => $request->prod_pingauges,
+                            'prod_measurescope' => $request->prod_measurescope,
+                            'prod_na' => $request->prod_na,
+                            'prod_visual_insp_name' => $request->prod_visual_insp_name,
+                            'prod_visual_insp_datetime' => date('Y-m-d H:i:s'),
+                            'prod_visual_insp_result' => $request->prod_visual_insp_result,
+                            'prod_dimension_insp_name' => $request->prod_dimension_insp_name,
+                            'prod_dimension_insp_datetime' => date('Y-m-d H:i:s'),
+                            'prod_dimension_insp_result' => $request->prod_dimension_insp_result,
+                            'prod_actual_checking_remarks' => $request->prod_actual_checking_remarks,
+                            'last_updated_by' => $request->user_id,
+                            'updated_at' => date('Y-m-d H:i:s'),
+                            // 'status' => 1 //Change Status to Updated(1)
+                        ]);
+                    }else if($status->status == 1){
+                        ProductReqChecking::where('request_id', $request->request_id)
+                        ->update([
+                            'engr_tech_eval_sample' => $request->engr_tech_eval_sample,
+                            'engr_tech_japan_sample' => $request->engr_tech_japan_sample,
+                            'engr_tech_last_prodn_sample' => $request->engr_tech_last_prodn_sample,
+                            'engr_tech_material_drawing' => $request->engr_tech_material_drawing,
+                            'engr_tech_material_drawing_no' => $request->engr_tech_material_drawing_no,
+                            'engr_tech_material_rev_no' => $request->engr_tech_material_rev_no,
+                            'engr_tech_insp_guide' => $request->engr_tech_insp_guide,
+                            'engr_tech_insp_guide_drawing_no' => $request->engr_tech_insp_guide_drawing_no,
+                            'engr_tech_insp_guide_rev_no' => $request->engr_tech_insp_guide_rev_no,
+                            'engr_tech_dieset_eval_report' => $request->engr_tech_dieset_eval_report,
+                            'engr_tech_cosmetic_defect' => $request->engr_tech_cosmetic_defect,
+                            'engr_tech_pingauges' => $request->engr_tech_pingauges,
+                            'engr_tech_measurescope' => $request->engr_tech_measurescope,
+                            'engr_tech_na' => $request->engr_tech_na,
+                            'engr_tech_visual_insp_name' => $request->engr_tech_visual_insp_name,
+                            'engr_tech_visual_insp_datetime' => date('Y-m-d H:i:s'),
+                            'engr_tech_visual_insp_result' => $request->engr_tech_visual_insp_result,
+                            'engr_tech_dimension_insp_name' => $request->engr_tech_dimension_insp_name,
+                            'engr_tech_dimension_insp_datetime' => date('Y-m-d H:i:s'),
+                            'engr_tech_dimension_insp_result' => $request->engr_tech_dimension_insp_result,
+                            'engr_tech_actual_checking_remarks' => $request->engr_tech_actual_checking_remarks,
+                            'last_updated_by' => $request->user_id,
+                            'updated_at' => date('Y-m-d H:i:s'),
+                            // 'status' => 2 //Change Status to Updated(1)
+                        ]);
+                    }else if($status->status == 2){
+                        ProductReqChecking::where('request_id', $request->request_id)
+                        ->update([
+                            'lqc_eval_sample' => $request->lqc_eval_sample,
+                            'lqc_japan_sample' => $request->lqc_japan_sample,
+                            'lqc_last_prodn_sample' => $request->lqc_last_prodn_sample,
+                            'lqc_material_drawing' => $request->lqc_material_drawing,
+                            'lqc_material_drawing_no' => $request->lqc_material_drawing_no,
+                            'lqc_material_rev_no' => $request->lqc_material_rev_no,
+                            'lqc_insp_guide' => $request->lqc_insp_guide,
+                            'lqc_insp_guide_drawing_no' => $request->lqc_insp_guide_drawing_no,
+                            'lqc_insp_guide_rev_no' => $request->lqc_insp_guide_rev_no,
+                            'lqc_dieset_eval_report' => $request->lqc_dieset_eval_report,
+                            'lqc_cosmetic_defect' => $request->lqc_cosmetic_defect,
+                            'lqc_pingauges' => $request->lqc_pingauges,
+                            'lqc_measurescope' => $request->lqc_measurescope,
+                            'lqc_na' => $request->lqc_na,
+                            'lqc_visual_insp_name' => $request->lqc_visual_insp_name,
+                            'lqc_visual_insp_datetime' => date('Y-m-d H:i:s'),
+                            'lqc_visual_insp_result' => $request->lqc_visual_insp_result,
+                            'lqc_dimension_insp_name' => $request->lqc_dimension_insp_name,
+                            'lqc_dimension_insp_datetime' => date('Y-m-d H:i:s'),
+                            'lqc_dimension_insp_result' => $request->lqc_dimension_insp_result,
+                            'lqc_actual_checking_remarks' => $request->lqc_actual_checking_remarks,
+                            'last_updated_by' => $request->user_id,
+                            'updated_at' => date('Y-m-d H:i:s'),
+                            // 'status' => 3 //Change Status to Updated(1)
+                        ]);
+                    }else if($status->status == 3){
+                        ProductReqChecking::where('request_id', $request->request_id)
+                        ->update([
+                            'process_engr_eval_sample' => $request->process_engr_eval_sample,
+                            'process_engr_japan_sample' => $request->process_engr_japan_sample,
+                            'process_engr_last_prodn_sample' => $request->process_engr_last_prodn_sample,
+                            'process_engr_material_drawing' => $request->process_engr_material_drawing,
+                            'process_engr_material_drawing_no' => $request->process_engr_material_drawing_no,
+                            'process_engr_material_rev_no' => $request->process_engr_material_rev_no,
+                            'process_engr_insp_guide' => $request->process_engr_insp_guide,
+                            'process_engr_insp_guide_drawing_no' => $request->process_engr_insp_guide_drawing_no,
+                            'process_engr_insp_guide_rev_no' => $request->process_engr_insp_guide_rev_no,
+                            'process_engr_dieset_eval_report' => $request->process_engr_dieset_eval_report,
+                            'process_engr_cosmetic_defect' => $request->process_engr_cosmetic_defect,
+                            'process_engr_pingauges' => $request->process_engr_pingauges,
+                            'process_engr_measurescope' => $request->process_engr_measurescope,
+                            'process_engr_na' => $request->process_engr_na,
+                            'process_engr_visual_insp_name' => $request->process_engr_visual_insp_name,
+                            'process_engr_visual_insp_datetime' => date('Y-m-d H:i:s'),
+                            'process_engr_visual_insp_result' => $request->process_engr_visual_insp_result,
+                            'process_engr_dimension_insp_name' => $request->process_engr_dimension_insp_name,
+                            'process_engr_dimension_insp_datetime' => date('Y-m-d H:i:s'),
+                            'process_engr_dimension_insp_result' => $request->process_engr_dimension_insp_result,
+                            'process_engr_actual_checking_remarks' => $request->process_engr_actual_checking_remarks,
+                            'last_updated_by' => $request->user_id,
+                            'updated_at' => date('Y-m-d H:i:s'),
+                            // 'status' => 4 //Change Status to Updated(1)
+                        ]);
+                    }
+
+
+                        DB::commit();
+                        return response()->json(['result' => 'Success']);
+                // }
+        }else{
+            return response()->json(['result' => 'Session Expired']);
+        }
+    }
+
     public function get_dmrpqc_details_id(Request $request){
-            $dmrpqc_details = ProductIdentification::with(['users.rapidx_user_details' => function($query) { $query->select('id', 'name'); }])
+            $dmrpqc_details = ProductIdentification::with(['created_by.rapidx_user_details' => function($query) { $query->select('id', 'name'); }])
             ->where('id', $request->id)
             ->where('logdel', 0)->get();
+
+            //  return $dmrpqc_details;
 
         if($request->process_status != 1){ //Get Dieset Condition Data if the Product Identification Status is (2)Ongoing
             $dieset_condition_details = DiesetCondition::with(['in_charged.rapidx_user_details' => function($query) { $query->select('id', 'name'); },
@@ -494,14 +714,40 @@ class DmrpqcTsController extends Controller
                                                                                 ->where('request_id', $request->id)
                                                                                 ->where('logdel', 0)->get();
 
-            if($dieset_condition_checking_details[0]->status == 0){ //return blank data if the (p2) status is unchanged(0) not yet updated
+            if($dieset_condition_checking_details[0]->status == 0){ //return blank data if the (p3) status is unchanged(0) not yet updated
                 $dieset_condition_checking_details = '';
             }
         }else{
             $dieset_condition_checking_details = '';
         }
 
-        return response()->json(['dmrpqc_details' => $dmrpqc_details, 'dieset_condition_details' => $dieset_condition_details, 'dieset_condition_checking_details' => $dieset_condition_checking_details]);
+        if($request->process_status != 1 && $request->process_status != 2 && $request->process_status != 3){
+            $machine_setup_details = MachineSetup::where('request_id', $request->id)
+                                                    ->where('logdel', 0)->get();
+
+            if($machine_setup_details[0]->status == 0){ //return blank data if the (p4) status is unchanged(0) not yet updated
+                $machine_setup_details = '';
+            }
+        }else{
+            $machine_setup_details = '';
+        }
+
+        if($request->process_status != 1 && $request->process_status != 2 && $request->process_status != 3 && $request->process_status != 4){
+            $product_req_checking_details = ProductReqChecking::where('request_id', $request->id)
+                                                    ->where('logdel', 0)->get();
+
+            if($product_req_checking_details[0]->prod_visual_insp_name == '' || $product_req_checking_details[0]->prod_dimension_insp_name == ''){ //return blank data if the (p5) status is unchanged(0) not yet updated
+                $product_req_checking_details = '';
+            }
+        }else{
+            $product_req_checking_details = '';
+        }
+
+        return response()->json(['dmrpqc_details' => $dmrpqc_details,
+                                'dieset_condition_details' => $dieset_condition_details,
+                                'dieset_condition_checking_details' => $dieset_condition_checking_details,
+                                'machine_setup_details' => $machine_setup_details,
+                                'product_req_checking_details' => $product_req_checking_details]);
     }
 
     public function delete_request(Request $request){
@@ -564,21 +810,78 @@ class DmrpqcTsController extends Controller
                         return response()->json(['result' => "Successful"]);
                     }
                 }elseif($request->process_status == 3){
-                    echo $this->update_status_product_identification($request->request_id, 2, 3, $get_requested_by_id->id);
 
-                    DiesetConditionChecking::insert(['request_id' => $request->request_id,
-                                                'created_by' => $get_requested_by_id->id,
-                                                'last_updated_by' => $get_requested_by_id->id,
-                                                'created_at' => date('Y-m-d H:i:s'),
-                                                'updated_at' => date('Y-m-d H:i:s'),]);
+                    $dieset_condition_checking = DiesetConditionChecking::where('request_id', $request->request_id)->first();
+                    // Conform: if request_id is not existing in dieset condition checking table
+                    if(!isset($dieset_condition_checking->request_id)){
+                        echo $this->update_status_product_identification($request->request_id, 2, 3, $get_requested_by_id->id);
 
-                    return response()->json(['result' => "Successful"]);
+                        DiesetConditionChecking::insert(['request_id' => $request->request_id,
+                                                        'created_by' => $get_requested_by_id->id,
+                                                        'last_updated_by' => $get_requested_by_id->id,
+                                                        'created_at' => date('Y-m-d H:i:s'),
+                                                        'updated_at' => date('Y-m-d H:i:s'),]);
+
+                        return response()->json(['result' => "Successful"]);
+                        //Submit: if there is request_id exist in dieset condition checking table and the status is 1(Updated)
+                    }elseif(isset($dieset_condition_checking->request_id) && $dieset_condition_checking->status == 1){
+                        echo $this->update_status_product_identification($request->request_id, 1, 4, $get_requested_by_id->id);
+                        DiesetConditionChecking::where('request_id', $request->request_id)->update(['last_updated_by' => $get_requested_by_id->id,
+                                               'updated_at' => date('Y-m-d H:i:s'),]);
+
+                        return response()->json(['result' => "Successful"]);
+                    }
+                }elseif($request->process_status == 4){
+
+                    $machine_setup = MachineSetup::where('request_id', $request->request_id)->first();
+                    // Conform: if request_id is not existing in machine setup table
+                    if(!isset($machine_setup->request_id)){
+                        echo $this->update_status_product_identification($request->request_id, 2, 4, $get_requested_by_id->id);
+
+                        MachineSetup::insert(['request_id' => $request->request_id,
+                                                        'created_by' => $get_requested_by_id->id,
+                                                        'last_updated_by' => $get_requested_by_id->id,
+                                                        'created_at' => date('Y-m-d H:i:s'),
+                                                        'updated_at' => date('Y-m-d H:i:s'),]);
+
+                        return response()->json(['result' => "Successful"]);
+                        //Submit: if there is request_id exist in machine setup table and the status is 1(Updated)
+                    }elseif(isset($machine_setup->request_id) && $machine_setup->status == 1){
+                        echo $this->update_status_product_identification($request->request_id, 1, 5, $get_requested_by_id->id);
+                        MachineSetup::where('request_id', $request->request_id)->update(['last_updated_by' => $get_requested_by_id->id,
+                                               'updated_at' => date('Y-m-d H:i:s'),]);
+
+                        return response()->json(['result' => "Successful"]);
+                    }
+                }elseif($request->process_status == 5){
+
+                    $product_req_checking = ProductReqChecking::select(['request_id', 'status'])->where('request_id', $request->request_id)->first();
+                    // return $product_req_checking['request_id'];
+                    // Conform: if request_id is not existing in machine setup table
+                    if(!isset($product_req_checking['request_id'])){
+                        // if(!isset($product_req_checking['status'])){ //Update p1 to next part
+                            echo $this->update_status_product_identification($request->request_id, 2, 5, $get_requested_by_id->id);
+                        // }
+                        ProductReqChecking::insert(['request_id' => $request->request_id,
+                                                        'created_by' => $get_requested_by_id->id,
+                                                        'last_updated_by' => $get_requested_by_id->id,
+                                                        'created_at' => date('Y-m-d H:i:s'),
+                                                        'updated_at' => date('Y-m-d H:i:s'),]);
+
+                        return response()->json(['result' => "Successful"]);
+                        //Submit: if there is request_id exist in machine setup table and the status is 1(Updated)
+                    }elseif(isset($product_req_checking['request_id'])){
+                        if($product_req_checking['status'] == 3){ //Update p1 to next part
+                            echo $this->update_status_product_identification($request->request_id, 1, 6, $get_requested_by_id->id);
+                        }
+
+                        $status = $product_req_checking['status'];
+                        ProductReqChecking::where('request_id', $request->request_id)->update(['last_updated_by' => $get_requested_by_id->id,
+                                                    'status' => $status + 1, 'updated_at' => date('Y-m-d H:i:s'),]);
+
+                        return response()->json(['result' => "Successful"]);
+                    }
                 }
-                // elseif($request->process_status == 3){
-                //     update_status_product_identification($request->id, 2, 2, $get_requested_by_id->id);
-                //     update_status_dieset_condition($request->id, $get_requested_by_id->id);
-                //     return response()->json(['result' => "Successful"]);
-                // }
                 else{
                     return response()->json(['result' => "Error"]);
                 }

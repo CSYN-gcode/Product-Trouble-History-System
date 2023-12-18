@@ -17,7 +17,7 @@ class CreateUsersTable extends Migration
             $table->bigIncrements('id');
             $table->string('rapidx_id')->nullable()->comment = 'RapidX User(table) id';
             $table->string('section');
-            $table->tinyInteger('position')->default(0)->comment = '0-N/A';
+            $table->tinyInteger('position')->comment = '	1 - Production Operator, 2 - Die Maintenance Engr, 3 - Process Technician, 4 - Process Engr, 5 - LQC, 6 - Sr. Engr, 7 - Manager, 8 - Administrator';
             $table->unsignedTinyInteger('status')->default(0)->comment = '0-Active, 1-Not-Active';
             $table->unsignedBigInteger('user_level_id')->comment = '1-Admin, 2-Staff, 3-User';
 

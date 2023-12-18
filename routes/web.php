@@ -146,6 +146,7 @@ Route::get('/auto_mailer', function () {
 Route::get('/get_user_department', [UserController::class, 'get_user_department'])->name('get_user_department');
 Route::get('/get_user_level', [UserController::class, 'get_user_level'])->name('get_user_level');
 Route::get('/get_users_by_stat', [UserController::class, 'get_users_by_stat'])->name('get_users_by_stat');
+Route::get('/get_users_by_position', [UserController::class, 'get_users_by_position'])->name('get_users_by_position');
 Route::post('/add_user', [UserController::class, 'add_user'])->name('add_user');
 Route::get('/get_id_edit_user', [UserController::class, 'get_id_edit_user'])->name('get_id_edit_user');
 Route::post('edit_user', [UserController::class, 'edit_user'])->name('edit_user');
@@ -156,6 +157,9 @@ Route::post('/activate_user', [UserController::class, 'activate_user'])->name('a
 //===== DIESET CONTROLLER ======
 Route::post('/add_request', [DmrpqcTsController::class, 'add_request'])->name('add_request');
 Route::post('/update_dieset_conditon_data', [DmrpqcTsController::class, 'update_dieset_conditon_data'])->name('update_dieset_conditon_data');
+Route::post('/update_dieset_conditon_checking_data', [DmrpqcTsController::class, 'update_dieset_conditon_checking_data'])->name('update_dieset_conditon_checking_data');
+Route::post('/update_machine_setup_data', [DmrpqcTsController::class, 'update_machine_setup_data'])->name('update_machine_setup_data');
+Route::post('/update_product_req_checking_data', [DmrpqcTsController::class, 'update_product_req_checking_data'])->name('update_product_req_checking_data');
 Route::post('/update_parts_drawing_data', [DmrpqcTsController::class, 'update_parts_drawing_data'])->name('update_parts_drawing_data');
 Route::post('/delete_request', [DmrpqcTsController::class, 'delete_request'])->name('delete_request');
 // Route::post('/submit_request', [DmrpqcTsController::class, 'submit_request'])->name('submit_request');

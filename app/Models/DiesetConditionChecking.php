@@ -13,6 +13,6 @@ class DiesetConditionChecking extends Model
 
     public function checked_by()
     {
-    	return $this->hasOne(User::class, 'id', 'mold_check_checked_by');
+    	return $this->hasOne(User::class, 'id', 'checked_by');
     }
 }

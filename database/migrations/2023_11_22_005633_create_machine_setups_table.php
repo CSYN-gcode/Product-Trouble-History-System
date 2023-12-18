@@ -16,15 +16,19 @@ class CreateMachineSetupsTable extends Migration
         Schema::create('p4_machine_setups', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('request_id')->comment = 'id from p1_product_identifications';
-            $table->unsignedTinyInteger('1st_adjustment')->nullable()->comment = '1 - Checked';
-            $table->unsignedTinyInteger('2nd_adjustment')->nullable()->comment = '1 - Checked';
-            $table->unsignedTinyInteger('3rd_adjustment')->nullable()->comment = '1 - Checked';
-            $table->unsignedBigInteger('1st_in_charged')->nullable();
-            $table->unsignedBigInteger('2nd_in_charged')->nullable();
-            $table->unsignedBigInteger('3rd_in_charged')->nullable();
-            $table->string('1st_date_time')->nullable();
-            $table->string('2nd_date_time')->nullable();
-            $table->string('3rd_date_time')->nullable();
+            $table->unsignedTinyInteger('first_adjustment')->nullable()->comment = '1 - Checked';
+            $table->unsignedTinyInteger('second_adjustment')->nullable()->comment = '1 - Checked';
+            $table->unsignedTinyInteger('third_adjustment')->nullable()->comment = '1 - Checked';
+            $table->unsignedBigInteger('first_in_charged')->nullable();
+            $table->unsignedBigInteger('second_in_charged')->nullable();
+            $table->unsignedBigInteger('third_in_charged')->nullable();
+            $table->string('first_date_time')->nullable();
+            $table->string('second_date_time')->nullable();
+            $table->string('third_date_time')->nullable();
+            $table->string('first_remarks')->nullable();
+            $table->string('second_remarks')->nullable();
+            $table->string('third_remarks')->nullable();
+            $table->TinyInteger('category')->comment = '1 - HVM, 2 - SMPO';
 
             // Defaults
             $table->unsignedBigInteger('created_by')->nullable();
@@ -35,9 +39,6 @@ class CreateMachineSetupsTable extends Migration
 
             // Foreign Key
             $table->foreign('request_id')->references('id')->on('p1_product_identifications');
-            $table->foreign('1st_in_charged')->references('id')->on('tbl_users');
-            $table->foreign('2nd_in_charged')->references('id')->on('tbl_users');
-            $table->foreign('3rd_in_charged')->references('id')->on('tbl_users');
             $table->foreign('created_by')->references('id')->on('tbl_users');
             $table->foreign('last_updated_by')->references('id')->on('tbl_users');
         });

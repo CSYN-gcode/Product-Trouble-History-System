@@ -420,36 +420,6 @@ class UserController extends Controller
             $accesses[] = $user_access[$i]->module_id;
         }
 
-        // DEPARTMENT ID == 30 (FACILITY SECTION), DEPARTMENT ID == 48 (ISS), DEPARTMENT ID == 1 (ISS SOFTWARE), DEPARTMENT ID == 2 (ISS HARDWARE), DEPARTMENT ID == 54 (SECRETARIAT), DEPARTMENT ID == 54 (TS WHSE)
-
-        // $authorized_departments = [1, 2, 30, 48, 54, 18]; /cmodify
-
-        // $BOD = RapidXDepartment::where('department_name', 'like', 'Board of Directors%')->pluck('department_id')->toArray();
-        // $IAS = RapidXDepartment::where('department_name', 'like', 'IAS%')->pluck('department_id')->toArray();
-        // $FIN = RapidXDepartment::where('department_name', 'like', 'FIN%')->pluck('department_id')->toArray();
-        // $HRD = RapidXDepartment::where('department_name', 'like', 'HRD%')->pluck('department_id')->toArray();
-        // $ESS = RapidXDepartment::where('department_name', 'like', 'ESS%')->pluck('department_id')->toArray();
-        // $LOG = RapidXDepartment::where('department_name', 'like', 'LOG%')->pluck('department_id')->toArray();
-        // $FAC = RapidXDepartment::where('department_name', 'like', 'FAC%')->pluck('department_id')->toArray();
-        // $ISS = RapidXDepartment::where('department_name', 'like', 'ISS%')->pluck('department_id')->toArray();
-        // $QAD = RapidXDepartment::where('department_name', 'like', 'QAD%')->pluck('department_id')->toArray();
-        // $EMS = RapidXDepartment::where('department_name', 'like', 'EMS%')->pluck('department_id')->toArray();
-
-        // $sg_array = array_merge($BOD,$IAS,$FIN,$HRD,$ESS,$LOG,$ISS,$QAD,$EMS);
-
-        // $ts_department = RapidXDepartment::where('department_name', 'like', 'TS%')->pluck('department_id')->toArray();
-        // $cn_department = RapidXDepartment::where('department_name', 'like', 'CN%')->pluck('department_id')->toArray();
-        // $yf_department = RapidXDepartment::where('department_name', 'like', 'YF%')->pluck('department_id')->toArray();
-        // $pps_department = RapidXDepartment::where('department_name', 'like', 'PPS%')->pluck('department_id')->toArray();
-
-        // $prod_wo_pps_array = array_merge($ts_department,$cn_department,$yf_department);
-        // $prod_pps_array = array_merge($pps_department);
-
-        // Session::put('support_group', $sg_array);
-        // Session::put('production_wo_pps', $prod_wo_pps_array);
-        // Session::put('production_pps', $prod_pps_array);
-        // Session::put('facility_section', $FAC);
-
         Session::put('department_id', $rapidx_dept_id);
         // Session::put('departments', $authorized_departments);
         Session::put('user_level', $user_level_id);
@@ -486,12 +456,17 @@ class UserController extends Controller
 
     public function get_users_by_stat(Request $request)
     {
-        $users;
         if ($request->user_stat == 0) {
             $users = RapidXUser::on('rapidx')->get();
         } else {
             $users = RapidXUser::on('rapidx')->where('user_stat', $request->user_stat)->get();
         }
+        return response()->json(['users' => $users]);
+    }
+
+    public function get_users_by_position(Request $request)
+    {
+        $users = User::with(['rapidx_user_details'])->where('position', $request->position)->where('status', 0)->get();
         return response()->json(['users' => $users]);
     }
 
