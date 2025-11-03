@@ -24,7 +24,7 @@ class CreateProductIdentificationsTable extends Migration
             $table->string('request_type')->nullable()->comment = '1 - For Maintenance, 2 - Temporary Stop';
             $table->string('start_date_time');
             $table->unsignedTinyInteger('status')->default(0)->comment = '0 - For Submission, 1 - For Conformance, 2 - Ongoing Condition Checking, 3 - Request Completed';
-            $table->unsignedTinyInteger('process_status')->default(1)->comment = '1 - Product Identification, 2 - Dieset Condition, 3 - Dieset Condition Checking, 4 - Machine Setup';
+            $table->unsignedTinyInteger('process_status')->default(1)->comment = '1 - Product Identification, 2 - Dieset Condition, 3 - Dieset Condition Checking, 4 - Machine Setup, 5 - Product Requirement Checking, 6 - Machine Parameter Checking, 7 - Specifications, 8 - Completion Activity, 9 - Request Completed';
 
             // Defaults
             $table->unsignedBigInteger('created_by')->nullable();

@@ -43,8 +43,21 @@
     };
 </script>
 
+{{-- User Management --}}
 <script src="{{ asset('public/js/main/User.js?n=135643213241032') }}"></script>
-{{-- <script src="{{ asset('public/js/main/test.js?n=546145324312') }}"></script> --}}
+
+<script src="@php echo asset("public/js/main/ProductionRuncard.js?".date("YmdHis")) @endphp"></script>
+<script src="@php echo asset("public/js/main/CommonFunctions.js?".date("YmdHis")) @endphp"></script>
+<script src="@php echo asset("public/js/main/Common.js?".date("YmdHis")) @endphp"></script>
+<script src="@php echo asset("public/js/main/ProductIdentification.js?".date("YmdHis")) @endphp"></script>
+<script src="@php echo asset("public/js/main/DiesetCondition.js?".date("YmdHis")) @endphp"></script>
+<script src="@php echo asset("public/js/main/DiesetConditionChecking.js?".date("YmdHis")) @endphp"></script>
+<script src="@php echo asset("public/js/main/MachineSetup.js?".date("YmdHis")) @endphp"></script>
+<script src="@php echo asset("public/js/main/ProductRequirementChecking.js?".date("YmdHis")) @endphp"></script>
+<script src="@php echo asset("public/js/main/MachineParameterChecking.js?".date("YmdHis")) @endphp"></script>
+<script src="@php echo asset("public/js/main/Specifications.js?".date("YmdHis")) @endphp"></script>
+<script src="@php echo asset("public/js/main/CompletionActivity.js?".date("YmdHis")) @endphp"></script>
+{{-- <script src="@php echo asset("public/js/main/test.js?".date("YmdHis"))"></script> --}}
 
 {{-- <script src="{{ asset('public/js/main/Mailer.js?n=5') }}"></script> --}}
 <!-- Custom JS -->
@@ -75,9 +88,3 @@
 {{-- INK CONSUMPTION DEPARTMENTS END--}}
 
 {{-- <script src="{{ asset('public/js/main/PastFYSelector.js') }}"></script> --}}
-
-{{-- User Management --}}
-{{-- <script src="{{ asset('public/js/main/User.js?n=4') }}"></script> --}}
-
-
-{{-- <script src="{{ asset('public/js/main/Common.js') }}"></script> --}}

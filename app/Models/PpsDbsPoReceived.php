@@ -17,5 +17,4 @@ class PpsDbsPoReceived extends Model
     {
         return $this->hasOne(PpsDbsdieset::class, 'R3Code','ItemCode');
     }
-
 }
