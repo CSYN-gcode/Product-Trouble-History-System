@@ -6,7 +6,7 @@
             style="opacity: .8">
 
         <span class="brand-text font-weight-light font-size">
-            <h5>DMR & PQC</h5>
+            <h5>PTHS</h5>
         </span>
     </a> <!-- System title and logo -->
 
@@ -21,48 +21,29 @@
                     </a>
                 </li>
 
-                <li class="nav-item has-treeview">
+                <li class="nav-item has-treeview" id="dashboard-energy" >
                     <a href="{{ route('dashboard') }}" class="nav-link">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
-                        <p>Dashboard</p>
+                        <i class="fa-solid fa-square-poll-vertical fa-lg"></i>
+                        <p> Dashboard</p>
                     </a>
                 </li>
 
-                <li class="nav-header font-weight-bold">Consumption Management</li>
-                <li class="nav-item has-treeview" id="energyNav" style="display: none;">
-                    <a href="{{ route('energy_consumption') }}" class="nav-link">
-                        <i class="fas fa-charging-station"></i> &nbsp;
-                        <p>Energy Consumption</p>
+                <li class="nav-item has-treeview"> <!-- DMR & PQC - TS  -->
+                    <a href="{{ route('defects') }}" class="nav-link">
+                      {{-- <i class="far fa-circle nav-icon"></i> --}}
+                      <i class="far fa-times-circle nav-icon"></i>
+                      <p>Defects List</p>
                     </a>
                 </li>
 
-                <li class="nav-item has-treeview" id="waternav" style="display: none;">
-                    <a href="{{ route('water_consumption') }}" class="nav-link">
-                        <i class="fas fa-tint"></i> &nbsp;&nbsp;&nbsp;
-                        <p>Water Consumption</p>
-                    </a>
-                </li>
+                <li class="nav-header font-weight-bold">Records</li>
 
-                <li class="nav-item has-treeview">
-                    <a href="{{ route('paper_consumption') }}" class="nav-link">
-                        <i class="fas fa-file"></i> &nbsp;&nbsp;&nbsp;
-                        <p>Paper Consumption - PROD</p>
-                    </a>
-                </li>
-
-                <li class="nav-item has-treeview" id="inknav" style="display: none;">
-                    <a href="{{ route('ink_consumption') }}" class="nav-link">
-                    <i class="fas fa-fill-drip"></i> &nbsp;&nbsp;&nbsp;
-                        <p>Ink Consumption</p>
-                    </a>
-                </li>
-
-                <li class="nav-item has-treeview" id="reportsnav">
-                    <a class="nav-link" data-widget="pushmenu" href="#">
-                    <a href="{{ route('reports') }}" class="nav-link">
-                    <i class="fas fa-file-chart-line"></i> &nbsp;&nbsp;&nbsp;
-                        <p>Reports</p>
-                    </a>
+                <li class="nav-item has-treeview"> <!-- DMR & PQC - TS  -->
+                    <a href="{{ route('parts_trouble_history_record') }}" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>
+                        Parts Trouble History Record
+                      </p>
                     </a>
                 </li>
             </ul>

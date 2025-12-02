@@ -6,7 +6,7 @@
             style="opacity: .8">
 
         <span class="brand-text font-weight-light font-size">
-            <h5>DMR & PQC</h5>
+            <h5>PTHS</h5>
         </span>
     </a> <!-- System title and logo -->
 
@@ -21,89 +21,33 @@
                     </a>
                 </li>
 
-                <li class="nav-header font-weight-bold" id="user_header" >User Management</li>
-                <li class="nav-item has-treeview" id="user_settings" >
-                    <a href="{{ route('user_management') }}" class="nav-link">
-                        <i class="fa-solid fa-users-gear fa-lg"></i>
-                        <p >User Settings</p>
-                    </a>
-                </li>
-
-                <li class="nav-header font-weight-bold">Dashboard Management</li>
                 <li class="nav-item has-treeview" id="dashboard-energy" >
                     <a href="{{ route('dashboard') }}" class="nav-link">
-                        <i class="fa-solid fa-square-poll-vertical fa-lg"></i>
+                        <i class="fa-solid fa-square-poll-vertical fa-lg nav-icon"></i>
                         <p> Dashboard</p>
                     </a>
                 </li>
 
-                {{-- <li class="nav-item has-treeview" id="dashboard">
-                    <a href="{{ route('status_dashboard') }}" class="nav-link">
-                        <i class="fa-solid fa-table-list fa-lg"></i>
-                        <p >Die-set Status</p>
-                    </a>
-                </li> --}}
-
-                <li class="nav-header font-weight-bold">Preparation Request</li>
-                {{-- <li class="nav-item has-treeview" id="DMR_PQC_ts_Nav">
-                    <a href="{{ route('DMR_PQC_TS') }}" class="nav-link">
-                        <i class="fa-solid fa-screwdriver-wrench fa-lg"></i>
-                        <p>DMR & PQC - TS</p>
-                    </a>
-                </li> --}}
-
                 <li class="nav-item has-treeview"> <!-- DMR & PQC - TS  -->
-                    <a href="{{ route('dmrpqc_ts') }}" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>
-                        DMR & PQC - TS
-                      </p>
+                    <a href="{{ route('defects') }}" class="nav-link">
+                      {{-- <i class="far fa-circle nav-icon"></i> --}}
+                      <i class="fas fa-times-circle nav-icon"></i>
+                      <p>Defects</p>
                     </a>
                 </li>
 
-                {{-- <li class="nav-item has-treeview" id="DMR_PQC_cn_Nav">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>
-                          DMR & PQC - CN
-                          <i class="fas fa-angle-left right"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                          <a href="{{ route('DMR_PQC_TS') }}" class="nav-link">
-                          <i class="far fa-circle nav-icon"></i>
-                            <p>Product Identification</p>
-                          </a>
-                        </li>
-                        <li class="nav-item">
-                          <a href="{{ route('DMR_PQC_TS') }}" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Dieset Condition</p>
-                          </a>
-                        </li>
-                        <li class="nav-item">
-                          <a href="{{ route('DMR_PQC_TS') }}" class="nav-link">
-                          <i class="far fa-circle nav-icon"></i>
-                            <p>Machine Set-up</p>
-                          </a>
-                        </li>
-                        <li class="nav-item">
-                          <a href="{{ route('DMR_PQC_TS') }}" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Product Requirement</p>
-                          </a>
-                        </li>
-                      </ul>
-                </li> --}}
+                <li class="nav-header font-weight-bold">Records</li>
 
-                {{-- <li class="nav-header font-weight-bold" id="reports_header" >Reports</li>
-                <li class="nav-item has-treeview" id="reportsnav" >
-                    <a href="{{ route('reports') }}" class="nav-link">
-                    <i class="fa-solid fa-file-export fa-lg"></i>
-                        <p>Report Settings</p>
+                <li class="nav-item has-treeview"> <!-- DMR & PQC - TS  -->
+                    <a href="{{ route('parts_trouble_history_record') }}" class="nav-link">
+                      {{-- <i class="far fa-circle nav-icon"></i> --}}
+                      <i class="fas fa-microchip nav-icon"></i>
+                      <p>
+                        Parts Trouble History Record
+                      </p>
                     </a>
-                </li> --}}
+                </li>
+                
             </ul>
         </nav>
     </div><!-- Sidebar -->

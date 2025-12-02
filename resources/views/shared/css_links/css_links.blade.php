@@ -27,3 +27,5 @@
 
 <!-- Custom CSS -->
 <link rel="stylesheet" href="{{ asset('public/css/custom.css') }}">
+
+<link rel="stylesheet" href="{{ asset('public/template/sweetalert/css/sweetalert2.min.css') }}">

@@ -1,45 +1,45 @@
 $(document).ready(function () {
 
     // PART 2 USER SELECTION
-    GetSupervisorEngrUser(4, $("#selFabricatedBy")); //Internally Fabricated Parts(X) Fabricated By
-    GetSupervisorEngrUser(4, $("#selValidatedBy")); //Internally Fabricated Parts(X) Validated By
+    // GetSupervisorEngrUser(4, $("#selFabricatedBy")); //Internally Fabricated Parts(X) Fabricated By
+    // GetSupervisorEngrUser(4, $("#selValidatedBy")); //Internally Fabricated Parts(X) Validated By
 
-    // PART 4 USER SELECTION
-    GetProductionUsers(1, $("#selProductionUser")); //Machine Set-up 1st Adjustment (In-Charge)
-    GetTechnicianUser(3, $("#selTechnicianUser")); //Machine Set-up 2md Adjustment (In-Charge)
-    GetSupervisorEngrUser(4, $("#selSupervisorEngrUser")); //Machine Set-up 3rd Adjustment (In-Charge)
+    // // PART 4 USER SELECTION
+    // GetProductionUsers(1, $("#selProductionUser")); //Machine Set-up 1st Adjustment (In-Charge)
+    // GetTechnicianUser(3, $("#selTechnicianUser")); //Machine Set-up 2md Adjustment (In-Charge)
+    // GetSupervisorEngrUser(4, $("#selSupervisorEngrUser")); //Machine Set-up 3rd Adjustment (In-Charge)
 
-    // PART 5 USER SELECTION
-    GetProductionUsers(1, $("#selProductionVisualUser")); // Production Visual Inspection
-    GetProductionUsers(1, $("#selProductionDimentionUser")); // Production Dimension Inspection
-    GetTechnicianUser(3, $("#selTechnicianVisualUser")); // Technician Visual Inspection
-    GetTechnicianUser(3, $("#selTechnicianDimensionUser")); // Technician Dimension Inspection
-    GetQcInspectorUser(5, $("#selQcVisualUser")); // QC Visual Inspection
-    GetQcInspectorUser(5, $("#selQcDimensionUser")); // QC Dimension Inspection
-    GetSupervisorEngrUser(4, $("#selEngrVisualUser")); // Process Engr Visual Inspection
-    GetSupervisorEngrUser(4, $("#selEngrDimensionUser")); // Process Engr Dimension Inspection
+    // // PART 5 USER SELECTION
+    // GetProductionUsers(1, $("#selProductionVisualUser")); // Production Visual Inspection
+    // GetProductionUsers(1, $("#selProductionDimentionUser")); // Production Dimension Inspection
+    // GetTechnicianUser(3, $("#selTechnicianVisualUser")); // Technician Visual Inspection
+    // GetTechnicianUser(3, $("#selTechnicianDimensionUser")); // Technician Dimension Inspection
+    // GetQcInspectorUser(5, $("#selQcVisualUser")); // QC Visual Inspection
+    // GetQcInspectorUser(5, $("#selQcDimensionUser")); // QC Dimension Inspection
+    // GetSupervisorEngrUser(4, $("#selEngrVisualUser")); // Process Engr Visual Inspection
+    // GetSupervisorEngrUser(4, $("#selEngrDimensionUser")); // Process Engr Dimension Inspection
 
-    GetProductionUsers(1, $("#selMachineSetupSamplesPIC")); //For Machine Setup Sample (PIC)
-    GetQcInspectorUser(5, $("#selMachineSetupSamplesQc")); //For Machine Setup Sample (QC)
-    GetSupervisorEngrUser(4, $("#selMachineSetupSamplesEngr")); //For Machine Setup Sample (ENGR)
+    // GetProductionUsers(1, $("#selMachineSetupSamplesPIC")); //For Machine Setup Sample (PIC)
+    // GetQcInspectorUser(5, $("#selMachineSetupSamplesQc")); //For Machine Setup Sample (QC)
+    // GetSupervisorEngrUser(4, $("#selMachineSetupSamplesEngr")); //For Machine Setup Sample (ENGR)
 
-    GetSupervisorEngrUser(4, $("#selPressureEngrUser"));
-    GetQcInspectorUser(5, $("#selPressureQCUser"));
-    GetSupervisorEngrUser(4, $("#selTempNozzleEngrUser"));
-    GetQcInspectorUser(5, $("#selTempNozzleQCUser"));
-    GetSupervisorEngrUser(4, $("#selTempMoldEngrUser"));
-    GetQcInspectorUser(5, $("#selTempMoldQCUser"));
-    GetSupervisorEngrUser(4, $("#selCtimeEngrUser"));
-    GetQcInspectorUser(5, $("#selCtimeQCUser"));
+    // GetSupervisorEngrUser(4, $("#selPressureEngrUser"));
+    // GetQcInspectorUser(5, $("#selPressureQCUser"));
+    // GetSupervisorEngrUser(4, $("#selTempNozzleEngrUser"));
+    // GetQcInspectorUser(5, $("#selTempNozzleQCUser"));
+    // GetSupervisorEngrUser(4, $("#selTempMoldEngrUser"));
+    // GetQcInspectorUser(5, $("#selTempMoldQCUser"));
+    // GetSupervisorEngrUser(4, $("#selCtimeEngrUser"));
+    // GetQcInspectorUser(5, $("#selCtimeQCUser"));
 
-    // SAMPLE SELECTION ONLY *FOR REVISION
-    GetProductionUsers(1, $("#selNgJudgedBy")); //For Specification (NG Judged By)
-    GetQcInspectorUser(5, $("#selOkVerifiedBy")); //For Specification (OK Verified By)
-    GetSupervisorEngrUser(4, $("#selSignedBy")); //For Specification (Signed By)
+    // // SAMPLE SELECTION ONLY *FOR REVISION
+    // GetProductionUsers(1, $("#selNgJudgedBy")); //For Specification (NG Judged By)
+    // GetQcInspectorUser(5, $("#selOkVerifiedBy")); //For Specification (OK Verified By)
+    // GetSupervisorEngrUser(4, $("#selSignedBy")); //For Specification (Signed By)
 
-    // PART 8 USER SELECTION
-    GetProductionUsers(1, $("#SelPreparedBy")); //For Specification (Prepared By)
-    GetProductionUsers(1, $("#SelCheckedBy")); //For Specification (Checked By)
+    // // PART 8 USER SELECTION
+    // GetProductionUsers(1, $("#SelPreparedBy")); //For Specification (Prepared By)
+    // GetProductionUsers(1, $("#SelCheckedBy")); //For Specification (Checked By)
 });
 
 //============================== ADD USER ==============================

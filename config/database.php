@@ -63,14 +63,14 @@ return [
             ]) : [],
         ],
 
-        'mysql_rapid' => [
+        'rapidx' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST_RAPID', '192.168.3.235'),
-            'port' => env('DB_PORT_RAPID', '3306'),
-            'database' => env('DB_DATABASE_RAPID', 'forge'),
-            'username' => env('DB_USERNAME_RAPID', 'forge'),
-            'password' => env('DB_PASSWORD_RAPID', ''),
+            'host' => env('DB_HOST', '127.0.0.1'),
+            'port' => env('DB_PORT', '3306'),
+            'database' => env('DB_DATABASE_RAPIDX', 'forge'),
+            'username' => env('DB_USERNAME_RAPIDX', 'forge'),
+            'password' => env('DB_PASSWORD_RAPIDX', ''),
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
@@ -83,14 +83,14 @@ return [
             ]) : [],
         ],
 
-        'rapidx' => [
+        'mysql_rapid' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE_RAPIDX', 'forge'),
-            'username' => env('DB_USERNAME_RAPIDX', 'forge'),
-            'password' => env('DB_PASSWORD_RAPIDX', ''),
+            'host' => env('DB_HOST_RAPID', '192.168.3.235'),
+            'port' => env('DB_PORT_RAPID', '3306'),
+            'database' => env('DB_DATABASE_RAPID', 'forge'),
+            'username' => env('DB_USERNAME_RAPID', 'forge'),
+            'password' => env('DB_PASSWORD_RAPID', ''),
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUserLevelsTable extends Migration
+class CreateDefectsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,12 @@ class CreateUserLevelsTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_levels', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('name');
+        Schema::create('defects', function (Blueprint $table) {
+            $table->id();
+            $table->string('defect_name');
+            $table->text('description')->nullable();
+            $table->string('status')->default(0)->comment('0 - Active, 1 - Inactive');
             $table->timestamps();
-
-            // Defaults
-            $table->tinyInteger('is_deleted')->nullable()->default(0)->comment = '0-active, 1-deleted';
         });
     }
 
@@ -30,6 +29,6 @@ class CreateUserLevelsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_levels');
+        Schema::dropIfExists('defects');
     }
 }
