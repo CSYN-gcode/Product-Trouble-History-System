@@ -32,7 +32,8 @@ class CreatePthsDefectsTable extends Migration
 
             // Defect-specific fields
             $table->text('illustration_of_defect')->nullable();
-            $table->string('no_of_occurence')->nullable();
+            $table->string('no_of_occurrence')->nullable();
+            $table->string('root_cause')->nullable();
 
             $table->softDeletes();
             $table->timestamps();

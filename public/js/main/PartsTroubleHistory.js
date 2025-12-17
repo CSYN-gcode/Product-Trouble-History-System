@@ -22,6 +22,7 @@ $(document).ready(function () {
     const dtPTH = initPartsTroubleHistoryTable($table);
     const $tableIA = $('#tblImprovementActions');                   //table for improvement actions
     const $addButtonIA = $('#btnAddImprovementAction');             //button for adding improvement actions
+    const $exportReportButton = $('#btnShowExportReportModal');             //button for adding improvement actions
     // --------------------------------------
     // Initialize global AJAX setup (once per project)
     // --------------------------------------
@@ -50,7 +51,8 @@ $(document).ready(function () {
         $addButtonPTH,
         dtPTH,
         $tableIA,
-        $addButtonIA
+        $addButtonIA,
+        $exportReportButton
     );
 });
 
@@ -70,27 +72,41 @@ function resetPartsTroubleHistoryForm(formSelector, tableImprovementActions) {
     $('.text-danger').text('');
 
     // Remove all rows except template row
-    $(tableImprovementActions).find('tbody tr:not(.template-row)').remove();
+    $(tableImprovementActions).find('tbody tr:not(.data-row)').remove();
 
     // Clear template row inputs
-    $(tableImprovementActions).find('.template-row input').val('');
+    $(tableImprovementActions).find('.data-row input').val('');
 
     // Remove any additional rows except the default one
     const defaultRow = `
-        <tr class="template-row">
+        <tr class="data-row">
+            <td id="removeIA">
+                <center><button class="btn btn-md btn-danger removeIA" title="Remove Row" type="button"><i class="fa fa-times"></i></button></center>
+            </td>
             <td>
                 <textarea class="form-control" name="improvement_action[]" required></textarea>
             </td>
             <td>
                 <textarea class="form-control" name="improvement_action_remarks[]" required></textarea>
             </td>
-            <td id="removeIA">
-                <center><button class="btn btn-md btn-danger removeIA" title="Remove Row" type="button"><i class="fa fa-times"></i></button></center>
-            </td>
         </tr>
     `;
     const $tbody = $(tableImprovementActions).find('tbody');
     $tbody.html(defaultRow);
+
+    // Hide Reupload Div & Exisiting Filename
+    formSelector.find("#btnReuploadTriggerDiv").addClass('d-none');
+    formSelector.find("#btnReuploadTrigger").addClass('d-none');
+    formSelector.find("#btnReuploadTrigger").prop('checked', false);
+    formSelector.find("#btnReuploadTriggerLabel").addClass('d-none');
+    formSelector.find("#illustrationOfDefectFileName").addClass('d-none');
+
+    // Show Upload Attachment section, remove required attribute
+    formSelector.find("#illustrationOfDefect").removeClass('d-none');
+    formSelector.find("#illustrationOfDefect").prop('required', true);
+
+    // Hide Download Button
+    formSelector.find("#downloadFile").addClass('d-none');
 
     updateRemoveButtons(tableImprovementActions);
 }
@@ -106,15 +122,14 @@ function initPartsTroubleHistoryTable($table, url = 'view_parts_trouble_history'
         fixedHeader: true,
         columns: [
             { data: 'action', orderable: false, searchable: false },
-            { data: 'status' },
+            { data: 'status_label' },
             { data: 'date_encountered' },    // customize this per parts_trouble_history
             { data: 'model' },    // customize this per parts_trouble_history
-            { data: 'mode_of_defect' },    // customize this per parts_trouble_history
-            { data: 'illustration_of_defect' },    // customize this per parts_trouble_history
-            { data: 'no_of_occurrence' },    // customize this per parts_trouble_history
-            { data: 'root_cause' },    // customize this per parts_trouble_history
-            { data: 'improvement_actions' },    // customize this per parts_trouble_history
-            { data: 'remarks' },    // customize this per parts_trouble_history
+            { data: 'defects.defect_item.defect_name' },    // customize this per parts_trouble_history
+            { data: 'defects.illustration_of_defect' },    // customize this per parts_trouble_history
+            { data: 'defects.no_of_occurrence' },    // customize this per parts_trouble_history
+            { data: 'defects.root_cause' },    // customize this per parts_trouble_history
+            { data: 'improvements' },    // customize this per parts_trouble_history
         ]
     });
 }
@@ -122,14 +137,14 @@ function initPartsTroubleHistoryTable($table, url = 'view_parts_trouble_history'
 /**
  * Bind events for buttons, forms, etc.
  */
-function bindPartsTroubleHistoryEvents($table, $form, $modal, $addButtonPTH, dtPTH, $tableIA, $addButtonIA) {
+function bindPartsTroubleHistoryEvents($table, $form, $modal, $addButtonPTH, dtPTH, $tableIA, $addButtonIA, $exportReportButton) {
 
     // initial check (on page load)
     updateRemoveButtons($tableIA);
 
     $addButtonPTH.on('click', function () {
         resetPartsTroubleHistoryForm($form, $tableIA);
-        getDefects($('#modeOfDefect'));
+        getDefects($('#defectId'));
         $('#modalPartsTroubleHistory').modal('show');
     });
 
@@ -142,13 +157,21 @@ function bindPartsTroubleHistoryEvents($table, $form, $modal, $addButtonPTH, dtP
     // Edit button
     $table.on('click', '.btnEdit', function () {
         const id = $(this).data('id');
-        fetchPartsTroubleHistoryById(id, $modal);
+        fetchPartsTroubleHistoryById(id, $modal, $tableIA, $form);
     });
 
     // Disable button
     $table.on('click', '.btnDisable', function () {
         const id = $(this).data('id');
-        confirmAction('Are you sure you want to disable this item?', function () {
+        confirmAction('Are you sure you want to disable this?', function () {
+            updatePartsTroubleHistoryStatus(id, dtPTH);
+        });
+    });
+
+    // Enable button
+    $table.on('click', '.btnEnable', function () {
+        const id = $(this).data('id');
+        confirmAction('Are you sure you want to enable this?', function () {
             updatePartsTroubleHistoryStatus(id, dtPTH);
         });
     });
@@ -167,28 +190,12 @@ function bindPartsTroubleHistoryEvents($table, $form, $modal, $addButtonPTH, dtP
         reader.readAsDataURL(file);
     });
 
-    // --------------------
-    // ADD ROW
-    // --------------------
-    // $addButtonIA.on('click', function() {
-    //     let newRow = $tableIA.find('.template-row').first().clone();
-    //     newRow.find('input').val('');
-    //     $tableIA.find('tbody').append(newRow);
-
-    //     // enable remove button
-    //     newRow.find('.removeIA').prop('disabled', false);
-
-    //     $tableIA.find('tbody').append(newRow);
-
-    //     updateRemoveButtons($tableIA);
-    // });
     $addButtonIA.on('click', function () {
-
-        const $templateRow = $tableIA.find('.template-row').first();
+        const $templateRow = $tableIA.find('.data-row').first();
         let newRow = $templateRow.clone();
 
         // Remove the template class so it can be deleted
-        newRow.removeClass('template-row');
+        // newRow.removeClass('data-row');
         newRow.find('input, textarea').val('');
         newRow.find('.removeIA').prop('disabled', false);
         $tableIA.find('tbody').append(newRow);
@@ -197,83 +204,68 @@ function bindPartsTroubleHistoryEvents($table, $form, $modal, $addButtonPTH, dtP
         updateRemoveButtons($tableIA);
     });
 
-
     // --------------------
     // REMOVE ROW
     // --------------------
     $tableIA.on('click', '.removeIA', function() {
-        console.log('clicked');
-
         // if it is template row, DON'T allow delete
-        if ($(this).closest('tr').hasClass('template-row')) return;
-
+        // if ($(this).closest('tr').hasClass('data-row')) return;
         $(this).closest('tr').remove();
-
         updateRemoveButtons($tableIA);
     });
 
-    // $addButtonIA.on('click', function(){
-    //     // let totalNumberOfMOD = 0;
-    //     // let ngQty = $('#formAddProductionRuncardStation #txtNgQuantity').val();
-    //     let rowImprovementAction = `
-    //         <tr>
-    //             <td>
-    //                 <textarea class="form-control" name="improvement_action[]"></textarea>
-    //             </td>
-    //             <td>
-    //                 <textarea class="form-control" name="improvement_action_remarks[]"></textarea>
-    //             </td>
-    //             <td id="btnRemoveRowImprovementAction">
-    //                 <center><button class="btn btn-md btn-danger btnRemoveRowImprovementAction" title="Remove" type="button"><i class="fa fa-times"></i></button></center>
-    //             </td>
-    //         </tr>
-    //     `;
-    //    $tableIA.find('tbody').append(rowImprovementAction);
-    // });
+    // ================================= RE-UPLOAD FILE =================================
+    $('#btnReuploadTrigger').on('click', function(){
+        $('#btnReuploadTrigger').attr('checked', 'checked');
+        if($(this).is(":checked")){
+            $form.find("#illustrationOfDefect").removeClass('d-none');
+            $form.find("#illustrationOfDefect").attr('required', true);
+            $form.find("#illustrationOfDefectFileName").addClass('d-none');
+            $form.find("#downloadFile").addClass('d-none');
+        }else{
+            $form.find("#illustrationOfDefect").addClass('d-none');
+            $form.find("#illustrationOfDefect").removeAttr('required');
+            $form.find("#illustrationOfDefect").val('');
+            $form.find("#illustrationOfDefectFileName").removeClass('d-none');
+            $form.find("#downloadFile").removeClass('d-none');
+        }
+    });
 
-    // $tableIA.on('click', '.btnRemoveRowImprovementAction', function(){
-    //     $(this).closest('tr').remove();
-    // });
-
-    // // --------------------
-    // // ADD ROW (copy format only)
-    // // --------------------
-    // $('#btnAddRow').on('click', function() {
-
-    //     let template = $table.find('.template-row').first();
-
-    //     let newRow = template.clone();
-
-    //     newRow.removeClass('template-row');   // important!
-    //     newRow.find('input').val('');         // clear values
-
-    //     // enable remove button
-    //     newRow.find('.removeIA').prop('disabled', false);
-
-    //     $table.find('tbody').append(newRow);
-
-    //     updateRemoveButtons();
-    // });
-
-    // // --------------------
-    // // REMOVE ROW
-    // // --------------------
-    // $table.on('click', '.removeIA', function() {
-
-    //     // if it is template row, DON'T allow delete
-    //     if ($(this).closest('tr').hasClass('template-row')) return;
-
-    //     $(this).closest('tr').remove();
-
-    //     updateRemoveButtons();
-    // });
+    $exportReportButton.on('click', function () {
+        const $formExport = $('#exportPTHSReportForm');
+        $formExport[0].reset();
+        $('#modalExportReport').modal('show');
+    });
 }
 
 function updateRemoveButtons($tableIA) {
-    let rowCount = $tableIA.find('tbody tr').length;
+//     let rowCount = $tableIA.find('tbody tr').length;
+//     $tableIA.find('.removeIA').prop('disabled', rowCount <= 1);
+    let rowCount = $tableIA.find('.data-row').length;
+    console.log('rowCount:', rowCount);
 
-    $tableIA.find('.removeIA').prop('disabled', rowCount <= 1);
+    if (rowCount <= 1) {
+        $tableIA.find('.removeIA').prop('disabled', true);
+    } else {
+        $tableIA.find('.removeIA').prop('disabled', false);
+    }
 }
+
+// function updateRemoveButtons($tableIA) {
+//     let rowCount = $tableIA.find('tbody tr').length;
+
+//     if (rowCount <= 1) {
+//         // Only one row left → disable remove button
+//         $tableIA.find('.removeIA')
+//             .prop('disabled', true)
+//             .addClass('disabled');
+//     } else {
+//         // More than one row → enable remove buttons
+//         $tableIA.find('.removeIA')
+//             .prop('disabled', false)
+//             .removeClass('disabled');
+//     }
+// }
 
 function getDefects(cboElement, defectId = null){
     let result = '<option value="" disabled selected> Select Defect </option>';
@@ -285,12 +277,10 @@ function getDefects(cboElement, defectId = null){
             result = '<option value="0" disabled selected>--Loading--</option>';
         },
         success: function (response) {
-            if(response.length > 0) {
+            if(response.length > 0){
                     result = '<option value="" disabled selected> Select Defect </option>';
                 for (let i = 0; i < response.length; i++) {
-                    if(response[i]['po_number'] == defectId){
-                        result += '<option value="' + response[i]['id'] + '">' + response[i]['defect_name'] + '</option>';
-                    }
+                    result += '<option value="' + response[i]['id'] + '">' + response[i]['defect_name'] + '</option>';
                 }
             }else{
                 result = '<option value="0" selected disabled> -- No record found -- </option>';
@@ -343,17 +333,75 @@ function savePartsTroubleHistory($form, $modal, dtPartsTroubleHistory) {
 /**
  * Fetch parts_trouble_history data by ID
  */
-function fetchPartsTroubleHistoryById(id, $modal) {
+function fetchPartsTroubleHistoryById(id, $modal, $tableIA, $form) {
     $.ajax({
         type: 'GET',
         url: 'get_parts_trouble_history_by_id',
         data: { id },
         dataType: 'json',
         success: function (response) {
+            // Show Reupload Div & Exisiting Filename
+            $form.find("#btnReuploadTriggerDiv").removeClass('d-none');
+            $form.find("#btnReuploadTrigger").removeClass('d-none');
+            $form.find("#btnReuploadTrigger").prop('checked', false);
+            $form.find("#btnReuploadTriggerLabel").removeClass('d-none');
+            $form.find("#illustrationOfDefectFileName").removeClass('d-none');
+
+            // Hide Upload Attachment section, remove required attribute
+            $form.find("#illustrationOfDefect").addClass('d-none');
+            $form.find("#illustrationOfDefect").removeAttr('required');
+
             // Populate modal fields (adjust names per parts_trouble_history)
-            $('#txtPartsTroubleHistoryId').val(response.id);
-            $('#txtPartsTroubleHistoryName').val(response.name);
-            $('#selStatus').val(response.status);
+            $form.find('#txtPartsTroubleHistoryId').val(response.id);
+            $form.find('#dateEncountered').val(response.date_encountered);
+            $form.find('#model').val(response.model);
+            $form.find('#illustrationOfDefectFileName').val(response.defects.illustration_of_defect);
+
+            let download_file ='<a href="download_file/'+response.id+'" target="_blank">';
+                download_file +='<button type="button" class="btn btn-primary btn-sm d-none" name="download_file" id="downloadFile">';
+                download_file +=     '<i class="fa-solid fa-file-arrow-down"></i>';
+                download_file +=         '&nbsp;';
+                download_file +=         'See Attachment';
+                download_file +='</button>';
+                download_file +='</a>';
+
+            $form.find('#attachmentDiv').append(download_file);
+
+            // Show Download Button
+            $form.find("#downloadFile").removeClass('d-none');
+
+            // MODE OF DEFECT
+            getDefects($('#defectId'), response.defects.defect_id);
+            // MODE OF DEFECT
+
+            $form.find('#noOfOccurrence').val(response.defects.no_of_occurrence);
+            $form.find('#rootCause').val(response.defects.root_cause);
+            // $('#improvementActionsRemarks').val(response.improvements.improvement_actions_remarks);
+
+            let order = '';
+            $tableIA.find('tbody').empty();
+            for(let index = 0; index < response.improvements.length; index++){
+                if(index > 0){
+                    // first row
+                    order = '-' + index;
+                }
+                // <tr class="data-row${order}">
+
+                let rowImprovements = `
+                    <tr class="data-row">
+                        <td id="removeIA">
+                            <center><button class="btn btn-md btn-danger removeIA" title="Remove Row" type="button"><i class="fa fa-times"></i></button></center>
+                        </td>
+                        <td>
+                            <textarea class="form-control" name="improvement_action[]">${response.improvements[index].improvement_actions}</textarea>
+                        </td>
+                        <td>
+                            <textarea class="form-control" name="improvement_action_remarks[]">${response.improvements[index].remarks}</textarea>
+                        </td>
+                    </tr>
+                `;
+                $tableIA.find('tbody').append(rowImprovements);
+            }
 
             $modal.modal('show');
         },
@@ -367,16 +415,16 @@ function fetchPartsTroubleHistoryById(id, $modal) {
 /**
  * Disable or update parts_trouble_history status
  */
-function updatePartsTroubleHistoryStatus(id, dtPartsTroubleHistory) {
+function updatePartsTroubleHistoryStatus(id, dtPTH) {
     $.ajax({
         type: 'POST',
         url: 'update_parts_trouble_history_status',
         data: { id },
         dataType: 'json',
         success: function (response) {
-            if (response.result === 1) {
+            if(response.success == true) {
                 showSuccess('Status updated successfully.');
-                dtPartsTroubleHistory.draw(false);
+                dtPTH.draw();
             }
         },
         error: function (xhr) {

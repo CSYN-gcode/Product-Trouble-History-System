@@ -51,6 +51,11 @@
 
                             <!-- Start Page Content -->
                             <div class="card-body">
+                                 <div class="float-sm-right ml-2">
+                                    <button class="btn btn-success" id="btnShowExportReportModal">
+                                        <i class="fa fa-initial-icon"></i> Export Report
+                                    </button>
+                                </div>
                                 <div class="float-sm-right">
                                     <button class="btn btn-dark" id="btnShowAddPartsTroubleHistory">
                                         <i class="fa fa-initial-icon"></i> Add Parts Trouble History
@@ -100,8 +105,7 @@
                                                 <th>Illustration of Defect</th>
                                                 <th>No of Occurence</th>
                                                 <th>Root Cause</th>
-                                                <th>Improvement Actions</th>
-                                                <th>Remarks</th>
+                                                <th>Improvement Actions - Remarks</th>
                                             </tr>
                                         </thead>
                                     </table>
@@ -135,7 +139,7 @@
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-sm-6">
-                                <input type="hidden" id="txtPartsTroubleHistoryId" name="id">
+                                <input type="hidden" id="txtPartsTroubleHistoryId" name="history_id">
 
                                 <div class="form-group">
                                     <label>Date Encountered</label>
@@ -143,13 +147,21 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="imageUpload">Illustration of Defect</label>
-                                    <input type="file" class="form-control" name="illustration_of_defect" id="illustrationOfDefect" accept="image/*" required>
+                                    <label>Mode of Defect</label>
+                                    <select class="form-control select2bs5" name="defect_id" id="defectId" required></select>
                                 </div>
 
+                                <!--ATTACHMENT-->
                                 <div class="form-group">
-                                    <label>Mode of Defect</label>
-                                    <select type="text" class="form-control select2bs5" name="mode_of_defect" id="modeOfDefect" required></select>
+                                    <div class="form-control-label" id="attachmentDiv">
+                                        <label for="imageUpload" class="form-control-label">Illustration of Defect</label>
+                                    </div>
+                                        <input type="file" class="form-control" name="illustration_of_defect" id="illustrationOfDefect" accept="image/*" required>
+                                        <input type="text" class="form-control d-none" name="illustration_of_defect_filename" id="illustrationOfDefectFileName" readonly>
+                                        <div class="form-group form-check d-none m-0" id="btnReuploadTriggerDiv">
+                                            <input type="checkbox" class="form-check-input d-none" id="btnReuploadTrigger">
+                                            <label class="d-none" id="btnReuploadTriggerLabel"> Re-upload File</label>
+                                        </div>
                                 </div>
                             </div>
                             <div class="col-sm-6">
@@ -159,8 +171,8 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label>No. of Occurence</label>
-                                    <input type="text" class="form-control" name="no_of_occurence" id="noOfOccurence" required>
+                                    <label>No. of Occurrence</label>
+                                    <input type="text" class="form-control" name="no_of_occurrence" id="noOfOccurrence" required>
                                 </div>
 
                                 <div class="form-group">
@@ -183,9 +195,9 @@
                                         <table class="table table-sm" id="tblImprovementActions">
                                             <thead>
                                                 <tr>
+                                                    <th style="width: 10%;">Action</th>
                                                     <th style="width: 45%;">Improvement Action</th>
                                                     <th style="width: 45%;">Remarks</th>
-                                                    <th style="width: 10%;">Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -201,6 +213,43 @@
                     <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
                         <button type="submit" id="btnSubmitPartsTroubleHistory" class="btn btn-success"><i class="fa fa-check"></i> Save</button>
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+    <!-- MODALS -->
+    <div class="modal fade" id="modalExportReport" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title"><i class="fa fa-plus"></i> Select Date to Export</h4>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="exportPTHSReportForm" action="{{ route('export_excel') }}" method="GET">
+                    <div class="modal-body">
+                        {{-- @csrf --}}
+                        <div style="display:flex; gap:10px; align-items:end;">
+                            <div>
+                                <label>From</label>
+                                <input type="date" name="date_from" class="form-control" required>
+                            </div>
+
+                            <div>
+                                <label>To</label>
+                                <input type="date" name="date_to" class="form-control" required>
+                            </div>
+
+                            <button type="submit" class="btn btn-success">
+                                Export to Excel
+                            </button>
+                        </div>
                     </div>
                 </form>
             </div>

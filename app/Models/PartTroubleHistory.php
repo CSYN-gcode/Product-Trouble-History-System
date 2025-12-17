@@ -17,7 +17,7 @@ class PartTroubleHistory extends Model
 
     public function defects()
     {
-        return $this->hasMany(PthsDefects::class, 'history_id', 'id');
+        return $this->hasOne(PthsDefects::class, 'history_id', 'id');
     }
 
     public function improvements()

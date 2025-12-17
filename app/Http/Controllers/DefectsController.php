@@ -46,15 +46,9 @@ class DefectsController extends Controller
     }
 
     public function addDefectsInfo(Request $request){
-        if(!isset($request->id)){
-            $validation = array(
-                'defects' => ['required', 'string', 'max:255']
-            );
-        }else{
-            $validation = array(
-                'defects' => ['required', 'string', 'max:255']
-            );
-        }
+        $validation = array(
+            'defects' => ['required', 'string', 'max:255']
+        );
 
         $data = $request->all();
         $validator = Validator::make($data, $validation);
