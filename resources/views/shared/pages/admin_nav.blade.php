@@ -21,12 +21,12 @@
                     </a>
                 </li>
 
-                <li class="nav-item has-treeview" id="dashboard-energy" >
+                {{-- <li class="nav-item has-treeview" id="dashboard-energy" >
                     <a href="{{ route('dashboard') }}" class="nav-link">
                         <i class="fa-solid fa-square-poll-vertical fa-lg"></i>
                         <p> Dashboard</p>
                     </a>
-                </li>
+                </li> --}}
 
                 <li class="nav-item has-treeview"> <!-- DMR & PQC - TS  -->
                     <a href="{{ route('defects') }}" class="nav-link">

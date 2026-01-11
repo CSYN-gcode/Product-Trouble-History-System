@@ -97,15 +97,15 @@
                                     <table id="tblPartsTroubleHistory" class="table table-bordered table-striped table-hover" style="width: 100%;">
                                         <thead>
                                             <tr>
-                                                <th>Action</th>
-                                                <th>Status</th>
-                                                <th>Date Encountered</th>
-                                                <th>Model</th>
-                                                <th>Mode of Defect</th>
-                                                <th>Illustration of Defect</th>
-                                                <th>No of Occurence</th>
-                                                <th>Root Cause</th>
-                                                <th>Improvement Actions - Remarks</th>
+                                                <th style="width: 5%;">Action</th>
+                                                <th style="width: 5%;">Status</th>
+                                                <th style="width: 10%;" class="text-center">Date Encountered</th>
+                                                <th style="width: 10%;" class="text-center">Situation</th>
+                                                <th style="width: 5%;"  class="text-center">Section</th>
+                                                <th style="width: 15%;" class="text-center">Series / Model</th>
+                                                <th style="width: 15%;" class="text-center">Mode of Defect</th>
+                                                <th style="width: 25%;" class="text-center">Illustration of Defect</th>
+                                                <th style="width: 10%;" class="text-center">No of Occurence</th>
                                             </tr>
                                         </thead>
                                     </table>
@@ -126,7 +126,7 @@
 
     <!-- MODALS -->
     <div class="modal fade" id="modalPartsTroubleHistory" data-bs-backdrop="static">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title"><i class="fa fa-plus"></i> Add/Edit Parts Trouble History Info</h4>
@@ -138,17 +138,30 @@
                     @csrf
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-sm-6">
+                            <div class="col-sm-4">
                                 <input type="hidden" id="txtPartsTroubleHistoryId" name="history_id">
 
                                 <div class="form-group">
-                                    <label>Date Encountered</label>
-                                    <input type="date" class="form-control" name="date_encountered" id="dateEncountered" required>
+                                    <label>Situation</label>
+                                    <select class="form-control" name="situation" id="situation" required>
+                                        <option value="" selected>Select Situation</option>
+                                        <option value="External Claim">External Claim</option>
+                                        <option value="Internal Claim">Internal Claim</option>
+                                        <option value="Lot Out">Lot Out</option>
+                                        <option value="Yield of Targets">Yield of Targets</option>
+                                        <option value="Defect Escalation">Defect Escalation</option>
+                                    </select>
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Mode of Defect</label>
-                                    <select class="form-control select2bs5" name="defect_id" id="defectId" required></select>
+                                    <label>Section</label>
+                                    <select class="form-control" name="section" id="section" required>
+                                        <option value="" disabled selected>Select Section</option>
+                                        <option value="TS">TS</option>
+                                        <option value="CN">CN</option>
+                                        <option value="PPD">PPD</option>
+                                        <option value="YF">YF</option>
+                                    </select>
                                 </div>
 
                                 <!--ATTACHMENT-->
@@ -164,20 +177,31 @@
                                         </div>
                                 </div>
                             </div>
-                            <div class="col-sm-6">
+
+                            <div class="col-sm-4">
+                                {{-- FOR DISCUSSION IF CHANGE TO AUTO GENERATE --}}
                                 <div class="form-group">
-                                    <label>Model</label>
-                                    <input type="text" class="form-control" name="model" id="model" required>
+                                    <label>Series / Model Name</label>
+                                    {{-- <input type="text" class="form-control" name="model" id="model" required> --}}
+                                    <select class="form-control select2bs5" name="model" id="selectDeviceName" required></select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Mode of Defect</label>
+                                    <select class="form-control select2bs5" name="defect_id" id="defectId" required></select>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label>Date Encountered</label>
+                                    <input type="date" class="form-control" name="date_encountered" id="dateEncountered" required>
                                 </div>
 
                                 <div class="form-group">
                                     <label>No. of Occurrence</label>
-                                    <input type="text" class="form-control" name="no_of_occurrence" id="noOfOccurrence" required>
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Root Cause</label>
-                                    <input type="text" class="form-control" name="root_cause" id="rootCause" required>
+                                    {{-- AUTO-GENERATE --}}
+                                    <input type="text" class="form-control" name="no_of_occurrence" id="noOfOccurrence" readonly>
                                 </div>
                             </div>
 
@@ -195,9 +219,13 @@
                                         <table class="table table-sm" id="tblImprovementActions">
                                             <thead>
                                                 <tr>
-                                                    <th style="width: 10%;">Action</th>
-                                                    <th style="width: 45%;">Improvement Action</th>
-                                                    <th style="width: 45%;">Remarks</th>
+                                                    <th style="width: 5%;">Action</th>
+                                                    <th style="width: 25%;">Factor</th>
+                                                    <th style="width: 20%;">Cause</th>
+                                                    <th style="width: 20%;">Analysis</th>
+                                                    <th style="width: 20%;">Counter Measure</th>
+                                                    <th style="width: 10%;">Implementation Date</th>
+                                                    {{-- <th style="width: 10%;">Remarks</th> --}}
                                                 </tr>
                                             </thead>
                                             <tbody>

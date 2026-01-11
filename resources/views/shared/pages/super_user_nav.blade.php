@@ -21,14 +21,16 @@
                     </a>
                 </li>
 
-                <li class="nav-item has-treeview" id="dashboard-energy" >
+                {{-- <li class="nav-item has-treeview" id="dashboard-energy" >
                     <a href="{{ route('dashboard') }}" class="nav-link">
                         <i class="fa-solid fa-square-poll-vertical fa-lg nav-icon"></i>
                         <p> Dashboard</p>
                     </a>
-                </li>
+                </li> --}}
 
-                <li class="nav-item has-treeview"> <!-- DMR & PQC - TS  -->
+                <li class="nav-header font-weight-bold">Mode of Defects</li>
+
+                <li class="nav-item has-treeview">
                     <a href="{{ route('defects') }}" class="nav-link">
                       {{-- <i class="far fa-circle nav-icon"></i> --}}
                       <i class="fas fa-times-circle nav-icon"></i>
@@ -38,16 +40,16 @@
 
                 <li class="nav-header font-weight-bold">Records</li>
 
-                <li class="nav-item has-treeview"> <!-- DMR & PQC - TS  -->
+                <li class="nav-item has-treeview">
                     <a href="{{ route('parts_trouble_history_record') }}" class="nav-link">
                       {{-- <i class="far fa-circle nav-icon"></i> --}}
                       <i class="fas fa-microchip nav-icon"></i>
                       <p>
-                        Parts Trouble History Record
+                        Past Trouble History Record
                       </p>
                     </a>
                 </li>
-                
+
             </ul>
         </nav>
     </div><!-- Sidebar -->

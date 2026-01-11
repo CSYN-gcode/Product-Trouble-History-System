@@ -6,6 +6,9 @@ use DataTables;
 use App\Models\PthsDefects;
 use App\Models\PthsImprovements;
 use App\Models\PartTroubleHistory;
+use App\Models\WbsTsMatKitting;
+use App\Models\WbsCnMatKitting;
+use App\Models\WbsYfMatKitting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -13,6 +16,7 @@ use Illuminate\Support\Facades\Validator;
 
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ExportPartsTroubleHistory;
+use Illuminate\Support\Facades\Cache;
 
 class PartsTroubleHistoryController extends Controller
 {
@@ -55,32 +59,27 @@ class PartsTroubleHistoryController extends Controller
 
             return $result;
         })
-        ->addColumn('improvements', function($parts_trouble_history_details){
-            $result = "";
-            $result .= "<center>";
-            $count = 1;
-            foreach($parts_trouble_history_details->improvements as $improvement){
-                $result .= $count . ". " . $improvement->improvement_actions ." - Remarks: " . $improvement->remarks . "<br>";
-                $count++;
-            }
-            $result .= "</center>";
-
-            return $result;
-        })
-        ->rawColumns(['action', 'status_label', 'mode_of_defect', 'improvements'])
+        ->rawColumns(['action', 'status_label', 'mode_of_defect'])
         ->make(true);
     }
 
     public function addPartsTroubleHistoryInfo(Request $request){
         $validation = array(
+            'situation' => 'required',
+            'section' => 'required',
             'date_encountered' => 'required',
             'model' => 'required',
             'illustration_of_defect' => ['nullable','file','mimes:jpg,jpeg,png,webp','max:10240'], // 5MB
             'no_of_occurrence' => 'required',
             'defect_id' => 'required',
-            'root_cause' => 'required',
-            'improvement_action.*' => 'required|string',
-            'improvement_action_remarks.*' => 'required|string'
+            // 'root_cause' => 'required',
+            'factor.*' => 'required|string',
+            'cause.*' => 'required|string',
+            'analysis.*' => 'required|string',
+            'counter_measure.*' => 'required|string',
+            'implementation_date.*' => 'required|string',
+            // 'improvement_action.*' => 'required|string',
+            // 'improvement_action_remarks.*' => 'required|string'
         );
 
         $data = $request->all();
@@ -109,6 +108,8 @@ class PartsTroubleHistoryController extends Controller
 
                 $history_data_array = array(
                     'date_encountered' => $request->date_encountered,
+                    'situation' => $request->situation,
+                    'section' => $request->section,
                     'model' => $request->model
                 );
 
@@ -171,12 +172,17 @@ class PartsTroubleHistoryController extends Controller
                 PthsImprovements::where('history_id', $request->history_id)->delete();
 
                 // SAVE NEW Improvement Actions
-                if ($request->improvement_action){
-                    foreach ($request->improvement_action as $i => $value){
+                if ($request->factor){
+                    foreach ($request->factor as $i => $value){
                         PthsImprovements::insert([
-                            'history_id'           => $history_id,
-                            'improvement_actions'  => $request->improvement_action[$i],
-                            'remarks'              => $request->improvement_action_remarks[$i]
+                            'history_id'          => $history_id,
+                            'factor'              => $request->factor[$i],
+                            'cause'               => $request->cause[$i],
+                            'analysis'            => $request->analysis[$i],
+                            'counter_measure'     => $request->counter_measure[$i],
+                            'implementation_date' => $request->implementation_date[$i]
+                            // 'improvement_actions'  => $request->improvement_action[$i],
+                            // 'remarks'              => $request->improvement_action_remarks[$i]
                         ]);
                     }
                 }
@@ -190,124 +196,9 @@ class PartsTroubleHistoryController extends Controller
         }
     }
 
-    // public function addPartsTroubleHistoryInfo(Request $request){
-    //     $request->validate([
-    //         'date_encountered' => 'required',
-    //         'model' => 'required',
-    //         'illustration_of_defect' => 'nullable|file|mimes:jpg,jpeg,png,webp|max:2048',
-    //         'no_of_occurrence' => 'required',
-    //         'mode_of_defect' => 'required',
-    //         'root_cause' => 'required',
-    //         'improvement_action.*' => 'nullable|string',
-    //         'improvement_action_remarks.*' => 'nullable|string'
-    //     ]);
-
-    //     // For editing
-    //     $history = PartTroubleHistory::find($request->id);
-
-    //     // For new record
-    //     if (!$history) {
-    //         $history = new PartTroubleHistory();
-    //     }
-
-    //     return 'here';
-
-    //     $history->title = $request->title;
-
-    //     // FILE HANDLING
-    //     if ($request->hasFile('attachment')) {
-
-    //         // delete old file if replace
-    //         if ($history->attachment && Storage::exists('public/parts_trouble_history/' . $history->attachment)) {
-    //             Storage::delete('public/parts_trouble_history/' . $history->attachment);
-    //         }
-
-    //         $file = $request->file('attachment');
-    //         $filename = time() . '_' . $file->getClientOriginalName();
-    //         $file->storeAs('public/parts_trouble_history', $filename);
-
-    //         $history->attachment = $filename; // save only varchar
-    //     }
-
-    //     $history->save();
-
-    //     // DELETE OLD ACTIONS ON UPDATE
-    //     ImprovementAction::where('parts_trouble_history_id', $history->id)->delete();
-
-    //     // SAVE NEW ACTIONS
-    //     if ($request->action) {
-    //         foreach ($request->action as $i => $value) {
-    //             ImprovementAction::create([
-    //                 'parts_trouble_history_id' => $history->id,
-    //                 'action' => $request->action[$i],
-    //                 'person' => $request->person[$i],
-    //             ]);
-    //         }
-    //     }
-
-    //     return response()->json(['success' => true]);
-    // }
-
-    // public function addPartsTroubleHistoryInfo(Request $request){
-    //     return $request->all();
-
-    //     // if(!isset($request->id)){
-    //     //     $validation = array(
-    //     //         'PartTroubleHistory' => ['required', 'string', 'max:255']
-    //     //     );
-    //     // }else{
-    //     //     $validation = array(
-    //     //         'PartTroubleHistory' => ['required', 'string', 'max:255']
-    //     //     );
-    //     // }
-
-    //     // $data = $request->all();
-    //     // $validator = Validator::make($data, $validation);
-    //     // if ($validator->fails()) {
-    //     //     return response()->json(['result' => '0', 'error' => $validator->messages()]);
-    //     // }else{
-    //         DB::beginTransaction();
-
-    //         try{
-    //             $parts_array = array(
-    //                 'date_encountered' => $request->PartTroubleHistory
-    //                 'illustration_of_defect' => $request->PartTroubleHistory
-    //                 'model' => $request->PartTroubleHistory
-    //                 'mode_of_defect' => $request->PartTroubleHistory
-    //                 'no_of_occurrence' => $request->PartTroubleHistory
-    //                 'root_cause' => $request->PartTroubleHistory
-    //             );
-
-    //             if(isset($request->id)){ // EDIT
-    //                 PartTroubleHistory::where('id', $request->id)
-    //                 ->update($process_array);
-    //             }else{ // ADD
-    //                 PartTroubleHistory::insert($process_array);
-    //             }
-
-    //             DB::commit();
-    //             return response()->json(['result' => 1, 'msg' => 'Transaction Succesful']);
-    //         }catch(Exemption $e){
-    //             DB::rollback();
-    //             return $e;
-    //         }
-    //     // }
-    // }
-
     public function getPartsTroubleHistoryById(Request $request){
         return PartTroubleHistory::with(['defects.defect_item', 'improvements'])->where('id', $request->id)->first();
     }
-
-    // public function updatePartTroubleHistoryStatus(Request $request){
-    //     DB::beginTransaction();
-    //     try{
-    //         PartTroubleHistory::where('id', $request->id)
-    //                 ->update(['status' => $request->status]);
-    //     }catch(Exemption $e){
-    //         DB::rollback();
-    //         return $e;
-    //     }
-    // }
 
     public function updatePartsTroubleHistoryStatus(Request $request){
         DB::beginTransaction();
@@ -381,8 +272,114 @@ class PartsTroubleHistoryController extends Controller
             new ExportPartsTroubleHistory($from, $to),
             $filename
         );
+    }
 
-        // use $from and $to in query
-        // return 'Excel download';
+    private function getMaterialsFrom($connection){
+        return DB::connection($connection)
+            ->table('tbl_wbs_material_kitting')
+            ->select('device_name')
+            ->whereNotNull('device_name')
+            ->groupBy('device_name')
+            ->orderBy('device_name')
+            ->pluck('device_name');
+    }
+
+    public function getDeviceName(Request $request){
+
+        // $po_details = DB::connection('mysql_rapid')->select(' SELECT po_receive.ItemName AS device_name FROM tbl_POReceived AS po_receive WHERE po_receive.logdel = 0 AND po_receive.P = "'.$request->device_name.'"'.$andWhere.' ORDER BY po_receive.DateIssued ASC;
+        // ');
+
+        $self = $this;
+
+        $materials = Cache::remember('device_materials', 3600, function () use ($self) {
+            return collect()
+                ->merge($self->getMaterialsFrom('wbs_ts'))
+                ->merge($self->getMaterialsFrom('wbs_cn'))
+                ->merge($self->getMaterialsFrom('wbs_yf'))
+                ->unique()
+                ->values()
+                ->map(function ($value) {
+                    return array(
+                        'materials' => $value
+                    );
+                })
+                ->toArray();
+        });
+
+        // return response()->json($materials);
+
+        // $materials = collect()
+        // ->merge(
+        //     DB::connection('wbs_ts')->table('tbl_wbs_material_kitting')
+        //         ->distinct()->pluck('device_name')
+        // )
+        // ->merge(
+        //     DB::connection('wbs_cn')->table('tbl_wbs_material_kitting')
+        //         ->distinct()->pluck('device_name')
+        // )
+        // ->merge(
+        //     DB::connection('wbs_yf')->table('tbl_wbs_material_kitting')
+        //         ->distinct()->pluck('device_name')
+        // )
+        // ->unique()
+        // ->sort()
+        // ->values()
+        // ->map(function ($value) {
+        //     return [
+        //         'materials' => $value   // 👈 MATCHES JS
+        //     ];
+        // })
+        // ->toArray();
+
+        return response()->json($materials);
+    }
+
+    public function getCountOfNoOfOccurrence(Request $request){
+        [$year, $month] = explode('-', $request->date_encountered);
+
+        if ($month >= 4) {
+            // April to December
+            $start = $year . '-04-01';
+            $end   = ($year + 1) . '-03-31';
+        } else {
+            // January to March
+            $start = ($year - 1) . '-04-01';
+            $end   = $year . '-03-31';
+        }
+
+        $count =  PartTroubleHistory::
+                // with(['defects' => function($query) use ($request) {
+                //     $query->where('defect_id', $request->defect_id);  // Add your condition for the 'defects' relationship
+                //     $query->whereNull('delete_at');  // You can add more conditions if needed
+                // }])
+                where('situation', $request->situation)
+                ->where('section', $request->section)
+                ->where('model', $request->model)
+                ->whereBetween('date_encountered', [$start, $end])
+                ->whereHas('defects', function ($query) use ($request) {
+                    $query->where('defect_id', $request->defect_id)
+                            ->whereNull('deleted_at');
+                })
+                ->count();
+
+                // +1 because current occurrence is not yet included
+                $ordinal = $this->ordinal($count + 1);
+
+                return response()->json([
+                    'count'   => $count,
+                    'ordinal' => $ordinal
+                ]);
+    }
+
+    private function ordinal($number){
+        if (!in_array($number % 100, [11, 12, 13])) {
+            switch ($number % 10) {
+                case 1: return $number . 'st';
+                case 2: return $number . 'nd';
+                case 3: return $number . 'rd';
+            }
+        }
+
+        return $number . 'th';
     }
 }

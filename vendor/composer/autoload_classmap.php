@@ -8,9 +8,12 @@ $baseDir = dirname($vendorDir);
 return array(
     'App\\Console\\Kernel' => $baseDir . '/app/Console/Kernel.php',
     'App\\Exceptions\\Handler' => $baseDir . '/app/Exceptions/Handler.php',
+    'App\\Exports\\ExportPartsTroubleHistory' => $baseDir . '/app/Exports/ExportPartsTroubleHistory.php',
     'App\\Http\\Controllers\\Controller' => $baseDir . '/app/Http/Controllers/Controller.php',
+    'App\\Http\\Controllers\\DefectsController' => $baseDir . '/app/Http/Controllers/DefectsController.php',
     'App\\Http\\Controllers\\DmrpqcTsController' => $baseDir . '/app/Http/Controllers/DmrpqcTsController.php',
     'App\\Http\\Controllers\\ExportPdfController' => $baseDir . '/app/Http/Controllers/ExportPdfController.php',
+    'App\\Http\\Controllers\\PartsTroubleHistoryController' => $baseDir . '/app/Http/Controllers/PartsTroubleHistoryController.php',
     'App\\Http\\Controllers\\Traits\\GetDmrpqcDetailsTrait' => $baseDir . '/app/Http/Controllers/Traits/GetDmrpqcDetailsTrait.php',
     'App\\Http\\Controllers\\UserController' => $baseDir . '/app/Http/Controllers/UserController.php',
     'App\\Http\\Kernel' => $baseDir . '/app/Http/Kernel.php',

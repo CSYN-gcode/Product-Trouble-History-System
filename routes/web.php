@@ -11,6 +11,7 @@ use App\Http\Controllers\DmrpqcTsController;
 use App\Http\Controllers\DiesetConditionController;
 use App\Http\Controllers\ExportPdfController;
 
+use Illuminate\Support\Facades\Response;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -23,8 +24,8 @@ use App\Http\Controllers\ExportPdfController;
 */
 
 Route::get('/', function () {
-    return view('dashboard');
-})->name('dashboard');
+    return view('parts_trouble_history_record');
+})->name('parts_trouble_history_record');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -55,4 +56,6 @@ Route::controller(PartsTroubleHistoryController::class)->group(function () {
     Route::post('/update_parts_trouble_history_status', 'updatePartsTroubleHistoryStatus')->name('update_parts_trouble_history_status');
     Route::get('/download_file/{id}', 'downloadFile')->name('download_file');
     Route::get('/export_excel', 'exportExcel')->name('export_excel');
+    Route::get('/get_count_no_of_occurrence', 'getCountOfNoOfOccurrence')->name('get_count_no_of_occurrence');
+    Route::get('/get_device_name', 'getDeviceName')->name('get_device_name');
 });

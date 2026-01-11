@@ -598,9 +598,12 @@ class ComposerStaticInit5646079f6441684b9b1f47b529b6017e
     public static $classMap = array (
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
+        'App\\Exports\\ExportPartsTroubleHistory' => __DIR__ . '/../..' . '/app/Exports/ExportPartsTroubleHistory.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
+        'App\\Http\\Controllers\\DefectsController' => __DIR__ . '/../..' . '/app/Http/Controllers/DefectsController.php',
         'App\\Http\\Controllers\\DmrpqcTsController' => __DIR__ . '/../..' . '/app/Http/Controllers/DmrpqcTsController.php',
         'App\\Http\\Controllers\\ExportPdfController' => __DIR__ . '/../..' . '/app/Http/Controllers/ExportPdfController.php',
+        'App\\Http\\Controllers\\PartsTroubleHistoryController' => __DIR__ . '/../..' . '/app/Http/Controllers/PartsTroubleHistoryController.php',
         'App\\Http\\Controllers\\Traits\\GetDmrpqcDetailsTrait' => __DIR__ . '/../..' . '/app/Http/Controllers/Traits/GetDmrpqcDetailsTrait.php',
         'App\\Http\\Controllers\\UserController' => __DIR__ . '/../..' . '/app/Http/Controllers/UserController.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
