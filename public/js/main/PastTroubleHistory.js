@@ -223,7 +223,6 @@ function bindPartsTroubleHistoryEvents($table, $form, $modal, $addButtonPTH, dtP
     $addButtonPTH.on('click', function () {
         resetPartsTroubleHistoryForm($form, $tableIA);
         getDefects($('#defectId'));
-        getDeviceName($('#selectDeviceName'));
         $('#modalPartsTroubleHistory').modal('show');
     });
 
@@ -267,6 +266,10 @@ function bindPartsTroubleHistoryEvents($table, $form, $modal, $addButtonPTH, dtP
             $('#previewImage').attr('src', e.target.result).show();
         };
         reader.readAsDataURL(file);
+    });
+
+    $('#section').on('change', function() {
+        getDeviceName($('#selectDeviceName'), $(this).val());
     });
 
     $addButtonIA.on('click', function () {
@@ -402,16 +405,19 @@ function getDefects(cboElement, defectId = null){
     });
 }
 
-function getDeviceName(cboElement, deviceName = null){
+function getDeviceName(cboElement, section, deviceName = null){
     let result = '<option value="" disabled selected> Select Series Name </option>';
     $.ajax({
         method: "get",
         url: "get_device_name",
+        data: { section },
         dataType: "json",
         beforeSend: function(){
             result = '<option value="" disabled selected>--Loading--</option>';
         },
         success: function (response) {
+            console.log('response', response);
+
             if(response.length > 0){
                     result = '<option value="" disabled selected> Select Series Name </option>';
                 for (let i = 0; i < response.length; i++) {
@@ -508,7 +514,7 @@ function fetchPartsTroubleHistoryById(id, $modal, $tableIA, $form) {
 
             // CLARK DEVICE NAME
             // $form.find('#selectDeviceName').val(response.model);
-            getDeviceName($('#selectDeviceName'), response.model);
+            getDeviceName($('#selectDeviceName'), response.section, response.model);
 
             // MODE OF DEFECT
             getDefects($('#defectId'), response.defects.defect_id);

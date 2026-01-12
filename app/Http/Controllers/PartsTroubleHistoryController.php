@@ -287,52 +287,102 @@ class PartsTroubleHistoryController extends Controller
 
     public function getDeviceName(Request $request){
 
-        // $po_details = DB::connection('mysql_rapid')->select(' SELECT po_receive.ItemName AS device_name FROM tbl_POReceived AS po_receive WHERE po_receive.logdel = 0 AND po_receive.P = "'.$request->device_name.'"'.$andWhere.' ORDER BY po_receive.DateIssued ASC;
-        // ');
-
         $self = $this;
 
-        $materials = Cache::remember('device_materials', 3600, function () use ($self) {
-            return collect()
-                ->merge($self->getMaterialsFrom('wbs_ts'))
-                ->merge($self->getMaterialsFrom('wbs_cn'))
-                ->merge($self->getMaterialsFrom('wbs_yf'))
+        $section = $request->input('section'); // ts, cn, yf, ppd
+        $materials = collect();
+
+        // Only run queries if a section is provided
+        if ($section) {
+
+            // TS section
+            if ($section == 'TS') {
+                $materials = $materials->merge($self->getMaterialsFrom('wbs_ts'));
+            }
+
+            // CN section
+            if ($section == 'CN') {
+                $materials = $materials->merge($self->getMaterialsFrom('wbs_cn'));
+            }
+
+            // YF section
+            if ($section == 'YF') {
+                $materials = $materials->merge($self->getMaterialsFrom('wbs_yf'));
+            }
+
+            // PPD section (different DB, only run if selected)
+            if ($section == 'PPD') {
+                $ppd_results = DB::connection('mysql_rapid')->select("
+                    SELECT DeviceName
+                    FROM tbl_dieset t1
+                    WHERE Rev = (
+                        SELECT MAX(NULLIF(Rev, ''))
+                        FROM tbl_dieset t2
+                        WHERE t2.DeviceName = t1.DeviceName
+                    )
+                    OR (Rev = '' AND NOT EXISTS (
+                        SELECT 1
+                        FROM tbl_dieset t3
+                        WHERE t3.DeviceName = t1.DeviceName
+                            AND t3.Rev <> ''
+                    ))
+                    ORDER BY DeviceName
+                ");
+
+                // Extract only DeviceName and wrap for JSON
+                foreach ($ppd_results as $row) {
+                    $materials->push($row->DeviceName);
+                }
+            }
+
+            // Deduplicate, sort, and format for JSON
+            $materials = $materials
                 ->unique()
-                ->values()
+                ->sort() // sort alphabetically
+                ->values() // reset keys
                 ->map(function ($value) {
-                    return array(
-                        'materials' => $value
-                    );
+                    return array('materials' => $value);
                 })
+                ->values() // reset keys after map
                 ->toArray();
-        });
+        }
+
+        // If no section selected, return empty array
+        return response()->json($materials);
+
+        // $self = $this;
+
+        // $materials = Cache::remember('device_materials', 3600, function () use ($self) {
+        //     return collect()
+        //         ->merge($self->getMaterialsFrom('wbs_ts'))
+        //         ->merge($self->getMaterialsFrom('wbs_cn'))
+        //         ->merge($self->getMaterialsFrom('wbs_yf'))
+        //         ->unique()
+        //         ->values()
+        //         ->map(function ($value) {
+        //             return array(
+        //                 'materials' => $value
+        //             );
+        //         })
+        //         ->toArray();
+        // });
+
+        // $ppd_device_name = DB::connection('mysql_rapid')->select(' SELECT DeviceName, Rev
+        //                                                         FROM tbl_dieset t1
+        //                                                         WHERE Rev = (
+        //                                                             SELECT MAX(NULLIF(Rev, \'\'))
+        //                                                             FROM tbl_dieset t2
+        //                                                             WHERE t2.DeviceName = t1.DeviceName
+        //                                                         )
+        //                                                         OR (Rev = \'\' AND NOT EXISTS (
+        //                                                             SELECT 1
+        //                                                             FROM tbl_dieset t3
+        //                                                             WHERE t3.DeviceName = t1.DeviceName
+        //                                                                 AND t3.Rev <> \'\'
+        //                                                         ))
+        //                                                         ORDER BY DeviceName; ');
 
         // return response()->json($materials);
-
-        // $materials = collect()
-        // ->merge(
-        //     DB::connection('wbs_ts')->table('tbl_wbs_material_kitting')
-        //         ->distinct()->pluck('device_name')
-        // )
-        // ->merge(
-        //     DB::connection('wbs_cn')->table('tbl_wbs_material_kitting')
-        //         ->distinct()->pluck('device_name')
-        // )
-        // ->merge(
-        //     DB::connection('wbs_yf')->table('tbl_wbs_material_kitting')
-        //         ->distinct()->pluck('device_name')
-        // )
-        // ->unique()
-        // ->sort()
-        // ->values()
-        // ->map(function ($value) {
-        //     return [
-        //         'materials' => $value   // 👈 MATCHES JS
-        //     ];
-        // })
-        // ->toArray();
-
-        return response()->json($materials);
     }
 
     public function getCountOfNoOfOccurrence(Request $request){
