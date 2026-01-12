@@ -18,6 +18,8 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 class ExportPartsTroubleHistory implements FromCollection, WithHeadings, WithEvents, WithCustomStartCell{
     protected $from;
     protected $to;
+    protected $situation;
+    protected $section;
 
     protected $mergeRanges = [];
 
@@ -25,10 +27,12 @@ class ExportPartsTroubleHistory implements FromCollection, WithHeadings, WithEve
 
     protected $recordStartRows;
 
-    public function __construct($from, $to){
+    public function __construct($from, $to, $situation, $section){
 
         $this->from = $from;
         $this->to   = $to;
+        $this->situation = $situation;
+        $this->section = $section;
 
         // 🔒 LOAD ONCE
         $this->records = PartTroubleHistory::with(['defects.defect_item', 'improvements'])
@@ -36,6 +40,14 @@ class ExportPartsTroubleHistory implements FromCollection, WithHeadings, WithEve
                 $this->from . ' 00:00:00',
                 $this->to   . ' 23:59:59'
             ])
+            ->when($this->situation !== 'ALL', function ($query) {
+                $query->where('situation', $this->situation);
+            })
+            ->when($this->section !== 'ALL', function ($query) {
+                $query->where('section', $this->section);
+            })
+            // ->where('situation', $this->situation)
+            // ->where('section', $this->section)
             ->orderBy('date_encountered', 'ASC')
             ->get();
     }
@@ -48,6 +60,14 @@ class ExportPartsTroubleHistory implements FromCollection, WithHeadings, WithEve
                     $this->from . ' 00:00:00',
                     $this->to   . ' 23:59:59'
                 ])
+                ->when($this->situation !== 'ALL', function ($query) {
+                    $query->where('situation', $this->situation);
+                })
+                ->when($this->section !== 'ALL', function ($query) {
+                    $query->where('section', $this->section);
+                })
+                // ->where('situation', $this->situation)
+                // ->where('section', $this->section)
                 ->orderBy('date_encountered', 'ASC')
                 ->get();
         }
@@ -61,6 +81,20 @@ class ExportPartsTroubleHistory implements FromCollection, WithHeadings, WithEve
         $this->mergeRanges = [];
         $this->recordStartRows = [];
 
+        // --- Handle empty records ---
+        if (empty($this->records) || $this->records->count() === 0) {
+            $rows = new Collection();
+            $rows->push([
+                'No data available', '', '', '', '', '', '', '', '', '', '', ''
+            ]);
+
+            // Add merge range so we can merge A3:L3 later
+            $this->mergeRanges[] = 'A3:L3';
+
+            return $rows;
+        }
+
+        // --- 2️⃣ Proceed normally ---
         $rows = new Collection();
         $currentRow = 3;
 
@@ -210,6 +244,14 @@ class ExportPartsTroubleHistory implements FromCollection, WithHeadings, WithEve
                     ->setHorizontal(Alignment::HORIZONTAL_CENTER)
                     ->setVertical(Alignment::VERTICAL_CENTER)
                     ->setWrapText(true);
+
+                // Skip image insertion if no records
+                if ($this->records->count() === 0) {
+                    $sheet->getStyle("A3:L{$lastRow}")->getAlignment()
+                        ->setHorizontal(Alignment::HORIZONTAL_CENTER)
+                        ->setVertical(Alignment::VERTICAL_CENTER);
+                    return; // nothing more to do
+                }
 
                 // --- INSERT IMAGES ---
                 foreach ($this->records as $record) {

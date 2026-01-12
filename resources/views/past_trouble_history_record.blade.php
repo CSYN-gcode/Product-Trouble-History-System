@@ -24,7 +24,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>CLARK Past Trouble History Record</h1>
+                        <h1>Past Trouble History Record</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
@@ -169,17 +169,16 @@
                                     <div class="form-control-label" id="attachmentDiv">
                                         <label for="imageUpload" class="form-control-label">Illustration of Defect</label>
                                     </div>
-                                        <input type="file" class="form-control" name="illustration_of_defect" id="illustrationOfDefect" accept="image/*" required>
-                                        <input type="text" class="form-control d-none" name="illustration_of_defect_filename" id="illustrationOfDefectFileName" readonly>
-                                        <div class="form-group form-check d-none m-0" id="btnReuploadTriggerDiv">
-                                            <input type="checkbox" class="form-check-input d-none" id="btnReuploadTrigger">
-                                            <label class="d-none" id="btnReuploadTriggerLabel"> Re-upload File</label>
-                                        </div>
+                                    <input type="file" class="form-control" name="illustration_of_defect" id="illustrationOfDefect" accept="image/*" required>
+                                    <input type="text" class="form-control d-none" name="illustration_of_defect_filename" id="illustrationOfDefectFileName" readonly>
+                                    <div class="form-group form-check d-none m-0" id="btnReuploadTriggerDiv">
+                                        <input type="checkbox" class="form-check-input d-none" id="btnReuploadTrigger">
+                                        <label class="d-none" id="btnReuploadTriggerLabel"> Re-upload File</label>
+                                    </div>
                                 </div>
                             </div>
 
                             <div class="col-sm-4">
-                                {{-- FOR DISCUSSION IF CHANGE TO AUTO GENERATE --}}
                                 <div class="form-group">
                                     <label>Series / Model Name</label>
                                     {{-- <input type="text" class="form-control" name="model" id="model" required> --}}
@@ -255,7 +254,7 @@
         <div class="modal-dialog modal-dialog-centered modal-md">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title"><i class="fa fa-plus"></i> Select Date to Export</h4>
+                    <h4 class="modal-title"><i class="fas fa-hand-pointer"></i> Select Parameters for Export</h4>
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -263,21 +262,51 @@
                 <form id="exportPTHSReportForm" action="{{ route('export_excel') }}" method="GET">
                     <div class="modal-body">
                         {{-- @csrf --}}
-                        <div style="display:flex; gap:10px; align-items:end;">
-                            <div>
+                        <div class="row" style="display:flex; gap:10px; align-items:end;">
+                            <div class="col">
                                 <label>From</label>
                                 <input type="date" name="date_from" class="form-control" required>
                             </div>
 
-                            <div>
+                            <div class="col">
                                 <label>To</label>
                                 <input type="date" name="date_to" class="form-control" required>
                             </div>
+                        </div>
 
+                        <div class="row" style="display:flex; gap:10px; align-items:end; margin-top:15px;">
+                            <div class="col">
+                                <label>Situation</label>
+                                <select class="form-control" name="situation" id="situation" required>
+                                    <option value="" selected>Select Situation</option>
+                                    <option value="ALL">ALL</option>
+                                    <option value="External Claim">External Claim</option>
+                                    <option value="Internal Claim">Internal Claim</option>
+                                    <option value="Lot Out">Lot Out</option>
+                                    <option value="Yield of Targets">Yield of Targets</option>
+                                    <option value="Defect Escalation">Defect Escalation</option>
+                                </select>
+                            </div>
+
+                            <div class="col">
+                                <label>Section</label>
+                                <select class="form-control" name="section" id="section" required>
+                                    <option value="" disabled selected>Select Section</option>
+                                    <option value="ALL">ALL</option>
+                                    <option value="TS">TS</option>
+                                    <option value="CN">CN</option>
+                                    <option value="PPD">PPD</option>
+                                    <option value="YF">YF</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div style="display:flex; gap:10px; align-items:end; margin-top:15px;">
                             <button type="submit" class="btn btn-success">
                                 Export to Excel
                             </button>
                         </div>
+
                     </div>
                 </form>
             </div>

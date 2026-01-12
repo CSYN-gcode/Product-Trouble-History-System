@@ -261,17 +261,18 @@ class PartsTroubleHistoryController extends Controller
         $request->validate([
             'date_from' => 'required|date',
             'date_to'   => 'required|date|after_or_equal:date_from',
+            'situation'   => 'required',
+            'section'   => 'required',
         ]);
 
         $from = $request->date_from;
         $to   = $request->date_to;
+        $situation   = $request->situation;
+        $section   = $request->section;
 
-        $filename = "Parts_Trouble_Report_History_{$from}_to_{$to}.xlsx";
+        $filename = "PTHS_Report_{$situation}_{$section}_{$from}_to_{$to}.xlsx";
 
-        return Excel::download(
-            new ExportPartsTroubleHistory($from, $to),
-            $filename
-        );
+        return Excel::download( new ExportPartsTroubleHistory($from, $to, $situation, $section), $filename );
     }
 
     private function getMaterialsFrom($connection){

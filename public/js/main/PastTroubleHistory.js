@@ -192,8 +192,16 @@ function initPartsTroubleHistoryTable($table, url = 'view_parts_trouble_history'
                         return '-';
                     }
 
+                    // Get the base path dynamically from current URL
+                    const baseUrl = window.location.origin + window.location.pathname.split('/')[1] ? `/${window.location.pathname.split('/')[1]}` : '';
+
+                    // old
+                    // <img src="/PTHS_test/storage/app/public/file_attachments/${data}"
+                    //         alt="Defect Image"
+                    //         style="max-width:300px; max-height:300px; width:300px; height:300px; object-fit:contain;"></img>
+
                     return `
-                        <img src="/PTHS/storage/app/public/file_attachments/${data}"
+                        <img src="${baseUrl}/storage/app/public/file_attachments/${data}"
                             alt="Defect Image"
                             style="max-width:300px; max-height:300px; width:300px; height:300px; object-fit:contain;">
                     `;
