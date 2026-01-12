@@ -45,7 +45,7 @@
 </script>
 
 <script src="@php echo asset("public/js/main/Defects.js?".date("YmdHis")) @endphp"></script>
-<script src="@php echo asset("public/js/main/PartsTroubleHistory.js?".date("YmdHis")) @endphp"></script>
+<script src="@php echo asset("public/js/main/PastTroubleHistory.js?".date("YmdHis")) @endphp"></script>
 
 {{-- <script src="@php echo asset("public/js/main/ProductionRuncard.js?".date("YmdHis")) @endphp"></script>
 <script src="@php echo asset("public/js/main/CommonFunctions.js?".date("YmdHis")) @endphp"></script>

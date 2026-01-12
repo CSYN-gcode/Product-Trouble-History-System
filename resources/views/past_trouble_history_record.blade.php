@@ -15,7 +15,7 @@
 
 {{-- @auth --}}
 @extends($layout)
-@section('title', 'Parts Trouble History Record')
+@section('title', 'Past Trouble History Record')
 @section('content_page')
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
@@ -24,13 +24,13 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Parts Trouble History Record</h1>
+                        <h1>Past Trouble History Record</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a>
                             </li>
-                            <li class="breadcrumb-item active">Parts Trouble History Record</li>
+                            <li class="breadcrumb-item active">Past Trouble History Record</li>
                         </ol>
                     </div>
                 </div>
@@ -46,7 +46,7 @@
                         <!-- general form elements -->
                         <div class="card card-dark">
                             <div class="card-header">
-                                <h3 class="card-title">Parts Trouble History Record Module</h3>
+                                <h3 class="card-title">Past Trouble History Record Module</h3>
                             </div>
 
                             <!-- Start Page Content -->
@@ -58,7 +58,7 @@
                                 </div>
                                 <div class="float-sm-right">
                                     <button class="btn btn-dark" id="btnShowAddPartsTroubleHistory">
-                                        <i class="fa fa-initial-icon"></i> Add Parts Trouble History
+                                        <i class="fa fa-initial-icon"></i> Add Past Trouble History
                                     </button>
                                 </div>
 
@@ -129,7 +129,7 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title"><i class="fa fa-plus"></i> Add/Edit Parts Trouble History Info</h4>
+                    <h4 class="modal-title"><i class="fa fa-plus"></i> Add/Edit Past Trouble History Info</h4>
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>

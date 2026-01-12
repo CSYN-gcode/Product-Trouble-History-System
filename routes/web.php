@@ -24,8 +24,8 @@ use Illuminate\Support\Facades\Response;
 */
 
 Route::get('/', function () {
-    return view('parts_trouble_history_record');
-})->name('parts_trouble_history_record');
+    return view('past_trouble_history_record');
+})->name('past_trouble_history_record');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -35,9 +35,9 @@ Route::get('/defects', function () {
     return view('defects');
 })->name('defects');
 
-Route::get('/parts_trouble_history_record', function () {
-    return view('parts_trouble_history_record');
-})->name('parts_trouble_history_record');
+Route::get('/past_trouble_history_record', function () {
+    return view('past_trouble_history_record');
+})->name('past_trouble_history_record');
 
 // MODE OF DEFECTS CONTROLLER
 Route::controller(DefectsController::class)->group(function () {

@@ -41,7 +41,7 @@
                 <li class="nav-header font-weight-bold">Records</li>
 
                 <li class="nav-item has-treeview">
-                    <a href="{{ route('parts_trouble_history_record') }}" class="nav-link">
+                    <a href="{{ route('past_trouble_history_record') }}" class="nav-link">
                       {{-- <i class="far fa-circle nav-icon"></i> --}}
                       <i class="fas fa-microchip nav-icon"></i>
                       <p>

@@ -214,13 +214,13 @@ class PartsTroubleHistoryController extends Controller
             return response()->json([
                 'success' => true,
                 'new_status' => $defect->status,
-                'message' => 'Parts Trouble History Record status updated successfully.'
+                'message' => 'Past Trouble History Record status updated successfully.'
             ]);
         } catch (\Throwable $e) { // ✅ catch everything including DB errors
             DB::rollBack(); // ✅ rollback only if it fails
 
             // log the error so you can see what’s happening
-            \Log::error('Parts Trouble History Record status update failed', [
+            \Log::error('Past Trouble History Record status update failed', [
                 'error' => $e->getMessage(),
                 'line' => $e->getLine(),
                 'file' => $e->getFile(),
@@ -228,7 +228,7 @@ class PartsTroubleHistoryController extends Controller
 
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to update Parts Trouble History Record status.',
+                'message' => 'Failed to update Past Trouble History Record status.',
                 'error' => $e->getMessage(),
             ], 500);
         }
