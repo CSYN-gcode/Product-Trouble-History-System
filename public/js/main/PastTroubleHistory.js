@@ -193,7 +193,7 @@ function initPartsTroubleHistoryTable($table, url = 'view_parts_trouble_history'
                     }
 
                     return `
-                        <img src="/PTHS_test/storage/app/public/file_attachments/${data}"
+                        <img src="/PTHS/storage/app/public/file_attachments/${data}"
                             alt="Defect Image"
                             style="max-width:300px; max-height:300px; width:300px; height:300px; object-fit:contain;">
                     `;
