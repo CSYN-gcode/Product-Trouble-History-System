@@ -84,13 +84,31 @@ function resetPartsTroubleHistoryForm(formSelector, tableImprovementActions) {
                 <center><button class="btn btn-md btn-danger removeIA" title="Remove Row" type="button"><i class="fa fa-times"></i></button></center>
             </td>
             <td>
-                <textarea class="form-control" name="improvement_action[]" required></textarea>
+                <textarea class="form-control form-control-sm" name="factor[]" required></textarea>
             </td>
             <td>
-                <textarea class="form-control" name="improvement_action_remarks[]" required></textarea>
+                <textarea class="form-control form-control-sm" name="cause[]" required></textarea>
+            </td>
+            <td>
+                <textarea class="form-control form-control-sm" name="analysis[]" required></textarea>
+            </td>
+            <td>
+                <textarea class="form-control form-control-sm" name="counter_measure[]" required></textarea>
+            </td>
+            <td>
+                <input type="date" class="form-control form-control-lg" name="implementation_date[]" required></input>
             </td>
         </tr>
     `;
+
+    // clark comment 12/29/2025 remove remarks column
+    // <td>
+    //     <textarea class="form-control" name="improvement_action[]" required></textarea>
+    // </td>
+    // <td>
+    //     <textarea class="form-control form-control-sm" name="remarks[]" required></textarea>
+    // </td>
+
     const $tbody = $(tableImprovementActions).find('tbody');
     $tbody.html(defaultRow);
 
@@ -124,12 +142,64 @@ function initPartsTroubleHistoryTable($table, url = 'view_parts_trouble_history'
             { data: 'action', orderable: false, searchable: false },
             { data: 'status_label' },
             { data: 'date_encountered' },    // customize this per parts_trouble_history
+            { data: 'situation' },    // customize this per parts_trouble_history
+            { data: 'section' },    // customize this per parts_trouble_history
+            // {
+            //     data: 'situation',
+            //     render: function(data) {
+            //         if(data == 1) {
+            //             return 'External Claim'
+            //         }else if(data == 2) {
+            //             return 'Internal Claim'
+            //         }else if(data == 3) {
+            //             return 'Lot Out'
+            //         }else if(data == 4) {
+            //             return 'Yield of Targets'
+            //         }else if(data == 5) {
+            //             return 'Defect Escalation'
+            //         }else{
+            //             return 'N/A'
+            //         }
+            //     }
+            // },
+            // {
+            //     data: 'section',
+            //     render: function(data) {
+            //         if(data == 1) {
+            //             return 'TS'
+            //         }
+            //         else if(data == 2) {
+            //             return 'CN'
+            //         }
+            //         else if(data == 3) {
+            //             return 'YF'
+            //         }
+            //         else if(data == 4) {
+            //             return 'PPD'
+            //         }else{
+            //             return 'N/A'
+            //         }
+            //     }
+            // },
             { data: 'model' },    // customize this per parts_trouble_history
             { data: 'defects.defect_item.defect_name' },    // customize this per parts_trouble_history
-            { data: 'defects.illustration_of_defect' },    // customize this per parts_trouble_history
-            { data: 'defects.no_of_occurrence' },    // customize this per parts_trouble_history
-            { data: 'defects.root_cause' },    // customize this per parts_trouble_history
-            { data: 'improvements' },    // customize this per parts_trouble_history
+            {
+                data: 'defects.illustration_of_defect',
+                orderable: false,
+                searchable: false,
+                render: function (data, type, row) {
+                    if (!data) {
+                        return '-';
+                    }
+
+                    return `
+                        <img src="/PTHS_test/storage/app/public/file_attachments/${data}"
+                            alt="Defect Image"
+                            style="max-width:300px; max-height:300px; width:300px; height:300px; object-fit:contain;">
+                    `;
+                }
+            },
+            { data: 'defects.no_of_occurrence' }    // customize this per parts_trouble_history
         ]
     });
 }
@@ -145,6 +215,7 @@ function bindPartsTroubleHistoryEvents($table, $form, $modal, $addButtonPTH, dtP
     $addButtonPTH.on('click', function () {
         resetPartsTroubleHistoryForm($form, $tableIA);
         getDefects($('#defectId'));
+        getDeviceName($('#selectDeviceName'));
         $('#modalPartsTroubleHistory').modal('show');
     });
 
@@ -236,6 +307,31 @@ function bindPartsTroubleHistoryEvents($table, $form, $modal, $addButtonPTH, dtP
         $formExport[0].reset();
         $('#modalExportReport').modal('show');
     });
+
+    $form.on('input', '#situation, #section, #selectDeviceName, #defectId', function (){
+        if($('#situation').val() != '' && $('#section').val() != '' && $('#selectDeviceName').val() != null && $('#defectId').val() != null && $('#dateEncountered').val() != ''){
+            $.ajax({
+                method: "get",
+                url: "get_count_no_of_occurrence",
+                data: {
+                    situation: $('#situation').val(),
+                    section: $('#section').val(),
+                    model: $('#selectDeviceName').val(),
+                    defect_id: $('#defectId').val(),
+                    date_encountered: $('#dateEncountered').val(),
+                },
+                dataType: "json",
+                success: function (response) {
+                    $('#noOfOccurrence').val(response.ordinal);
+                },
+                error: function(data, xhr, status) {
+                    console.log('Data: ' + data + "\n" + "XHR: " + xhr + "\n" + "Status: " + status);
+                }
+            });
+        }else{
+            console.log('missing parameter');
+        }
+    });
 }
 
 function updateRemoveButtons($tableIA) {
@@ -274,7 +370,7 @@ function getDefects(cboElement, defectId = null){
         url: "get_defects",
         dataType: "json",
         beforeSend: function(){
-            result = '<option value="0" disabled selected>--Loading--</option>';
+            result = '<option value="" disabled selected>--Loading--</option>';
         },
         success: function (response) {
             if(response.length > 0){
@@ -288,6 +384,37 @@ function getDefects(cboElement, defectId = null){
             cboElement.html(result);
             if(defectId != null){
                 cboElement.val(defectId).trigger('change');
+            }
+        },
+        error: function(data, xhr, status) {
+            result = '<option value="0" selected disabled> -- Reload Again -- </option>';
+            cboElement.html(result);
+            console.log('Data: ' + data + "\n" + "XHR: " + xhr + "\n" + "Status: " + status);
+        }
+    });
+}
+
+function getDeviceName(cboElement, deviceName = null){
+    let result = '<option value="" disabled selected> Select Series Name </option>';
+    $.ajax({
+        method: "get",
+        url: "get_device_name",
+        dataType: "json",
+        beforeSend: function(){
+            result = '<option value="" disabled selected>--Loading--</option>';
+        },
+        success: function (response) {
+            if(response.length > 0){
+                    result = '<option value="" disabled selected> Select Series Name </option>';
+                for (let i = 0; i < response.length; i++) {
+                    result += '<option value="' + response[i]['materials'] + '">' + response[i]['materials'] + '</option>';
+                }
+            }else{
+                result = '<option value="0" selected disabled> -- No record found -- </option>';
+            }
+            cboElement.html(result);
+            if(deviceName != null){
+                cboElement.val(deviceName).trigger('change');
             }
         },
         error: function(data, xhr, status) {
@@ -353,8 +480,9 @@ function fetchPartsTroubleHistoryById(id, $modal, $tableIA, $form) {
 
             // Populate modal fields (adjust names per parts_trouble_history)
             $form.find('#txtPartsTroubleHistoryId').val(response.id);
+            $form.find('#situation').val(response.situation);
+            $form.find('#section').val(response.section);
             $form.find('#dateEncountered').val(response.date_encountered);
-            $form.find('#model').val(response.model);
             $form.find('#illustrationOfDefectFileName').val(response.defects.illustration_of_defect);
 
             let download_file ='<a href="download_file/'+response.id+'" target="_blank">';
@@ -369,6 +497,10 @@ function fetchPartsTroubleHistoryById(id, $modal, $tableIA, $form) {
 
             // Show Download Button
             $form.find("#downloadFile").removeClass('d-none');
+
+            // CLARK DEVICE NAME
+            // $form.find('#selectDeviceName').val(response.model);
+            getDeviceName($('#selectDeviceName'), response.model);
 
             // MODE OF DEFECT
             getDefects($('#defectId'), response.defects.defect_id);
@@ -393,13 +525,31 @@ function fetchPartsTroubleHistoryById(id, $modal, $tableIA, $form) {
                             <center><button class="btn btn-md btn-danger removeIA" title="Remove Row" type="button"><i class="fa fa-times"></i></button></center>
                         </td>
                         <td>
-                            <textarea class="form-control" name="improvement_action[]">${response.improvements[index].improvement_actions}</textarea>
+                            <textarea class="form-control form-control-sm" name="factor[]">${response.improvements[index].factor}</textarea>
                         </td>
                         <td>
-                            <textarea class="form-control" name="improvement_action_remarks[]">${response.improvements[index].remarks}</textarea>
+                            <textarea class="form-control form-control-sm" name="cause[]">${response.improvements[index].cause}</textarea>
+                        </td>
+                        <td>
+                            <textarea class="form-control form-control-sm" name="analysis[]">${response.improvements[index].analysis}</textarea>
+                        </td>
+                        <td>
+                            <textarea class="form-control form-control-sm" name="counter_measure[]">${response.improvements[index].counter_measure}</textarea>
+                        </td>
+                        <td>
+                            <input type="date" class="form-control form-control-lg" name="implementation_date[]" value="${response.improvements[index].implementation_date}">
                         </td>
                     </tr>
                 `;
+
+                // clark comment 12/29/2025 remove remarks column
+                // <td>
+                //     <textarea class="form-control" name="improvement_action[]">${response.improvements[index].improvement_actions}</textarea>
+                // </td>
+                // <td>
+                //     <textarea class="form-control" name="improvement_action_remarks[]">${response.improvements[index].remarks}</textarea>
+                // </td>
+
                 $tableIA.find('tbody').append(rowImprovements);
             }
 
