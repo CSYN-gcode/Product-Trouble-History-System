@@ -269,6 +269,8 @@ function bindPartsTroubleHistoryEvents($table, $form, $modal, $addButtonPTH, dtP
     });
 
     $('#section').on('change', function() {
+        console.log('set readonly false');
+        $('#selectDeviceName').prop('disabled', false);
         getDeviceName($('#selectDeviceName'), $(this).val());
     });
 
@@ -319,7 +321,9 @@ function bindPartsTroubleHistoryEvents($table, $form, $modal, $addButtonPTH, dtP
         $('#modalExportReport').modal('show');
     });
 
-    $form.on('input', '#situation, #section, #selectDeviceName, #defectId', function (){
+    $form.on('input', '#situation, #section, #selectDeviceName, #defectId, #dateEncountered', function (){
+        console.log('change no of occurence');
+
         if($('#situation').val() != '' && $('#section').val() != '' && $('#selectDeviceName').val() != null && $('#defectId').val() != null && $('#dateEncountered').val() != ''){
             $.ajax({
                 method: "get",
@@ -417,14 +421,15 @@ function getDeviceName(cboElement, section, deviceName = null){
         },
         success: function (response) {
             console.log('response', response);
-
+            $('#selectDeviceName').prop('disabled', false);
             if(response.length > 0){
                     result = '<option value="" disabled selected> Select Series Name </option>';
                 for (let i = 0; i < response.length; i++) {
                     result += '<option value="' + response[i]['materials'] + '">' + response[i]['materials'] + '</option>';
                 }
             }else{
-                result = '<option value="0" selected disabled> -- No record found -- </option>';
+                // result = '<option value="0" selected disabled> -- No record found -- </option>';
+                result = '<option value="" disabled selected>--Loading--</option>';
             }
             cboElement.html(result);
             if(deviceName != null){

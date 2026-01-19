@@ -98,9 +98,14 @@ class ExportPartsTroubleHistory implements FromCollection, WithHeadings, WithEve
         $rows = new Collection();
         $currentRow = 3;
 
-        foreach ($this->records as $record) {
+        foreach ($this->records as $record){
+            $defects = collect($record->defects);
 
-            $defect = $record->defects->first();
+            if ($defects->isEmpty()) {
+                continue;
+            }
+
+            // $defect = $record->defects->first();
             $improvements = collect($record->improvements);
 
             $rowCount = max($improvements->count(), 1);
@@ -109,25 +114,29 @@ class ExportPartsTroubleHistory implements FromCollection, WithHeadings, WithEve
 
             $this->recordStartRows[$record->id] = $startRow;
 
-            for ($i = 0; $i < $rowCount; $i++) {
-                $improvement = $improvements->get($i);
+            // foreach ($defects as $defect) {
+                for ($i = 0; $i < $rowCount; $i++) {
+                    $improvement = $improvements->get($i);
 
-                $rows->push([
-                    $record->situation,
-                    $record->section,
-                    $record->date_encountered,
-                    $record->model,
-                    $defect->defect_item->defect_name ?? '',
-                    '', // image column
-                    $defect->no_of_occurrence ?? '',
-                    $improvement ? $improvement->factor : '',
-                    $improvement ? $improvement->cause : '',
-                    $improvement ? $improvement->analysis : '',
-                    $improvement ? $improvement->counter_measure : '',
-                    $improvement ? $improvement->implementation_date : '',
-                    // $improvement ? $improvement->remarks : '',
-                ]);
-            }
+                    $rows->push([
+                        $record->situation,
+                        $record->section,
+                        $record->date_encountered,
+                        $record->model,
+                        // $defect->defect_item->defect_name ?? '',
+                        '', // defect name
+                        '', // image column
+                        '', // no_of_occurrence
+                        // $defect->no_of_occurrence ?? '',
+                        $improvement ? $improvement->factor : '',
+                        $improvement ? $improvement->cause : '',
+                        $improvement ? $improvement->analysis : '',
+                        $improvement ? $improvement->counter_measure : '',
+                        $improvement ? $improvement->implementation_date : '',
+                        // $improvement ? $improvement->remarks : '',
+                    ]);
+                }
+            // }
 
             // merge only if truly multi-row
             if ($rowCount > 1) {
@@ -261,6 +270,11 @@ class ExportPartsTroubleHistory implements FromCollection, WithHeadings, WithEve
                         continue;
                     }
 
+                    $defect = $record->defects;
+                    if (!$defect) {
+                        continue;
+                    }
+
                     $imagePath = storage_path(
                         'app/public/file_attachments/' . $record->defects->illustration_of_defect
                     );
@@ -269,6 +283,13 @@ class ExportPartsTroubleHistory implements FromCollection, WithHeadings, WithEve
                         continue;
                     }
 
+                    // 1️⃣ Patch defect name (Column E)
+                    $sheet->setCellValue("E{$startRow}", $defect->defect_item->defect_name ?? '');
+
+                    // 2️⃣ Patch no_of_occurrence (Column G)
+                    $sheet->setCellValue("G{$startRow}", $defect->no_of_occurrence ?? '');
+
+                    // 3️⃣ Insert image (Column F)
                     $drawing = new Drawing();
                     $drawing->setPath($imagePath);
                     $drawing->setCoordinates("F{$startRow}");

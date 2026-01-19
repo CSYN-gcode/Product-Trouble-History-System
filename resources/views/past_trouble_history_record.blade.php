@@ -182,7 +182,9 @@
                                 <div class="form-group">
                                     <label>Series / Model Name</label>
                                     {{-- <input type="text" class="form-control" name="model" id="model" required> --}}
-                                    <select class="form-control select2bs5" name="model" id="selectDeviceName" required></select>
+                                    <select class="form-control select2bs5" name="model" id="selectDeviceName" disabled required>
+                                        <option value="" disabled selected> Select Series Name </option>
+                                    </select>
                                 </div>
 
                                 <div class="form-group">
@@ -200,7 +202,7 @@
                                 <div class="form-group">
                                     <label>No. of Occurrence</label>
                                     {{-- AUTO-GENERATE --}}
-                                    <input type="text" class="form-control" name="no_of_occurrence" id="noOfOccurrence" readonly>
+                                    <input type="text" class="form-control" name="no_of_occurrence" id="noOfOccurrence" placeholder="Auto Generate" readonly>
                                 </div>
                             </div>
 

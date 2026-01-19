@@ -270,7 +270,10 @@ class PartsTroubleHistoryController extends Controller
         $situation   = $request->situation;
         $section   = $request->section;
 
-        $filename = "PTHS_Report_{$situation}_{$section}_{$from}_to_{$to}.xlsx";
+        $param1 = $situation === 'ALL' ? 'All Situation' : $situation;
+        $param2 = $section === 'ALL' ? 'All Section' : $section;
+
+        $filename = "PTHS_Report_{$param1}_{$param2}_{$from}_to_{$to}.xlsx";
 
         return Excel::download( new ExportPartsTroubleHistory($from, $to, $situation, $section), $filename );
     }
