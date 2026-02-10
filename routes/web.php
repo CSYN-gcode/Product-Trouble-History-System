@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 // Controllers
 use App\Http\Controllers\DefectsController;
+use App\Http\Controllers\SituationsController;
 use App\Http\Controllers\PartsTroubleHistoryController;
 
 use App\Http\Controllers\UserController;
@@ -35,6 +36,10 @@ Route::get('/defects', function () {
     return view('defects');
 })->name('defects');
 
+Route::get('/situations', function () {
+    return view('situations');
+})->name('situations');
+
 Route::get('/past_trouble_history_record', function () {
     return view('past_trouble_history_record');
 })->name('past_trouble_history_record');
@@ -46,6 +51,15 @@ Route::controller(DefectsController::class)->group(function () {
     Route::get('/get_defects_by_id', 'getDefectsById')->name('get_defects_by_id');
     Route::post('/update_defects_status', 'updateDefectsStatus')->name('update_defects_status');
     Route::get('/get_defects', 'getDefects')->name('get_defects');
+});
+
+//SITUATIONS CONTROLLER
+Route::controller(SituationsController::class)->group(function () {
+    Route::get('/view_situations', 'viewSituationsInfo')->name('view_situations');
+    Route::post('/add_situations', 'addSituationsInfo')->name('add_situations');
+    Route::get('/get_situations_by_id', 'getSituationsById')->name('get_situations_by_id');
+    Route::post('/update_situations_status', 'updateSituationsStatus')->name('update_situations_status');
+    Route::get('/get_situations', 'getSituations')->name('get_situations');
 });
 
 // MODE OF PARTS TROUBLE HISTORY CONTROLLER

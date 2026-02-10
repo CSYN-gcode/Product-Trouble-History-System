@@ -142,7 +142,7 @@ function initPartsTroubleHistoryTable($table, url = 'view_parts_trouble_history'
             { data: 'action', orderable: false, searchable: false },
             { data: 'status_label' },
             { data: 'date_encountered' },    // customize this per parts_trouble_history
-            { data: 'situation' },    // customize this per parts_trouble_history
+            { data: 'situation_label' },    // customize this per parts_trouble_history
             { data: 'section' },    // customize this per parts_trouble_history
             // {
             //     data: 'situation',
@@ -223,6 +223,7 @@ function bindPartsTroubleHistoryEvents($table, $form, $modal, $addButtonPTH, dtP
     $addButtonPTH.on('click', function () {
         resetPartsTroubleHistoryForm($form, $tableIA);
         getDefects($('#defectId'));
+        getSituations($('#selectSituation'));
         $('#modalPartsTroubleHistory').modal('show');
     });
 
@@ -324,12 +325,12 @@ function bindPartsTroubleHistoryEvents($table, $form, $modal, $addButtonPTH, dtP
     $form.on('input', '#situation, #section, #selectDeviceName, #defectId, #dateEncountered', function (){
         console.log('change no of occurence');
 
-        if($('#situation').val() != '' && $('#section').val() != '' && $('#selectDeviceName').val() != null && $('#defectId').val() != null && $('#dateEncountered').val() != ''){
+        if($('#selectSituation').val() != '' && $('#section').val() != '' && $('#selectDeviceName').val() != null && $('#defectId').val() != null && $('#dateEncountered').val() != ''){
             $.ajax({
                 method: "get",
                 url: "get_count_no_of_occurrence",
                 data: {
-                    situation: $('#situation').val(),
+                    situation: $('#selectSituation').val(),
                     section: $('#section').val(),
                     model: $('#selectDeviceName').val(),
                     defect_id: $('#defectId').val(),
@@ -390,8 +391,8 @@ function getDefects(cboElement, defectId = null){
         success: function (response) {
             if(response.length > 0){
                     result = '<option value="" disabled selected> Select Defect </option>';
-                for (let i = 0; i < response.length; i++) {
-                    result += '<option value="' + response[i]['id'] + '">' + response[i]['defect_name'] + '</option>';
+                for (let di = 0; di < response.length; di++) {
+                    result += '<option value="' + response[di]['id'] + '">' + response[di]['defect_name'] + '</option>';
                 }
             }else{
                 result = '<option value="0" selected disabled> -- No record found -- </option>';
@@ -424,8 +425,8 @@ function getDeviceName(cboElement, section, deviceName = null){
             $('#selectDeviceName').prop('disabled', false);
             if(response.length > 0){
                     result = '<option value="" disabled selected> Select Series Name </option>';
-                for (let i = 0; i < response.length; i++) {
-                    result += '<option value="' + response[i]['materials'] + '">' + response[i]['materials'] + '</option>';
+                for (let dni = 0; dni < response.length; dni++) {
+                    result += '<option value="' + response[dni]['materials'] + '">' + response[dni]['materials'] + '</option>';
                 }
             }else{
                 // result = '<option value="0" selected disabled> -- No record found -- </option>';
@@ -434,6 +435,38 @@ function getDeviceName(cboElement, section, deviceName = null){
             cboElement.html(result);
             if(deviceName != null){
                 cboElement.val(deviceName).trigger('change');
+            }
+        },
+        error: function(data, xhr, status) {
+            result = '<option value="0" selected disabled> -- Reload Again -- </option>';
+            cboElement.html(result);
+            console.log('Data: ' + data + "\n" + "XHR: " + xhr + "\n" + "Status: " + status);
+        }
+    });
+}
+
+function getSituations(cboElement, situationId = null){
+    let result = '<option value="" disabled selected> Select Situation </option>';
+    $.ajax({
+        method: "get",
+        url: "get_situations",
+        // data: { section },
+        dataType: "json",
+        beforeSend: function(){
+            result = '<option value="" disabled selected>--Loading--</option>';
+        },
+        success: function (response) {
+            if(response.length > 0){
+                    result = '<option value="" disabled selected> Select Situation </option>';
+                for (let si = 0; si < response.length; si++){
+                    result += '<option value="' + response[si]['id'] + '">' + response[si]['situation_name'] + '</option>';
+                }
+            }else{
+                result = '<option value="0" selected disabled> -- No record found -- </option>';
+            }
+            cboElement.html(result);
+            if(situationId != null){
+                cboElement.val(situationId).trigger('change');
             }
         },
         error: function(data, xhr, status) {
@@ -520,10 +553,8 @@ function fetchPartsTroubleHistoryById(id, $modal, $tableIA, $form) {
             // CLARK DEVICE NAME
             // $form.find('#selectDeviceName').val(response.model);
             getDeviceName($('#selectDeviceName'), response.section, response.model);
-
-            // MODE OF DEFECT
             getDefects($('#defectId'), response.defects.defect_id);
-            // MODE OF DEFECT
+            getSituations($('#selectSituation'), response.situation);
 
             $form.find('#noOfOccurrence').val(response.defects.no_of_occurrence);
             $form.find('#rootCause').val(response.defects.root_cause);
