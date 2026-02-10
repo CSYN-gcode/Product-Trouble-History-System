@@ -143,14 +143,18 @@
 
                                 <div class="form-group">
                                     <label>Situation</label>
-                                    <select class="form-control" name="situation" id="situation" required>
-                                        <option value="" selected>Select Situation</option>
+                                    <select class="form-control select2bs5" name="situation" id="selectSituation" required>
+                                         {{-- AUTO GENERATE --}}
+                                        <option value="" disabled selected> Select Situation </option>
+                                    </select>
+                                    {{-- <select class="form-control" name="situation" id="situation" required> --}}
+                                        {{-- <option value="" selected>Select Situation</option>
                                         <option value="External Claim">External Claim</option>
                                         <option value="Internal Claim">Internal Claim</option>
                                         <option value="Lot Out">Lot Out</option>
-                                        <option value="Yield of Targets">Yield of Targets</option>
-                                        <option value="Defect Escalation">Defect Escalation</option>
-                                    </select>
+                                        <option value="Yield-off Targets">Yield-off Targets</option>
+                                        <option value="Defect Escalation">Defect Escalation</option> --}}
+                                    {{-- </select> --}}
                                 </div>
 
                                 <div class="form-group">

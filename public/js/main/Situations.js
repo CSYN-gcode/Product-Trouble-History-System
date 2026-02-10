@@ -1,12 +1,12 @@
 /**
  * ==========================================
- * TEMPLATE Defects SCRIPT
+ * TEMPLATE Situations SCRIPT
  * ------------------------------------------
- * Rename "Defects" and related variables
+ * Rename "Situations" and related variables
  * to match your actual feature.
  *
  * Example:
- *   - Replace "Defects" with "Defects"
+ *   - Replace "Situations" with "Situations"
  *   - Replace URLs accordingly
  * ==========================================
  */
@@ -15,9 +15,9 @@ $(document).ready(function () {
     // --------------------------------------
     // Cache DOM elements
     // --------------------------------------
-    const $table = $('#tblDefects');        // e.g., #tblDefects
-    const $form = $('#formDefects');        // e.g., #formDefects
-    const $modal = $('#modalAddDefects');      // e.g., #modalAddDefects
+    const $table = $('#tblSituations');        // e.g., #tblSituations
+    const $form = $('#formSituations');        // e.g., #formSituations
+    const $modal = $('#modalAddSituations');      // e.g., #modalAddSituations
 
     // --------------------------------------
     // Initialize global AJAX setup (once per project)
@@ -31,20 +31,21 @@ $(document).ready(function () {
     // --------------------------------------
     // Initialize DataTable
     // --------------------------------------
-    const dtDefects = initDefectsTable($table);
+    const dtSituations = initSituationsTable($table);
 
     // --------------------------------------
     // Bind all event handlers
     // --------------------------------------
-    bindDefectsEvents($table, $form, $modal, dtDefects);
+    bindSituationsEvents($table, $form, $modal, dtSituations);
 });
 
 /**
  * Reset a form and clear hidden fields
  * @param {string|jQuery} formSelector - the form element or selector
  */
-function resetDefectForm(formSelector) {
+function resetSituationForm(formSelector) {
     const $form = $(formSelector);
+    console.log('resetting form', $form);
     $form[0].reset();
     $form.find('input[type="hidden"]').val('');
 }
@@ -52,7 +53,7 @@ function resetDefectForm(formSelector) {
 /**
  * Initialize DataTable
  */
-function initDefectsTable($table, url = 'view_defects') {
+function initSituationsTable($table, url = 'view_situations') {
     return $table.DataTable({
         processing: true,
         serverSide: true,
@@ -60,7 +61,7 @@ function initDefectsTable($table, url = 'view_defects') {
         fixedHeader: true,
         columns: [
             { data: 'action', orderable: false, searchable: false },
-            { data: 'defect_name' },    // customize this per defects
+            { data: 'situation_name' },    // customize this per situations
             { data: 'status_label' }
         ]
     });
@@ -69,54 +70,54 @@ function initDefectsTable($table, url = 'view_defects') {
 /**
  * Bind events for buttons, forms, etc.
  */
-function bindDefectsEvents($table, $form, $modal, dtDefects){
+function bindSituationsEvents($table, $form, $modal, dtSituations){
 
-    $('#btnShowAddDefectModal').on('click', function () {
-        resetDefectForm($form);
-        $('#modalAddDefects').modal('show');
+    $('#btnShowAddSituationModal').on('click', function () {
+        resetSituationForm($form);
+        $('#modalAddSituations').modal('show');
     });
 
     // Submit form (Add / Edit)
     $form.on('submit', function (e) {
         e.preventDefault();
-        saveDefects($form, $modal, dtDefects);
+        saveSituations($form, $modal, dtSituations);
     });
 
     // Edit button
     $table.on('click', '.btnEdit', function () {
         const id = $(this).data('id');
-        fetchDefectsById(id, $modal);
+        fetchSituationsById(id, $modal);
     });
 
     // Disable button
     $table.on('click', '.btnDisable', function () {
         const id = $(this).data('id');
-        confirmAction('Are you sure you want to disable this defect?', function () {
-            updateDefectsStatus(id, dtDefects);
+        confirmAction('Are you sure you want to disable this situation?', function () {
+            updateSituationsStatus(id, dtSituations);
         });
     });
 
     // Enable button
     $table.on('click', '.btnEnable', function () {
         const id = $(this).data('id');
-        confirmAction('Are you sure you want to enable this defect?', function () {
-            updateDefectsStatus(id, dtDefects);
+        confirmAction('Are you sure you want to enable this situation?', function () {
+            updateSituationsStatus(id, dtSituations);
         });
     });
 }
 
 /**
- * Save (add/update) defects data
+ * Save (add/update) situations data
  */
-function saveDefects($form, $modal, dtDefects) {
+function saveSituations($form, $modal, dtSituations) {
     $.ajax({
         type: 'POST',
-        url: 'add_defects',
+        url: 'add_situations',
         data: $form.serialize(),
         dataType: 'json',
         success: function (response) {
             if (response.result === 1) {
-                dtDefects.draw(false);
+                dtSituations.draw(false);
                 $modal.modal('hide');
                 $form[0].reset();
                 showSuccess('Successfully saved!');
@@ -130,18 +131,18 @@ function saveDefects($form, $modal, dtDefects) {
 }
 
 /**
- * Fetch defects data by ID
+ * Fetch situations data by ID
  */
-function fetchDefectsById(id, $modal) {
+function fetchSituationsById(id, $modal) {
     $.ajax({
         type: 'GET',
-        url: 'get_defects_by_id',
+        url: 'get_situations_by_id',
         data: { id },
         dataType: 'json',
         success: function (response) {
-            // Populate modal fields (adjust names per defects)
-            $('#txtDefectId').val(response.id);
-            $('#txtDefectName').val(response.defect_name);
+            // Populate modal fields (adjust names per situations)
+            $('#txtSituationId').val(response.id);
+            $('#txtSituationName').val(response.situation_name);
             // $('#selStatus').val(response.status);
 
             $modal.modal('show');
@@ -154,18 +155,18 @@ function fetchDefectsById(id, $modal) {
 }
 
 /**
- * Disable or update defects status
+ * Disable or update situations status
  */
-function updateDefectsStatus(id, dtDefects) {
+function updateSituationsStatus(id, dtSituations) {
     $.ajax({
         type: 'POST',
-        url: 'update_defects_status',
+        url: 'update_situations_status',
         data: { id },
         dataType: 'json',
         success: function (response) {
             if (response.success) {
                 showSuccess('Status updated successfully.');
-                dtDefects.draw(false);
+                dtSituations.draw(false);
             }else {
                 // ⚠️ If success is false
                 Swal.fire({
