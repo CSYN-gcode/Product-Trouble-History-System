@@ -15,7 +15,7 @@
 
 {{-- @auth --}}
 @extends($layout)
-@section('title', 'Defects')
+@section('title', 'Situations')
 @section('content_page')
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
@@ -24,13 +24,13 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>List of Defects</h1>
+                        <h1>List of Situations</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a>
                             </li>
-                            <li class="breadcrumb-item active">List of Defects</li>
+                            <li class="breadcrumb-item active">List of Situations</li>
                         </ol>
                     </div>
                 </div>
@@ -46,23 +46,23 @@
                         <!-- general form elements -->
                         <div class="card card-dark">
                             <div class="card-header">
-                                <h3 class="card-title">Defects Module</h3>
+                                <h3 class="card-title">Situations Module</h3>
                             </div>
 
                             <!-- Start Page Content -->
                             <div class="card-body">
                                 <div style="float: right;">
-                                    <button class="btn btn-dark" id="btnShowAddDefectModal">
-                                        <i class="fa fa-plus"></i> Add Defect
+                                    <button class="btn btn-dark" id="btnShowAddSituationModal">
+                                        <i class="fa fa-plus"></i> Add Situation
                                     </button>
                                 </div> <br><br>
                                 <div class="table-responsive">
-                                    <table id="tblDefects" class="table table-bordered table-striped table-hover"
+                                    <table id="tblSituations" class="table table-bordered table-striped table-hover"
                                         style="width: 100%;">
                                         <thead>
                                             <tr>
                                                 <th>Action</th>
-                                                <th>Defect Name</th>
+                                                <th>Situation Name</th>
                                                 <th>Status</th>
                                             </tr>
                                         </thead>
@@ -83,25 +83,25 @@
     <!-- /.content-wrapper -->
 
     <!-- MODALS -->
-    <div class="modal fade" id="modalAddDefects">
+    <div class="modal fade" id="modalAddSituations">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title"><i class="fa fa-plus"></i> Add/Edit Defect Info</h4>
+                    <h4 class="modal-title"><i class="fa fa-plus"></i> Add/Edit Situation Info</h4>
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form method="post" id="formDefects" autocomplete="off">
+                <form method="post" id="formSituations" autocomplete="off">
                     @csrf
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-sm-12">
-                                <input type="hidden" id="txtDefectId" name="id">
+                                <input type="hidden" id="txtSituationId" name="id">
 
                                 <div class="form-group">
-                                    <label>Defect Name</label>
-                                    <input type="text" class="form-control" name="defects" id="txtDefectName">
+                                    <label>Situation Name</label>
+                                    <input type="text" class="form-control" name="situations" id="txtSituationName">
                                 </div>
                             </div>
                         </div>

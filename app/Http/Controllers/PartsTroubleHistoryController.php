@@ -396,6 +396,7 @@ class PartsTroubleHistoryController extends Controller
     }
 
     public function getCountOfNoOfOccurrence(Request $request){
+
         [$year, $month] = explode('-', $request->date_encountered);
 
         if ($month >= 4) {
@@ -425,6 +426,8 @@ class PartsTroubleHistoryController extends Controller
                     $query->where('id', $request->situation)
                             ->where('status', 0);
                 })
+                ->where('status', 0)
+                ->whereNull('deleted_at')
                 ->count();
 
                 // +1 because current occurrence is not yet included
@@ -434,17 +437,17 @@ class PartsTroubleHistoryController extends Controller
                     'count'   => $count,
                     'ordinal' => $ordinal
                 ]);
-        }
-
-        private function ordinal($number){
-            if (!in_array($number % 100, [11, 12, 13])) {
-                switch ($number % 10) {
-                    case 1: return $number . 'st';
-                    case 2: return $number . 'nd';
-                    case 3: return $number . 'rd';
-                }
-            }
-
-            return $number . 'th';
-        }
     }
+
+    private function ordinal($number){
+        if (!in_array($number % 100, [11, 12, 13])) {
+            switch ($number % 10) {
+                case 1: return $number . 'st';
+                case 2: return $number . 'nd';
+                case 3: return $number . 'rd';
+            }
+        }
+
+        return $number . 'th';
+    }
+}
