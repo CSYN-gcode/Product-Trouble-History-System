@@ -20,8 +20,8 @@ $user_level = 0;
                     You will see the module_id on the table inside modules(table) under db_rapidx(database) since Customer Claim Database System id is 11
                     you are free to change below module_id equals to your module_id
                 -->
-                @if ($_SESSION['rapidx_user_accesses'][$index]['module_id'] == 31)
-                    <!-- 31- DMR & PQC -->
+                @if ($_SESSION['rapidx_user_accesses'][$index]['module_id'] == 51)
+                    <!-- 51- PTHS -->
                     @php
                         $isAuthorized = true;
                         $user_level = $_SESSION['rapidx_user_accesses'][$index]['user_level_id']; // Collect the user_level_id
