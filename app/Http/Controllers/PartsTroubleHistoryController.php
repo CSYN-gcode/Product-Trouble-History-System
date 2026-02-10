@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Cache;
 class PartsTroubleHistoryController extends Controller
 {
     public function viewPartsTroubleHistoryInfo(Request $request){
-        $parts_trouble_history_details = PartTroubleHistory::with(['defects.defect_item', 'improvements'])->get();
+        $parts_trouble_history_details = PartTroubleHistory::with(['defects.defect_item', 'situations', 'improvements'])->get();
 
         // return $parts_trouble_history_details;
         return DataTables::of($parts_trouble_history_details)
@@ -35,6 +35,13 @@ class PartsTroubleHistoryController extends Controller
             else{
                 $result .= "<button class='btn btn-success btn-sm btnEnable' data-id='$parts_trouble_history_details->id'><i class='fa-solid fa-rotate-left'></i></button>";
             }
+            $result .= "</center>";
+            return $result;
+        })
+        ->addColumn('situation_label', function($parts_trouble_history_details){
+            $result = "";
+            $result .= "<center>";
+            $result .= $parts_trouble_history_details->situation ? $parts_trouble_history_details->situations->situation_name : 'N/A';
             $result .= "</center>";
             return $result;
         })
@@ -59,7 +66,7 @@ class PartsTroubleHistoryController extends Controller
 
             return $result;
         })
-        ->rawColumns(['action', 'status_label', 'mode_of_defect'])
+        ->rawColumns(['action', 'situation_label', 'status_label', 'mode_of_defect'])
         ->make(true);
     }
 
@@ -406,13 +413,17 @@ class PartsTroubleHistoryController extends Controller
                 //     $query->where('defect_id', $request->defect_id);  // Add your condition for the 'defects' relationship
                 //     $query->whereNull('delete_at');  // You can add more conditions if needed
                 // }])
-                where('situation', $request->situation)
-                ->where('section', $request->section)
+                // where('situation', $request->situation)
+                where('section', $request->section)
                 ->where('model', $request->model)
                 ->whereBetween('date_encountered', [$start, $end])
-                ->whereHas('defects', function ($query) use ($request) {
+                ->whereHas('defects', function ($query) use ($request){
                     $query->where('defect_id', $request->defect_id)
                             ->whereNull('deleted_at');
+                })
+                ->whereHas('situations', function ($query) use ($request){
+                    $query->where('id', $request->situation)
+                            ->where('status', 0);
                 })
                 ->count();
 
@@ -423,17 +434,17 @@ class PartsTroubleHistoryController extends Controller
                     'count'   => $count,
                     'ordinal' => $ordinal
                 ]);
-    }
-
-    private function ordinal($number){
-        if (!in_array($number % 100, [11, 12, 13])) {
-            switch ($number % 10) {
-                case 1: return $number . 'st';
-                case 2: return $number . 'nd';
-                case 3: return $number . 'rd';
-            }
         }
 
-        return $number . 'th';
+        private function ordinal($number){
+            if (!in_array($number % 100, [11, 12, 13])) {
+                switch ($number % 10) {
+                    case 1: return $number . 'st';
+                    case 2: return $number . 'nd';
+                    case 3: return $number . 'rd';
+                }
+            }
+
+            return $number . 'th';
+        }
     }
-}
