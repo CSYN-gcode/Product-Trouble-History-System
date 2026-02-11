@@ -56,8 +56,8 @@ $user_level = 0;
             @include('shared.css_links.css_links')
             <style>
                 .modal-xl-custom {
-                    width: 95% !important;
-                    min-width: 90% !important;
+                    width: 70% !important;
+                    min-width: 70% !important;
                 }
 
             </style>

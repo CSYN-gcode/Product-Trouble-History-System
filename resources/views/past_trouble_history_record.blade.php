@@ -126,7 +126,7 @@
 
     <!-- MODALS -->
     <div class="modal fade" id="modalPartsTroubleHistory" data-bs-backdrop="static">
-        <div class="modal-dialog modal-xl">
+        <div class="modal-dialog modal-xl-custom">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title"><i class="fa fa-plus"></i> Add/Edit Past Trouble History Info</h4>
@@ -225,10 +225,11 @@
                                             <thead>
                                                 <tr>
                                                     <th style="width: 5%;">Action</th>
-                                                    <th style="width: 25%;">Factor</th>
-                                                    <th style="width: 20%;">Cause</th>
+                                                    <th style="width: 10%;">Factor</th>
+                                                    <th style="width: 15%;">Cause</th>
                                                     <th style="width: 20%;">Analysis</th>
                                                     <th style="width: 20%;">Counter Measure</th>
+                                                    <th style="width: 20%;">PIC</th>
                                                     <th style="width: 10%;">Implementation Date</th>
                                                     {{-- <th style="width: 10%;">Remarks</th> --}}
                                                 </tr>
@@ -271,38 +272,52 @@
                         <div class="row" style="display:flex; gap:10px; align-items:end;">
                             <div class="col">
                                 <label>From</label>
-                                <input type="date" name="date_from" class="form-control" required>
+                                <input type="date" name="date_from_export" class="form-control" required>
                             </div>
 
                             <div class="col">
                                 <label>To</label>
-                                <input type="date" name="date_to" class="form-control" required>
+                                <input type="date" name="date_to_export" class="form-control" required>
                             </div>
                         </div>
 
                         <div class="row" style="display:flex; gap:10px; align-items:end; margin-top:15px;">
                             <div class="col">
                                 <label>Situation</label>
-                                <select class="form-control" name="situation" id="situation" required>
+                                <select class="form-control select2bs5" name="situation_export" id="selectSituationToExport" required>
                                     <option value="" selected>Select Situation</option>
-                                    <option value="ALL">ALL</option>
+                                    {{-- <option value="ALL">ALL</option>
                                     <option value="External Claim">External Claim</option>
                                     <option value="Internal Claim">Internal Claim</option>
                                     <option value="Lot Out">Lot Out</option>
                                     <option value="Yield of Targets">Yield of Targets</option>
-                                    <option value="Defect Escalation">Defect Escalation</option>
+                                    <option value="Defect Escalation">Defect Escalation</option> --}}
                                 </select>
                             </div>
 
                             <div class="col">
+                                <label>Mode of Defect</label>
+                                <select class="form-control select2bs5" name="defect_export" id="defectIdToExport" required></select>
+                            </div>
+                        </div>  
+
+                        <div class="row" style="display:flex; gap:10px; align-items:end; margin-top:15px;">
+                            <div class="col">
                                 <label>Section</label>
-                                <select class="form-control" name="section" id="section" required>
+                                <select class="form-control select2bs5" name="section_export" id="selectSectionToExport" required>
                                     <option value="" disabled selected>Select Section</option>
                                     <option value="ALL">ALL</option>
                                     <option value="TS">TS</option>
                                     <option value="CN">CN</option>
                                     <option value="PPD">PPD</option>
                                     <option value="YF">YF</option>
+                                </select>
+                            </div>
+
+                            <div class="col">
+                                <label>Series / Model Name</label>
+                                <select class="form-control select2bs5" name="model_export" id="selectDeviceNameToExport" disabled required>
+                                    <option value="" disabled selected> Select Series Name </option>
                                 </select>
                             </div>
                         </div>

@@ -96,6 +96,9 @@ function resetPartsTroubleHistoryForm(formSelector, tableImprovementActions) {
                 <textarea class="form-control form-control-sm" name="counter_measure[]" required></textarea>
             </td>
             <td>
+                <input type="text" class="form-control form-control-lg select2bs5" name="pic[]" id="selectPic"></input>
+            </td>
+            <td>
                 <input type="date" class="form-control form-control-lg" name="implementation_date[]" required></input>
             </td>
         </tr>
@@ -316,10 +319,23 @@ function bindPartsTroubleHistoryEvents($table, $form, $modal, $addButtonPTH, dtP
         }
     });
 
-    $exportReportButton.on('click', function () {
+    $exportReportButton.on('click', function (){
         const $formExport = $('#exportPTHSReportForm');
         $formExport[0].reset();
+        getSituations($('#selectSituationToExport'), '', 'Export');
+        getDefects($('#defectIdToExport'), '', 'Export');
         $('#modalExportReport').modal('show');
+    });
+
+    $('#selectSectionToExport').on('change', function (){
+        const section = $(this).val();
+        console.log('section to export', $(this).val());
+        if($(this).val() != 'ALL'){
+            getDeviceName($('#selectDeviceNameToExport'), section, '', 'Export');
+            $('#selectDeviceNameToExport').prop('disabled', false);
+        }else{
+            $('#selectDeviceNameToExport').prop('disabled', true);
+        }
     });
 
     $form.on('input', '#situation, #section, #selectDeviceName, #defectId, #dateEncountered', function (){
@@ -379,7 +395,40 @@ function updateRemoveButtons($tableIA) {
 //     }
 // }
 
-function getDefects(cboElement, defectId = null){
+// CLARK ONGOING
+// function getUsers(cboElement, userId = null){
+//     let result = '<option value="" disabled selected> Select Name </option>';
+//     $.ajax({
+//         method: "get",
+//         url: "get_defects",
+//         dataType: "json",
+//         beforeSend: function(){
+//             result = '<option value="" disabled selected>--Loading--</option>';
+//         },
+//         success: function (response) {
+//             if(response.length > 0){
+//                     result = '<option value="" disabled selected> Select Name </option>';
+
+//                 for (let di = 0; di < response.length; di++) {
+//                     result += '<option value="' + response[di]['id'] + '">' + response[di]['defect_name'] + '</option>';
+//                 }
+//             }else{
+//                 result = '<option value="0" selected disabled> -- No record found -- </option>';
+//             }
+//             cboElement.html(result);
+//             if(defectId != null){
+//                 cboElement.val(defectId).trigger('change');
+//             }
+//         },
+//         error: function(data, xhr, status) {
+//             result = '<option value="0" selected disabled> -- Reload Again -- </option>';
+//             cboElement.html(result);
+//             console.log('Data: ' + data + "\n" + "XHR: " + xhr + "\n" + "Status: " + status);
+//         }
+//     });
+// }
+
+function getDefects(cboElement, defectId = null, mode = null){
     let result = '<option value="" disabled selected> Select Defect </option>';
     $.ajax({
         method: "get",
@@ -391,6 +440,11 @@ function getDefects(cboElement, defectId = null){
         success: function (response) {
             if(response.length > 0){
                     result = '<option value="" disabled selected> Select Defect </option>';
+
+                if(mode == 'Export'){
+                    result += '<option value="ALL"> ALL </option>';
+                }
+
                 for (let di = 0; di < response.length; di++) {
                     result += '<option value="' + response[di]['id'] + '">' + response[di]['defect_name'] + '</option>';
                 }
@@ -410,7 +464,7 @@ function getDefects(cboElement, defectId = null){
     });
 }
 
-function getDeviceName(cboElement, section, deviceName = null){
+function getDeviceName(cboElement, section, deviceName = null, mode = null){
     let result = '<option value="" disabled selected> Select Series Name </option>';
     $.ajax({
         method: "get",
@@ -425,6 +479,11 @@ function getDeviceName(cboElement, section, deviceName = null){
             $('#selectDeviceName').prop('disabled', false);
             if(response.length > 0){
                     result = '<option value="" disabled selected> Select Series Name </option>';
+
+                if(mode == 'Export'){
+                    result += '<option value="ALL"> ALL </option>';
+                }
+
                 for (let dni = 0; dni < response.length; dni++) {
                     result += '<option value="' + response[dni]['materials'] + '">' + response[dni]['materials'] + '</option>';
                 }
@@ -445,7 +504,7 @@ function getDeviceName(cboElement, section, deviceName = null){
     });
 }
 
-function getSituations(cboElement, situationId = null){
+function getSituations(cboElement, situationId = null, mode = null){
     let result = '<option value="" disabled selected> Select Situation </option>';
     $.ajax({
         method: "get",
@@ -458,6 +517,11 @@ function getSituations(cboElement, situationId = null){
         success: function (response) {
             if(response.length > 0){
                     result = '<option value="" disabled selected> Select Situation </option>';
+
+                if(mode == 'Export'){
+                    result += '<option value="ALL"> ALL </option>';
+                }
+
                 for (let si = 0; si < response.length; si++){
                     result += '<option value="' + response[si]['id'] + '">' + response[si]['situation_name'] + '</option>';
                 }
@@ -585,6 +649,9 @@ function fetchPartsTroubleHistoryById(id, $modal, $tableIA, $form) {
                         </td>
                         <td>
                             <textarea class="form-control form-control-sm" name="counter_measure[]">${response.improvements[index].counter_measure}</textarea>
+                        </td>
+                        <td>
+                            <textarea class="form-control form-control-sm" name="pic[]">${response.improvements[index].counter_measure}</textarea>
                         </td>
                         <td>
                             <input type="date" class="form-control form-control-lg" name="implementation_date[]" value="${response.improvements[index].implementation_date}">

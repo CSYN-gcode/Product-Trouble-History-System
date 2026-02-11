@@ -20,6 +20,8 @@ class ExportPartsTroubleHistory implements FromCollection, WithHeadings, WithEve
     protected $to;
     protected $situation;
     protected $section;
+    protected $defect;
+    protected $model;
 
     protected $mergeRanges = [];
 
@@ -27,12 +29,14 @@ class ExportPartsTroubleHistory implements FromCollection, WithHeadings, WithEve
 
     protected $recordStartRows;
 
-    public function __construct($from, $to, $situation, $section){
+    public function __construct($from, $to, $situation, $section, $defect, $model){
 
         $this->from = $from;
         $this->to   = $to;
         $this->situation = $situation;
         $this->section = $section;
+        $this->defect = $defect;
+        $this->model = $model;
 
         // 🔒 LOAD ONCE
         $this->records = PartTroubleHistory::with(['defects.defect_item', 'improvements'])
@@ -46,8 +50,14 @@ class ExportPartsTroubleHistory implements FromCollection, WithHeadings, WithEve
             ->when($this->section !== 'ALL', function ($query) {
                 $query->where('section', $this->section);
             })
-            // ->where('situation', $this->situation)
-            // ->where('section', $this->section)
+            ->when($this->defect !== 'ALL', function ($query) {
+                $query->whereHas('defects', function ($q) {
+                    $q->where('defect_id', $this->defect);
+                });
+            })
+            ->when($this->model !== 'ALL', function ($query) {
+                $query->where('model', $this->model);
+            })
             ->orderBy('date_encountered', 'ASC')
             ->get();
     }
@@ -66,12 +76,17 @@ class ExportPartsTroubleHistory implements FromCollection, WithHeadings, WithEve
                 ->when($this->section !== 'ALL', function ($query) {
                     $query->where('section', $this->section);
                 })
-                // ->where('situation', $this->situation)
-                // ->where('section', $this->section)
+                ->when($this->defect !== 'ALL', function ($query) {
+                    $query->whereHas('defects', function ($q) {
+                        $q->where('defect_id', $this->defect);
+                    });
+                })
+                ->when($this->model !== 'ALL', function ($query) {
+                    $query->where('model', $this->model);
+                })
                 ->orderBy('date_encountered', 'ASC')
                 ->get();
         }
-
         return $this->records;
     }
 

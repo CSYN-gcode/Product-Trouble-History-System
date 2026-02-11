@@ -264,25 +264,30 @@ class PartsTroubleHistoryController extends Controller
     }
 
     public function exportExcel(Request $request){
-
         $request->validate([
-            'date_from' => 'required|date',
-            'date_to'   => 'required|date|after_or_equal:date_from',
-            'situation'   => 'required',
-            'section'   => 'required',
+            'date_from_export' => 'required|date',
+            'date_to_export'   => 'required|date|after_or_equal:date_from',
+            'situation_export'   => 'required',
+            'section_export'   => 'required',
+            'defect_export'   => 'required',
+            'model_export'   => 'required',
         ]);
 
-        $from = $request->date_from;
-        $to   = $request->date_to;
-        $situation   = $request->situation;
-        $section   = $request->section;
+        $from = $request->date_from_export;
+        $to   = $request->date_to_export;
+        $situation   = $request->situation_export;
+        $section   = $request->section_export;
+        $defect   = $request->defect_export;
+        $model   = $request->model_export;
 
         $param1 = $situation === 'ALL' ? 'All Situation' : $situation;
         $param2 = $section === 'ALL' ? 'All Section' : $section;
+        $param3 = $defect === 'ALL' ? 'All Defect' : $defect;
+        $param4 = $model === 'ALL' ? 'All Model' : $model;
 
-        $filename = "PTHS_Report_{$param1}_{$param2}_{$from}_to_{$to}.xlsx";
+        $filename = "PTHS_Report_{$param1}_{$param2}_{$param3}_{$param4}_{$from}_to_{$to}.xlsx";
 
-        return Excel::download( new ExportPartsTroubleHistory($from, $to, $situation, $section), $filename );
+        return Excel::download( new ExportPartsTroubleHistory($from, $to, $situation, $section, $defect, $model), $filename );
     }
 
     private function getMaterialsFrom($connection){
