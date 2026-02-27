@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use DataTables;
+use App\Models\User;
 use App\Models\PthsDefects;
 use App\Models\PthsImprovements;
 use App\Models\PartTroubleHistory;
@@ -20,36 +21,88 @@ use Illuminate\Support\Facades\Cache;
 
 class PartsTroubleHistoryController extends Controller
 {
+    // public function index($position){
+    //     return view('past_trouble_history_record', compact('position'));
+    // }
+
+    private function actionButton($class, $icon, $id, $extraClass = ''){
+        return "<button class='btn {$class} btn-sm {$extraClass}' data-id='{$id}'>
+                    <i class='fa-solid {$icon}'></i>
+                </button>";
+    }
+
     public function viewPartsTroubleHistoryInfo(Request $request){
-        $parts_trouble_history_details = PartTroubleHistory::with(['defects.defect_item', 'situations', 'improvements'])->get();
+        $globalUser = session('global_user');
+        // $position = optional($globalUser)->position;
+        // return $position;
+        $pth_details = PartTroubleHistory::with(['defects.defect_item', 'situations', 'improvements'])->orderBy('id', 'DESC')->get();
 
-        // return $parts_trouble_history_details;
-        return DataTables::of($parts_trouble_history_details)
-        ->addColumn('action', function($parts_trouble_history_details){
-            $result = "";
-            $result .= "<center>";
-            $result .= "<button class='btn btn-secondary btn-sm btnEdit mr-1' data-id='$parts_trouble_history_details->id'><i class='fa-solid fa-pen-to-square'></i></button>";
-            if($parts_trouble_history_details->status == 0){
-                $result .= "<button class='btn btn-danger btn-sm btnDisable' data-id='$parts_trouble_history_details->id'><i class='fa-solid fa-ban'></i></button>";
-            }
-            else{
-                $result .= "<button class='btn btn-success btn-sm btnEnable' data-id='$parts_trouble_history_details->id'><i class='fa-solid fa-rotate-left'></i></button>";
-            }
-            $result .= "</center>";
-            return $result;
-        })
-        ->addColumn('situation_label', function($parts_trouble_history_details){
-            $result = "";
-            $result .= "<center>";
-            $result .= $parts_trouble_history_details->situation ? $parts_trouble_history_details->situations->situation_name : 'N/A';
-            $result .= "</center>";
-            return $result;
-        })
-        ->addColumn('status_label', function($parts_trouble_history_details){
+        return DataTables::of($pth_details)
+        ->addColumn('action', function($pth_details) use ($globalUser){
             $result = "";
             $result .= "<center>";
 
-            if($parts_trouble_history_details->status == 0){
+            $canManage  = $globalUser && in_array($globalUser->position, [0,1,2,3]);
+            $isActive   = $pth_details->status == 0;
+            $isDisabled = $pth_details->status == 1;
+
+            $id = $pth_details->id;
+
+            if ($isActive) {
+
+                if ($canManage) {
+                    $result .= $this->actionButton('btn-secondary btnEdit', 'fa-pen-to-square', $id, 'mr-1');
+                    $result .= $this->actionButton('btn-danger btnDisable', 'fa-ban', $id);
+                } else {
+                    $result .= $this->actionButton('btn-info btnView', 'fa-eye', $id, 'mr-1');
+                }
+            }
+
+            if ($isDisabled) {
+
+                $result .= $this->actionButton('btn-info btnView', 'fa-eye', $id, 'mr-1');
+
+                if ($canManage) {
+                    $result .= $this->actionButton('btn-success btnEnable', 'fa-rotate-left', $id);
+                }
+            }
+
+            // if($globalUser && in_array($globalUser->position, [0,1,2,3]) && $pth_details->status == 0){
+            //     $result .= "<button class='btn btn-secondary btn-sm btnEdit mr-1' data-id='$pth_details->id'><i class='fa-solid fa-pen-to-square'></i></button>";
+            //     // if($pth_details->status == 0){
+            //         $result .= "<button class='btn btn-danger btn-sm btnDisable' data-id='$pth_details->id'><i class='fa-solid fa-ban'></i></button>";
+            //     // }else{
+            //     //     $result .= "<button class='btn btn-success btn-sm btnEnable' data-id='$pth_details->id'><i class='fa-solid fa-rotate-left'></i></button>";
+            //     // }
+            // }else{
+            //     $result .= "<button class='btn btn-info btn-sm btnView mr-1' data-id='$pth_details->id'><i class='fa-solid fa-eye'></i></button>";
+
+            //     if($pth_details->status == 1){
+            //         $result .= "<button class='btn btn-success btn-sm btnEnable' data-id='$pth_details->id'><i class='fa-solid fa-rotate-left'></i></button>";
+            //     }
+            // }
+
+            // $result .= "<button class='btn btn-secondary btn-sm btnEdit mr-1' data-id='$pth_details->id'><i class='fa-solid fa-pen-to-square'></i></button>";
+            // if($pth_details->status == 0){
+            //     $result .= "<button class='btn btn-danger btn-sm btnDisable' data-id='$pth_details->id'><i class='fa-solid fa-ban'></i></button>";
+            // }else{
+            //     $result .= "<button class='btn btn-success btn-sm btnEnable' data-id='$pth_details->id'><i class='fa-solid fa-rotate-left'></i></button>";
+            // }
+            $result .= "</center>";
+            return $result;
+        })
+        ->addColumn('situation_label', function($pth_details){
+            $result = "";
+            $result .= "<center>";
+            $result .= $pth_details->situation ? $pth_details->situations->situation_name : 'N/A';
+            $result .= "</center>";
+            return $result;
+        })
+        ->addColumn('status_label', function($pth_details){
+            $result = "";
+            $result .= "<center>";
+
+            if($pth_details->status == 0){
                 $result .= "<span class='badge rounded-pill bg-success'>Active</span>";
             }else{
                 $result .= "<span class='badge rounded-pill bg-danger'>Inactive</span>";
@@ -58,10 +111,10 @@ class PartsTroubleHistoryController extends Controller
 
             return $result;
         })
-        ->addColumn('mode_of_defect', function($parts_trouble_history_details){
+        ->addColumn('mode_of_defect', function($pth_details){
             $result = "";
             $result .= "<center>";
-            $result .= $parts_trouble_history_details->defects->defect_item ? $parts_trouble_history_details->defects->defect_item->defect_name : 'N/A';
+                $result .= $pth_details->defects->defect_item ? $pth_details->defects->defect_item->defect_name : 'N/A';
             $result .= "</center>";
 
             return $result;
@@ -95,24 +148,9 @@ class PartsTroubleHistoryController extends Controller
         if ($validator->fails()) {
             return response()->json(['result' => '0', 'error' => $validator->messages()]);
         }else{
-            // return 'true';
             DB::beginTransaction();
 
             try{
-                // if ($request->hasFile('illustration_of_defect')) {
-
-                //     // delete old file if replace
-                //     if ($request->illustration_of_defect && Storage::exists('public/parts_trouble_history/' . $request->illustration_of_defect)) {
-                //         Storage::delete('public/parts_trouble_history/' . $request->illustration_of_defect);
-                //     }
-
-                //     $file = $request->file('illustration_of_defect');
-                //     $filename = time() . '_' . $file->getClientOriginalName();
-                //     $file->storeAs('public/parts_trouble_history', $filename);
-
-                //     $request->attachment = $filename; // save only varchar
-                // }
-
                 $history_data_array = array(
                     'date_encountered' => $request->date_encountered,
                     'situation' => $request->situation,
@@ -132,7 +170,6 @@ class PartsTroubleHistoryController extends Controller
                 // DELETE OLD PthsDefects ON UPDATE
                 PthsDefects::where('history_id', $request->history_id)->delete();
 
-                // SAVE NEW PthsDefects
                 if ($request->defect_id){
 
                     if($request->hasFile('illustration_of_defect')){
@@ -167,11 +204,6 @@ class PartsTroubleHistoryController extends Controller
                         'root_cause'                => $request->root_cause,
                     ];
 
-                    // only add illustration if it exists
-                    // if (!empty($cleanedFilename)) {
-                    //     $pths_defects_data['illustration_of_defect'] = $cleanedFilename;
-                    // }
-
                     PthsDefects::insert($pths_defects_data);
                 }
 
@@ -187,6 +219,7 @@ class PartsTroubleHistoryController extends Controller
                             'cause'               => $request->cause[$i],
                             'analysis'            => $request->analysis[$i],
                             'counter_measure'     => $request->counter_measure[$i],
+                            'pic'                 => $request->pic[$i],
                             'implementation_date' => $request->implementation_date[$i]
                             // 'improvement_actions'  => $request->improvement_action[$i],
                             // 'remarks'              => $request->improvement_action_remarks[$i]
@@ -300,8 +333,12 @@ class PartsTroubleHistoryController extends Controller
             ->pluck('device_name');
     }
 
-    public function getDeviceName(Request $request){
+    public function getUsers(Request $request){
+        $users = User::where('status', 0)->get();
+        return response()->json(['users_data' => $users]);
+    }
 
+    public function getDeviceName(Request $request){
         $self = $this;
 
         $section = $request->input('section'); // ts, cn, yf, ppd

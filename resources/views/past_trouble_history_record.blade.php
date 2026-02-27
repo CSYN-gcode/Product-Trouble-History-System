@@ -51,16 +51,19 @@
 
                             <!-- Start Page Content -->
                             <div class="card-body">
-                                 <div class="float-sm-right ml-2">
+                                <div class="float-sm-right ml-2">
                                     <button class="btn btn-success" id="btnShowExportReportModal">
                                         <i class="fa fa-initial-icon"></i> Export Report
                                     </button>
                                 </div>
-                                <div class="float-sm-right">
-                                    <button class="btn btn-dark" id="btnShowAddPartsTroubleHistory">
-                                        <i class="fa fa-initial-icon"></i> Add Past Trouble History
-                                    </button>
-                                </div>
+                                
+                                @if ( $globalUser && in_array( $globalUser->position, [0,2,3]))
+                                    <div class="float-sm-right">
+                                        <button class="btn btn-dark" id="btnShowAddPartsTroubleHistory">
+                                            <i class="fa fa-initial-icon"></i> Add Past Trouble History
+                                        </button>
+                                    </div>
+                                @endif
 
                                 <div class="float-sm-left col-2">
                                     {{-- <form id="frmSearchYear" class="form-inline"> --}}
@@ -147,14 +150,6 @@
                                          {{-- AUTO GENERATE --}}
                                         <option value="" disabled selected> Select Situation </option>
                                     </select>
-                                    {{-- <select class="form-control" name="situation" id="situation" required> --}}
-                                        {{-- <option value="" selected>Select Situation</option>
-                                        <option value="External Claim">External Claim</option>
-                                        <option value="Internal Claim">Internal Claim</option>
-                                        <option value="Lot Out">Lot Out</option>
-                                        <option value="Yield-off Targets">Yield-off Targets</option>
-                                        <option value="Defect Escalation">Defect Escalation</option> --}}
-                                    {{-- </select> --}}
                                 </div>
 
                                 <div class="form-group">
@@ -299,7 +294,7 @@
                                 <label>Mode of Defect</label>
                                 <select class="form-control select2bs5" name="defect_export" id="defectIdToExport" required></select>
                             </div>
-                        </div>  
+                        </div>
 
                         <div class="row" style="display:flex; gap:10px; align-items:end; margin-top:15px;">
                             <div class="col">

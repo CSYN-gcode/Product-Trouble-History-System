@@ -1,5 +1,5 @@
 @php
-session_start();
+// session_start();
 $isLogin = false;
 if (isset($_SESSION['rapidx_user_id'])) {
     $isLogin = true;
@@ -25,6 +25,10 @@ $user_level = 0;
                     @php
                         $isAuthorized = true;
                         $user_level = $_SESSION['rapidx_user_accesses'][$index]['user_level_id']; // Collect the user_level_id
+
+                        // Check if the main system sent a user ID
+                        // $currentUser = \App\Models\User::where('rapidx_user_id', $_SESSION['rapidx_user_id'] ?? null)->first();
+                        
                     @endphp
                     @break
                 @endif

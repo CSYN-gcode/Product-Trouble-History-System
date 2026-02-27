@@ -1,16 +1,3 @@
-/**
- * ==========================================
- * TEMPLATE PartsTroubleHistory SCRIPT
- * ------------------------------------------
- * Rename "PartsTroubleHistory" and related variables
- * to match your actual feature.
- *
- * Example:
- *   - Replace "PartsTroubleHistory" with "Defects"
- *   - Replace URLs accordingly
- * ==========================================
- */
-
 $(document).ready(function () {
     // --------------------------------------
     // Cache DOM elements
@@ -37,6 +24,7 @@ $(document).ready(function () {
         $(this).find('.select2bs5').each(function() {
             $(this).select2({
                 theme: 'bootstrap-5',
+                width: '100%',
                 dropdownParent: $(this).closest('.modal') // Ensures correct parent modal
             });
         });
@@ -96,7 +84,7 @@ function resetPartsTroubleHistoryForm(formSelector, tableImprovementActions) {
                 <textarea class="form-control form-control-sm" name="counter_measure[]" required></textarea>
             </td>
             <td>
-                <input type="text" class="form-control form-control-lg select2bs5" name="pic[]" id="selectPic"></input>
+                <select class="form-control form-control-lg select2bs5 selectPic" name="pic[]" required></select>
             </td>
             <td>
                 <input type="date" class="form-control form-control-lg" name="implementation_date[]" required></input>
@@ -147,43 +135,6 @@ function initPartsTroubleHistoryTable($table, url = 'view_parts_trouble_history'
             { data: 'date_encountered' },    // customize this per parts_trouble_history
             { data: 'situation_label' },    // customize this per parts_trouble_history
             { data: 'section' },    // customize this per parts_trouble_history
-            // {
-            //     data: 'situation',
-            //     render: function(data) {
-            //         if(data == 1) {
-            //             return 'External Claim'
-            //         }else if(data == 2) {
-            //             return 'Internal Claim'
-            //         }else if(data == 3) {
-            //             return 'Lot Out'
-            //         }else if(data == 4) {
-            //             return 'Yield of Targets'
-            //         }else if(data == 5) {
-            //             return 'Defect Escalation'
-            //         }else{
-            //             return 'N/A'
-            //         }
-            //     }
-            // },
-            // {
-            //     data: 'section',
-            //     render: function(data) {
-            //         if(data == 1) {
-            //             return 'TS'
-            //         }
-            //         else if(data == 2) {
-            //             return 'CN'
-            //         }
-            //         else if(data == 3) {
-            //             return 'YF'
-            //         }
-            //         else if(data == 4) {
-            //             return 'PPD'
-            //         }else{
-            //             return 'N/A'
-            //         }
-            //     }
-            // },
             { data: 'model' },    // customize this per parts_trouble_history
             { data: 'defects.defect_item.defect_name' },    // customize this per parts_trouble_history
             {
@@ -227,6 +178,8 @@ function bindPartsTroubleHistoryEvents($table, $form, $modal, $addButtonPTH, dtP
         resetPartsTroubleHistoryForm($form, $tableIA);
         getDefects($('#defectId'));
         getSituations($('#selectSituation'));
+        // getPic($('#tblImprovementActions #selectPic'));
+        getPic($('#tblImprovementActions tr:last').find('.selectPic'));
         $('#modalPartsTroubleHistory').modal('show');
     });
 
@@ -239,7 +192,20 @@ function bindPartsTroubleHistoryEvents($table, $form, $modal, $addButtonPTH, dtP
     // Edit button
     $table.on('click', '.btnEdit', function () {
         const id = $(this).data('id');
-        fetchPartsTroubleHistoryById(id, $modal, $tableIA, $form);
+        fetchPartsTroubleHistoryById(id, $modal, $tableIA, $form, 'edit');
+    });
+
+    // View button
+    $table.on('click', '.btnView', function () {
+        const id = $(this).data('id');
+        fetchPartsTroubleHistoryById(id, $modal, $tableIA, $form, 'view');
+        // if($mode == 'view'){
+        // $('#mySelect').prop('disabled', true).trigger('change.select2');
+        // setTimeout(function() {
+        //     $form.find('input, textarea, select').prop('disabled', true);
+        //     $form.find('#btnReuploadTrigger').prop('disabled', true);
+        //     $form.find('#btnReuploadTrigger').prop('checked', false);
+        // }, 3000);
     });
 
     // Disable button
@@ -280,16 +246,40 @@ function bindPartsTroubleHistoryEvents($table, $form, $modal, $addButtonPTH, dtP
 
     $addButtonIA.on('click', function () {
         const $templateRow = $tableIA.find('.data-row').first();
-        let newRow = $templateRow.clone();
 
-        // Remove the template class so it can be deleted
-        // newRow.removeClass('data-row');
+        // Clone WITHOUT events & select2 bindings
+        let newRow = $templateRow.clone(false, false);
+
+        // Clear inputs
         newRow.find('input, textarea').val('');
         newRow.find('.removeIA').prop('disabled', false);
+
+        // 🔥 Remove select2 generated container inside cloned row
+        newRow.find('.select2-container').remove();
+
+        let $newSelect = newRow.find('.selectPic');
+
+        // 🔥 Clean select2 plugin traces from cloned select
+        $newSelect
+            .removeClass('select2-hidden-accessible')
+            .removeAttr('data-select2-id')
+            .removeAttr('tabindex')
+            .removeAttr('aria-hidden')
+            .empty()        // ← THIS clears options
+            .val(null);
+
+        // Append new row first
         $tableIA.find('tbody').append(newRow);
+
+        // 🔥 Reinitialize select2 ONLY for the new row
+        $newSelect.select2({
+            theme: 'bootstrap-5',
+            width: '100%'
+        });
 
         // Update button states
         updateRemoveButtons($tableIA);
+        getPic($newSelect);
     });
 
     // --------------------
@@ -379,55 +369,6 @@ function updateRemoveButtons($tableIA) {
     }
 }
 
-// function updateRemoveButtons($tableIA) {
-//     let rowCount = $tableIA.find('tbody tr').length;
-
-//     if (rowCount <= 1) {
-//         // Only one row left → disable remove button
-//         $tableIA.find('.removeIA')
-//             .prop('disabled', true)
-//             .addClass('disabled');
-//     } else {
-//         // More than one row → enable remove buttons
-//         $tableIA.find('.removeIA')
-//             .prop('disabled', false)
-//             .removeClass('disabled');
-//     }
-// }
-
-// CLARK ONGOING
-// function getUsers(cboElement, userId = null){
-//     let result = '<option value="" disabled selected> Select Name </option>';
-//     $.ajax({
-//         method: "get",
-//         url: "get_defects",
-//         dataType: "json",
-//         beforeSend: function(){
-//             result = '<option value="" disabled selected>--Loading--</option>';
-//         },
-//         success: function (response) {
-//             if(response.length > 0){
-//                     result = '<option value="" disabled selected> Select Name </option>';
-
-//                 for (let di = 0; di < response.length; di++) {
-//                     result += '<option value="' + response[di]['id'] + '">' + response[di]['defect_name'] + '</option>';
-//                 }
-//             }else{
-//                 result = '<option value="0" selected disabled> -- No record found -- </option>';
-//             }
-//             cboElement.html(result);
-//             if(defectId != null){
-//                 cboElement.val(defectId).trigger('change');
-//             }
-//         },
-//         error: function(data, xhr, status) {
-//             result = '<option value="0" selected disabled> -- Reload Again -- </option>';
-//             cboElement.html(result);
-//             console.log('Data: ' + data + "\n" + "XHR: " + xhr + "\n" + "Status: " + status);
-//         }
-//     });
-// }
-
 function getDefects(cboElement, defectId = null, mode = null){
     let result = '<option value="" disabled selected> Select Defect </option>';
     $.ajax({
@@ -454,6 +395,10 @@ function getDefects(cboElement, defectId = null, mode = null){
             cboElement.html(result);
             if(defectId != null){
                 cboElement.val(defectId).trigger('change');
+            }
+            
+            if(mode == 'view'){
+                cboElement.prop('disabled', true).trigger('change.select2');
             }
         },
         error: function(data, xhr, status) {
@@ -495,6 +440,10 @@ function getDeviceName(cboElement, section, deviceName = null, mode = null){
             if(deviceName != null){
                 cboElement.val(deviceName).trigger('change');
             }
+
+            if(mode == 'view'){
+                cboElement.prop('disabled', true).trigger('change.select2');
+            }
         },
         error: function(data, xhr, status) {
             result = '<option value="0" selected disabled> -- Reload Again -- </option>';
@@ -532,8 +481,53 @@ function getSituations(cboElement, situationId = null, mode = null){
             if(situationId != null){
                 cboElement.val(situationId).trigger('change');
             }
+
+            if(mode === 'view'){
+                cboElement.prop('disabled', true).trigger('change.select2');
+            }
         },
         error: function(data, xhr, status) {
+            result = '<option value="0" selected disabled> -- Reload Again -- </option>';
+            cboElement.html(result);
+            console.log('Data: ' + data + "\n" + "XHR: " + xhr + "\n" + "Status: " + status);
+        }
+    });
+}
+
+function getPic(cboElement, picId = null, $mode = null){
+    let result = '<option value="" disabled selected> Select Person-In Charge </option>';
+    $.ajax({
+        method: "get",
+        url: "get_users",
+        dataType: "json",
+        beforeSend: function(){
+            result = '<option value="" disabled selected>--Loading--</option>';
+        },
+        success: function (response) {
+            let users = response.users_data;
+            if(users.length > 0){
+                    result = '<option value="" disabled selected> Select Person-In Charge </option>';
+
+                for (let ui = 0; ui < users.length; ui++) {
+                    let id = users[ui]['id'];
+                    let name = users[ui]['name'];
+
+                    result += '<option value="'+id+'">' + name + '</option>';
+                }
+            }else{
+                result = '<option value="0" selected disabled> -- No record found -- </option>';
+            }
+            cboElement.html(result);
+
+            if (picId != null) {
+                cboElement.val(picId).trigger('change');
+            }
+
+            if($mode === 'view'){
+                cboElement.prop('disabled', true).trigger('change.select2');
+            }
+        },
+        error: function(data, xhr, status){
             result = '<option value="0" selected disabled> -- Reload Again -- </option>';
             cboElement.html(result);
             console.log('Data: ' + data + "\n" + "XHR: " + xhr + "\n" + "Status: " + status);
@@ -576,13 +570,17 @@ function savePartsTroubleHistory($form, $modal, dtPartsTroubleHistory) {
 /**
  * Fetch parts_trouble_history data by ID
  */
-function fetchPartsTroubleHistoryById(id, $modal, $tableIA, $form) {
+function fetchPartsTroubleHistoryById(id, $modal, $tableIA, $form, $mode) {
     $.ajax({
         type: 'GET',
         url: 'get_parts_trouble_history_by_id',
         data: { id },
         dataType: 'json',
-        success: function (response) {
+        success: function (response){
+            if($mode == 'view'){
+                disableForm($form);
+            }
+
             // Show Reupload Div & Exisiting Filename
             $form.find("#btnReuploadTriggerDiv").removeClass('d-none');
             $form.find("#btnReuploadTrigger").removeClass('d-none');
@@ -614,47 +612,39 @@ function fetchPartsTroubleHistoryById(id, $modal, $tableIA, $form) {
             // Show Download Button
             $form.find("#downloadFile").removeClass('d-none');
 
-            // CLARK DEVICE NAME
-            // $form.find('#selectDeviceName').val(response.model);
-            getDeviceName($('#selectDeviceName'), response.section, response.model);
-            getDefects($('#defectId'), response.defects.defect_id);
-            getSituations($('#selectSituation'), response.situation);
+            getDeviceName($('#selectDeviceName'), response.section, response.model, $mode);
+            getDefects($('#defectId'), response.defects.defect_id, $mode);
+            getSituations($('#selectSituation'), response.situation, $mode);
 
             $form.find('#noOfOccurrence').val(response.defects.no_of_occurrence);
             $form.find('#rootCause').val(response.defects.root_cause);
             // $('#improvementActionsRemarks').val(response.improvements.improvement_actions_remarks);
 
-            let order = '';
             $tableIA.find('tbody').empty();
             for(let index = 0; index < response.improvements.length; index++){
-                if(index > 0){
-                    // first row
-                    order = '-' + index;
-                }
-                // <tr class="data-row${order}">
-
+            
                 let rowImprovements = `
                     <tr class="data-row">
                         <td id="removeIA">
-                            <center><button class="btn btn-md btn-danger removeIA" title="Remove Row" type="button"><i class="fa fa-times"></i></button></center>
+                            <center><button ${$mode === 'view' ? 'disabled' : ''} class="btn btn-md btn-danger removeIA" title="Remove Row" type="button"><i class="fa fa-times"></i></button></center>
                         </td>
                         <td>
-                            <textarea class="form-control form-control-sm" name="factor[]">${response.improvements[index].factor}</textarea>
+                            <textarea ${$mode === 'view' ? 'disabled' : ''} class="form-control form-control-sm" name="factor[]">${response.improvements[index].factor}</textarea>
                         </td>
                         <td>
-                            <textarea class="form-control form-control-sm" name="cause[]">${response.improvements[index].cause}</textarea>
+                            <textarea ${$mode === 'view' ? 'disabled' : ''} class="form-control form-control-sm" name="cause[]">${response.improvements[index].cause}</textarea>
                         </td>
                         <td>
-                            <textarea class="form-control form-control-sm" name="analysis[]">${response.improvements[index].analysis}</textarea>
+                            <textarea ${$mode === 'view' ? 'disabled' : ''} class="form-control form-control-sm" name="analysis[]">${response.improvements[index].analysis}</textarea>
                         </td>
                         <td>
-                            <textarea class="form-control form-control-sm" name="counter_measure[]">${response.improvements[index].counter_measure}</textarea>
+                            <textarea ${$mode === 'view' ? 'disabled' : ''} class="form-control form-control-sm" name="counter_measure[]">${response.improvements[index].counter_measure}</textarea>
                         </td>
                         <td>
-                            <textarea class="form-control form-control-sm" name="pic[]">${response.improvements[index].counter_measure}</textarea>
+                            <select ${$mode === 'view' ? 'disabled' : ''} class="form-control form-control-lg select2bs5 selectPic" name="pic[]"></select>
                         </td>
                         <td>
-                            <input type="date" class="form-control form-control-lg" name="implementation_date[]" value="${response.improvements[index].implementation_date}">
+                            <input ${$mode === 'view' ? 'disabled' : ''} type="date" class="form-control form-control-lg" name="implementation_date[]" value="${response.improvements[index].implementation_date}">
                         </td>
                     </tr>
                 `;
@@ -668,6 +658,7 @@ function fetchPartsTroubleHistoryById(id, $modal, $tableIA, $form) {
                 // </td>
 
                 $tableIA.find('tbody').append(rowImprovements);
+                getPic($('#tblImprovementActions tr:last').find('.selectPic'), response.improvements[index].pic, $mode);
             }
 
             $modal.modal('show');
@@ -677,6 +668,16 @@ function fetchPartsTroubleHistoryById(id, $modal, $tableIA, $form) {
             showError('Failed to fetch data.');
         }
     });
+}
+
+function disableForm($form){
+    $form.find('#btnAddImprovementAction').prop('disabled', true);
+    $form.find('#btnAddImprovementAction').prop('hidden', true);
+    $form.find('#btnSubmitPartsTroubleHistory').prop('disabled', true);
+    $form.find('#btnSubmitPartsTroubleHistory').prop('hidden', true);
+    $form.find('input, textarea, select').prop('disabled', true);
+    $form.find('#btnReuploadTrigger').prop('disabled', true);
+    $form.find('#btnReuploadTrigger').prop('checked', false);
 }
 
 /**
