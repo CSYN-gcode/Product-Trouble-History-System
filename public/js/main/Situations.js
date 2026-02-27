@@ -45,6 +45,7 @@ $(document).ready(function () {
  */
 function resetSituationForm(formSelector) {
     const $form = $(formSelector);
+    console.log('resetting form', $form);
     $form[0].reset();
     $form.find('input[type="hidden"]').val('');
 }
@@ -71,7 +72,7 @@ function initSituationsTable($table, url = 'view_situations') {
  */
 function bindSituationsEvents($table, $form, $modal, dtSituations){
 
-    $('#btnShowAddSituation').on('click', function () {
+    $('#btnShowAddSituationModal').on('click', function () {
         resetSituationForm($form);
         $('#modalAddSituations').modal('show');
     });

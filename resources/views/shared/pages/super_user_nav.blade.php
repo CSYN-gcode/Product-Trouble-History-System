@@ -33,11 +33,12 @@
                 <li class="nav-item has-treeview">
                     <a href="{{ route('defects') }}" class="nav-link">
                       {{-- <i class="far fa-circle nav-icon"></i> --}}
-                      {{-- <i class="fas fa-times-circle nav-icon"></i> --}}
                       <i class="fas fa-exclamation-triangle nav-icon"></i>
                       <p>Defects</p>
                     </a>
                 </li>
+
+                <li class="nav-header font-weight-bold">List of Situations</li>
 
                 <li class="nav-item has-treeview">
                     <a href="{{ route('situations') }}" class="nav-link">

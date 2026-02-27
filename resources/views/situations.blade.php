@@ -52,8 +52,8 @@
                             <!-- Start Page Content -->
                             <div class="card-body">
                                 <div style="float: right;">
-                                    <button class="btn btn-dark" id="btnShowAddSituation">
-                                        <i class="fa fa-initial-icon"></i> Add Situation
+                                    <button class="btn btn-dark" id="btnShowAddSituationModal">
+                                        <i class="fa fa-plus"></i> Add Situation
                                     </button>
                                 </div> <br><br>
                                 <div class="table-responsive">
@@ -87,7 +87,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title"><i class="fa fa-plus"></i> Add/Edit Situations Info</h4>
+                    <h4 class="modal-title"><i class="fa fa-plus"></i> Add/Edit Situation Info</h4>
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -100,8 +100,8 @@
                                 <input type="hidden" id="txtSituationId" name="id">
 
                                 <div class="form-group">
-                                    <label>Situations Name</label>
-                                    <input type="text" class="form-control" name="situation" id="txtSituationName">
+                                    <label>Situation Name</label>
+                                    <input type="text" class="form-control" name="situations" id="txtSituationName">
                                 </div>
                             </div>
                         </div>

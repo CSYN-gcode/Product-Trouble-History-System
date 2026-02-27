@@ -396,6 +396,7 @@ class PartsTroubleHistoryController extends Controller
     }
 
     public function getCountOfNoOfOccurrence(Request $request){
+
         [$year, $month] = explode('-', $request->date_encountered);
 
         if ($month >= 4) {
@@ -425,6 +426,8 @@ class PartsTroubleHistoryController extends Controller
                     $query->where('id', $request->situation)
                             ->where('status', 0);
                 })
+                ->where('status', 0)
+                ->whereNull('deleted_at')
                 ->count();
 
                 // +1 because current occurrence is not yet included

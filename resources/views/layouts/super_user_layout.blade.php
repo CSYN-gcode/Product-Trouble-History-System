@@ -21,7 +21,7 @@ $user_level = 0;
                     you are free to change below module_id equals to your module_id
                 -->
                 @if ($_SESSION['rapidx_user_accesses'][$index]['module_id'] == 51)
-                    <!-- 51 PTHS -->
+                    <!-- 51- PTHS -->
                     @php
                         $isAuthorized = true;
                         $user_level = $_SESSION['rapidx_user_accesses'][$index]['user_level_id']; // Collect the user_level_id

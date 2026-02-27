@@ -52,8 +52,8 @@
                             <!-- Start Page Content -->
                             <div class="card-body">
                                 <div style="float: right;">
-                                    <button class="btn btn-dark" id="btnShowAddDefect">
-                                        <i class="fa fa-initial-icon"></i> Add Defect
+                                    <button class="btn btn-dark" id="btnShowAddDefectModal">
+                                        <i class="fa fa-plus"></i> Add Defect
                                     </button>
                                 </div> <br><br>
                                 <div class="table-responsive">

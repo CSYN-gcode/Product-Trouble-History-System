@@ -10,9 +10,10 @@ use Illuminate\Support\Facades\Validator;
 
 class SituationsController extends Controller
 {
-   public function viewSituationsInfo(Request $request){
+    public function viewSituationsInfo(Request $request){
         $situation_details = Situations::get();
 
+        // return $situation_details;
         return DataTables::of($situation_details)
         ->addColumn('action', function($situation_details){
             $result = "";
@@ -46,7 +47,7 @@ class SituationsController extends Controller
 
     public function addSituationsInfo(Request $request){
         $validation = array(
-            'situation' => ['required', 'string', 'max:255']
+            'situations' => ['required', 'string', 'max:255']
         );
 
         $data = $request->all();
@@ -58,7 +59,7 @@ class SituationsController extends Controller
 
             try{
                 $process_array = array(
-                    'situation_name' => $request->situation
+                    'situation_name' => $request->situations
                 );
 
                 if(isset($request->id)){ // EDIT
@@ -99,13 +100,13 @@ class SituationsController extends Controller
             return response()->json([
                 'success' => true,
                 'new_status' => $situation->status,
-                'message' => 'Situations status updated successfully.'
+                'message' => 'Situation status updated successfully.'
             ]);
         } catch (\Throwable $e) { // ✅ catch everything including DB errors
             DB::rollBack(); // ✅ rollback only if it fails
 
             // log the error so you can see what’s happening
-            \Log::error('Situations status update failed', [
+            \Log::error('Situation status update failed', [
                 'error' => $e->getMessage(),
                 'line' => $e->getLine(),
                 'file' => $e->getFile(),

@@ -71,7 +71,7 @@ function initDefectsTable($table, url = 'view_defects') {
  */
 function bindDefectsEvents($table, $form, $modal, dtDefects){
 
-    $('#btnShowAddDefect').on('click', function () {
+    $('#btnShowAddDefectModal').on('click', function () {
         resetDefectForm($form);
         $('#modalAddDefects').modal('show');
     });
