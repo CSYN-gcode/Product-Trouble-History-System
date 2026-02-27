@@ -28,7 +28,7 @@
                     </a>
                 </li> --}}
 
-                <li class="nav-item has-treeview"> <!-- DMR & PQC - TS  -->
+                <li class="nav-item has-treeview">
                     <a href="{{ route('defects') }}" class="nav-link">
                       {{-- <i class="far fa-circle nav-icon"></i> --}}
                       <i class="far fa-times-circle nav-icon"></i>
@@ -36,9 +36,17 @@
                     </a>
                 </li>
 
+                <li class="nav-item has-treeview">
+                    <a href="{{ route('situations') }}" class="nav-link">
+                      {{-- <i class="far fa-circle nav-icon"></i> --}}
+                      <i class="far fa-times-circle nav-icon"></i>
+                      <p>Situations</p>
+                    </a>
+                </li>
+
                 <li class="nav-header font-weight-bold">Records</li>
 
-                <li class="nav-item has-treeview"> <!-- DMR & PQC - TS  -->
+                <li class="nav-item has-treeview">
                     <a href="{{ route('parts_trouble_history_record') }}" class="nav-link">
                       <i class="far fa-circle nav-icon"></i>
                       <p>
