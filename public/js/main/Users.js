@@ -1,16 +1,3 @@
-/**
- * ==========================================
- * TEMPLATE Users SCRIPT
- * ------------------------------------------
- * Rename "Users" and related variables
- * to match your actual feature.
- *
- * Example:
- *   - Replace "Users" with "Users"
- *   - Replace URLs accordingly
- * ==========================================
- */
-
 $(document).ready(function () {
     // --------------------------------------
     // Cache DOM elements

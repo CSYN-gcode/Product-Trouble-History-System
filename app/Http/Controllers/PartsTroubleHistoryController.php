@@ -21,10 +21,6 @@ use Illuminate\Support\Facades\Cache;
 
 class PartsTroubleHistoryController extends Controller
 {
-    // public function index($position){
-    //     return view('past_trouble_history_record', compact('position'));
-    // }
-
     private function actionButton($class, $icon, $id, $extraClass = ''){
         return "<button class='btn {$class} btn-sm {$extraClass}' data-id='{$id}'>
                     <i class='fa-solid {$icon}'></i>
@@ -33,9 +29,7 @@ class PartsTroubleHistoryController extends Controller
 
     public function viewPartsTroubleHistoryInfo(Request $request){
         $globalUser = session('global_user');
-        // $position = optional($globalUser)->position;
-        // return $position;
-        $pth_details = PartTroubleHistory::with(['defects.defect_item', 'situations', 'improvements'])->orderBy('id', 'DESC')->get();
+        $pth_details = PartTroubleHistory::with(['defects.defect_item', 'situations', 'improvements'])->whereNull('deleted_at')->orderBy('id', 'DESC')->get();
 
         return DataTables::of($pth_details)
         ->addColumn('action', function($pth_details) use ($globalUser){
@@ -67,27 +61,6 @@ class PartsTroubleHistoryController extends Controller
                 }
             }
 
-            // if($globalUser && in_array($globalUser->position, [0,1,2,3]) && $pth_details->status == 0){
-            //     $result .= "<button class='btn btn-secondary btn-sm btnEdit mr-1' data-id='$pth_details->id'><i class='fa-solid fa-pen-to-square'></i></button>";
-            //     // if($pth_details->status == 0){
-            //         $result .= "<button class='btn btn-danger btn-sm btnDisable' data-id='$pth_details->id'><i class='fa-solid fa-ban'></i></button>";
-            //     // }else{
-            //     //     $result .= "<button class='btn btn-success btn-sm btnEnable' data-id='$pth_details->id'><i class='fa-solid fa-rotate-left'></i></button>";
-            //     // }
-            // }else{
-            //     $result .= "<button class='btn btn-info btn-sm btnView mr-1' data-id='$pth_details->id'><i class='fa-solid fa-eye'></i></button>";
-
-            //     if($pth_details->status == 1){
-            //         $result .= "<button class='btn btn-success btn-sm btnEnable' data-id='$pth_details->id'><i class='fa-solid fa-rotate-left'></i></button>";
-            //     }
-            // }
-
-            // $result .= "<button class='btn btn-secondary btn-sm btnEdit mr-1' data-id='$pth_details->id'><i class='fa-solid fa-pen-to-square'></i></button>";
-            // if($pth_details->status == 0){
-            //     $result .= "<button class='btn btn-danger btn-sm btnDisable' data-id='$pth_details->id'><i class='fa-solid fa-ban'></i></button>";
-            // }else{
-            //     $result .= "<button class='btn btn-success btn-sm btnEnable' data-id='$pth_details->id'><i class='fa-solid fa-rotate-left'></i></button>";
-            // }
             $result .= "</center>";
             return $result;
         })
@@ -401,40 +374,6 @@ class PartsTroubleHistoryController extends Controller
 
         // If no section selected, return empty array
         return response()->json($materials);
-
-        // $self = $this;
-
-        // $materials = Cache::remember('device_materials', 3600, function () use ($self) {
-        //     return collect()
-        //         ->merge($self->getMaterialsFrom('wbs_ts'))
-        //         ->merge($self->getMaterialsFrom('wbs_cn'))
-        //         ->merge($self->getMaterialsFrom('wbs_yf'))
-        //         ->unique()
-        //         ->values()
-        //         ->map(function ($value) {
-        //             return array(
-        //                 'materials' => $value
-        //             );
-        //         })
-        //         ->toArray();
-        // });
-
-        // $ppd_device_name = DB::connection('mysql_rapid')->select(' SELECT DeviceName, Rev
-        //                                                         FROM tbl_dieset t1
-        //                                                         WHERE Rev = (
-        //                                                             SELECT MAX(NULLIF(Rev, \'\'))
-        //                                                             FROM tbl_dieset t2
-        //                                                             WHERE t2.DeviceName = t1.DeviceName
-        //                                                         )
-        //                                                         OR (Rev = \'\' AND NOT EXISTS (
-        //                                                             SELECT 1
-        //                                                             FROM tbl_dieset t3
-        //                                                             WHERE t3.DeviceName = t1.DeviceName
-        //                                                                 AND t3.Rev <> \'\'
-        //                                                         ))
-        //                                                         ORDER BY DeviceName; ');
-
-        // return response()->json($materials);
     }
 
     public function getCountOfNoOfOccurrence(Request $request){

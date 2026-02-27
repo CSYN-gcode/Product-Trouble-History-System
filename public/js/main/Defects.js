@@ -1,16 +1,3 @@
-/**
- * ==========================================
- * TEMPLATE Defects SCRIPT
- * ------------------------------------------
- * Rename "Defects" and related variables
- * to match your actual feature.
- *
- * Example:
- *   - Replace "Defects" with "Defects"
- *   - Replace URLs accordingly
- * ==========================================
- */
-
 $(document).ready(function () {
     // --------------------------------------
     // Cache DOM elements

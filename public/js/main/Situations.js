@@ -1,16 +1,3 @@
-/**
- * ==========================================
- * TEMPLATE Situations SCRIPT
- * ------------------------------------------
- * Rename "Situations" and related variables
- * to match your actual feature.
- *
- * Example:
- *   - Replace "Situations" with "Situations"
- *   - Replace URLs accordingly
- * ==========================================
- */
-
 $(document).ready(function () {
     // --------------------------------------
     // Cache DOM elements
