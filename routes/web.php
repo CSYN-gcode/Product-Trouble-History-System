@@ -52,6 +52,10 @@ Route::get('/past_trouble_history_record', function () {
     return view('past_trouble_history_record');
 })->name('past_trouble_history_record');
 
+Route::controller(PartsTroubleHistoryController::class)->group(function () {
+    Route::get('/get_data_for_dashboard', 'getDataForDashboard')->name('get_data_for_dashboard');
+});
+
 // User CONTROLLER
 Route::controller(UserController::class)->group(function () {
     Route::get('/view_users', 'viewUsersInfo')->name('view_users');

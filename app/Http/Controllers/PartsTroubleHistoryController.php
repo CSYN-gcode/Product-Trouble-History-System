@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use DataTables;
 use App\Models\User;
+use App\Models\Defects;
+use App\Models\Situations;
+use App\Models\PartTroubleHistory;
 use App\Models\PthsDefects;
 use App\Models\PthsImprovements;
-use App\Models\PartTroubleHistory;
 use App\Models\WbsTsMatKitting;
 use App\Models\WbsCnMatKitting;
 use App\Models\WbsYfMatKitting;
@@ -21,6 +23,73 @@ use Illuminate\Support\Facades\Cache;
 
 class PartsTroubleHistoryController extends Controller
 {
+    public function getDataForDashboard(Request $request){
+        $totalIncidents = PartTroubleHistory::whereNull('deleted_at')->count();
+
+        // $recurringModel = PartTroubleHistory::select('model')
+        //                             ->groupBy('model')
+        //                             ->havingRaw('COUNT(*) >= 3') // Only include models with 2 or more occurrences
+        //                             ->get()
+        //                             ->count();
+
+        // $recurringSituations = Situation::withCount('occurrences')
+        //                         ->having('occurrences_count', '>=', 3)
+        //                         ->get()
+        //                         ->count();
+
+        // $recurringSituations = PartTroubleHistory::with('defects')
+        //                         ->select('defects.defect_id')
+        //                         ->groupBy('defect_id')
+        //                         ->havingRaw('COUNT(*) >= 3') // Only include models with 2 or more occurrences
+        //                         ->get()
+        //                         ->count();
+
+        // return $recurringSituations;
+
+        // $totalSituationOccured = PartTroubleHistory::select('situation')->groupBy('situation')->get()->count();
+
+        // $latestIds = PartTroubleHistory::whereNull('deleted_at')
+        //                 ->select(DB::raw('MAX(id) as id'))
+        //                 ->groupBy('model')
+        //                 ->pluck('id');
+
+        // $PTHRecords = PartTroubleHistory::with('defects.defect_item')
+        //                 ->whereIn('id', $latestIds)
+        //                 ->orderBy('model')
+        //                 ->get();
+
+        //                 ->orderByRaw("
+        //                         CAST(
+        //                             REPLACE(
+        //                                 REPLACE(
+        //                                     REPLACE(
+        //                                         REPLACE(no_of_occurrence, 'st',''),
+        //                                     'nd',''),
+        //                                 'rd',''),
+        //                             'th',''
+        //                         ) AS UNSIGNED
+        //                     ) DESC
+        //                 ")
+        $PTHRecords = PartTroubleHistory::with('defects.defect_item')->whereNull('deleted_at')->orderBy('model', 'ASC')->get();
+
+        return response()->json([
+            'totalIncidents'        => $totalIncidents,
+            // 'totalSituationOccured' => $totalSituationOccured,
+            // 'recurringModel'        => $recurringModel,
+            'PTHRecords'   => $PTHRecords
+        ]);
+
+        // return response()->json([
+        //     'totalPthsRecord'           => PartTroubleHistory::whereNull('deleted_at')->count(),
+        //     'totalPthsRecord'           => PartTroubleHistory::whereNull('deleted_at')->count(),
+        //     'recurringIssues'           => PartTroubleHistory::select('*')
+        //                                     ->groupBy('model')
+        //                                     ->havingRaw('COUNT(*) >= 3') // Only include models with 2 or more occurrences
+        //                                     ->get()
+        //                                     ->count();
+        // ]);
+    }
+
     private function actionButton($class, $icon, $id, $extraClass = ''){
         return "<button class='btn {$class} btn-sm {$extraClass}' data-id='{$id}'>
                     <i class='fa-solid {$icon}'></i>
@@ -391,11 +460,6 @@ class PartsTroubleHistoryController extends Controller
         }
 
         $count =  PartTroubleHistory::
-                // with(['defects' => function($query) use ($request) {
-                //     $query->where('defect_id', $request->defect_id);  // Add your condition for the 'defects' relationship
-                //     $query->whereNull('delete_at');  // You can add more conditions if needed
-                // }])
-                // where('situation', $request->situation)
                 where('section', $request->section)
                 ->where('model', $request->model)
                 ->whereBetween('date_encountered', [$start, $end])
