@@ -56,8 +56,8 @@
                                         <i class="fa fa-initial-icon"></i> Export Report
                                     </button>
                                 </div>
-                                
-                                @if ( $globalUser && in_array( $globalUser->position, [0,2,3]))
+
+                                @if ( $globalUser && in_array( $globalUser->position, [0,1,2,3]))
                                     <div class="float-sm-right">
                                         <button class="btn btn-dark" id="btnShowAddPartsTroubleHistory">
                                             <i class="fa fa-initial-icon"></i> Add Past Trouble History

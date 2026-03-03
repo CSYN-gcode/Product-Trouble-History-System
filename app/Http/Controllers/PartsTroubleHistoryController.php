@@ -26,28 +26,6 @@ class PartsTroubleHistoryController extends Controller
     public function getDataForDashboard(Request $request){
         $totalIncidents = PartTroubleHistory::whereNull('deleted_at')->count();
 
-        // $recurringModel = PartTroubleHistory::select('model')
-        //                             ->groupBy('model')
-        //                             ->havingRaw('COUNT(*) >= 3') // Only include models with 2 or more occurrences
-        //                             ->get()
-        //                             ->count();
-
-        // $recurringSituations = Situation::withCount('occurrences')
-        //                         ->having('occurrences_count', '>=', 3)
-        //                         ->get()
-        //                         ->count();
-
-        // $recurringSituations = PartTroubleHistory::with('defects')
-        //                         ->select('defects.defect_id')
-        //                         ->groupBy('defect_id')
-        //                         ->havingRaw('COUNT(*) >= 3') // Only include models with 2 or more occurrences
-        //                         ->get()
-        //                         ->count();
-
-        // return $recurringSituations;
-
-        // $totalSituationOccured = PartTroubleHistory::select('situation')->groupBy('situation')->get()->count();
-
         // $latestIds = PartTroubleHistory::whereNull('deleted_at')
         //                 ->select(DB::raw('MAX(id) as id'))
         //                 ->groupBy('model')
@@ -70,6 +48,7 @@ class PartsTroubleHistoryController extends Controller
         //                         ) AS UNSIGNED
         //                     ) DESC
         //                 ")
+
         $PTHRecords = PartTroubleHistory::with('defects.defect_item')->whereNull('deleted_at')->orderBy('model', 'ASC')->get();
 
         return response()->json([
@@ -78,16 +57,6 @@ class PartsTroubleHistoryController extends Controller
             // 'recurringModel'        => $recurringModel,
             'PTHRecords'   => $PTHRecords
         ]);
-
-        // return response()->json([
-        //     'totalPthsRecord'           => PartTroubleHistory::whereNull('deleted_at')->count(),
-        //     'totalPthsRecord'           => PartTroubleHistory::whereNull('deleted_at')->count(),
-        //     'recurringIssues'           => PartTroubleHistory::select('*')
-        //                                     ->groupBy('model')
-        //                                     ->havingRaw('COUNT(*) >= 3') // Only include models with 2 or more occurrences
-        //                                     ->get()
-        //                                     ->count();
-        // ]);
     }
 
     private function actionButton($class, $icon, $id, $extraClass = ''){
