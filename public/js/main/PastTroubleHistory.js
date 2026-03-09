@@ -356,9 +356,7 @@ function bindPartsTroubleHistoryEvents($table, $form, $modal, $addButtonPTH, dtP
     });
 }
 
-function updateRemoveButtons($tableIA) {
-//     let rowCount = $tableIA.find('tbody tr').length;
-//     $tableIA.find('.removeIA').prop('disabled', rowCount <= 1);
+function updateRemoveButtons($tableIA){
     let rowCount = $tableIA.find('.data-row').length;
     console.log('rowCount:', rowCount);
 
@@ -396,7 +394,7 @@ function getDefects(cboElement, defectId = null, mode = null){
             if(defectId != null){
                 cboElement.val(defectId).trigger('change');
             }
-            
+
             if(mode == 'view'){
                 cboElement.prop('disabled', true).trigger('change.select2');
             }
@@ -622,7 +620,7 @@ function fetchPartsTroubleHistoryById(id, $modal, $tableIA, $form, $mode) {
 
             $tableIA.find('tbody').empty();
             for(let index = 0; index < response.improvements.length; index++){
-            
+
                 let rowImprovements = `
                     <tr class="data-row">
                         <td id="removeIA">
