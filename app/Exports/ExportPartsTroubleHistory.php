@@ -39,7 +39,8 @@ class ExportPartsTroubleHistory implements FromCollection, WithHeadings, WithEve
         $this->model = $model;
 
         // 🔒 LOAD ONCE
-        $this->records = PartTroubleHistory::with(['defects.defect_item', 'improvements'])
+        $this->records = PartTroubleHistory::with(['defects.defect_item', 'situations', 'improvements'])
+            ->whereNull('deleted_at')
             ->whereBetween('date_encountered', [
                 $this->from . ' 00:00:00',
                 $this->to   . ' 23:59:59'
@@ -65,7 +66,8 @@ class ExportPartsTroubleHistory implements FromCollection, WithHeadings, WithEve
     protected function getRecords(){
 
         if ($this->records === null) {
-            $this->records = PartTroubleHistory::with(['defects.defect_item', 'improvements'])
+            $this->records = PartTroubleHistory::with(['defects.defect_item', 'situations', 'improvements'])
+                ->whereNull('deleted_at')
                 ->whereBetween('date_encountered', [
                     $this->from . ' 00:00:00',
                     $this->to   . ' 23:59:59'
@@ -134,7 +136,7 @@ class ExportPartsTroubleHistory implements FromCollection, WithHeadings, WithEve
                     $improvement = $improvements->get($i);
 
                     $rows->push([
-                        $record->situation,
+                        $record->situations->situation_name,
                         $record->section,
                         $record->date_encountered,
                         $record->model,

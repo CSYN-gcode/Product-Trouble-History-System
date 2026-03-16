@@ -142,6 +142,7 @@
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-sm-4">
+                                <input hidden type="text" class="d-none" id="txtUserId" name="user_id" value="{{ $globalUser->id }}">
                                 <input type="hidden" id="txtPartsTroubleHistoryId" name="history_id">
 
                                 <div class="form-group">
@@ -311,7 +312,7 @@
 
                             <div class="col">
                                 <label>Series / Model Name</label>
-                                <select class="form-control select2bs5" name="model_export" id="selectDeviceNameToExport" disabled required>
+                                <select class="form-control select2bs5" name="model_export" id="selectDeviceNameToExport" required>
                                     <option value="" disabled selected> Select Series Name </option>
                                 </select>
                             </div>

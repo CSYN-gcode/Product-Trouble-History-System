@@ -166,7 +166,9 @@ class PartsTroubleHistoryController extends Controller
                     'date_encountered' => $request->date_encountered,
                     'situation' => $request->situation,
                     'section' => $request->section,
-                    'model' => $request->model
+                    'model' => $request->model,
+                    'created_by' => $request->user_id,
+                    'last_updated_by' => $request->user_id
                 );
 
                 if(isset($request->history_id)){ // EDIT
@@ -314,7 +316,7 @@ class PartsTroubleHistoryController extends Controller
             'situation_export'   => 'required',
             'section_export'   => 'required',
             'defect_export'   => 'required',
-            'model_export'   => 'required',
+            // 'model_export'   => 'required',
         ]);
 
         $from = $request->date_from_export;
@@ -322,7 +324,7 @@ class PartsTroubleHistoryController extends Controller
         $situation   = $request->situation_export;
         $section   = $request->section_export;
         $defect   = $request->defect_export;
-        $model   = $request->model_export;
+        $model   = $request->model_export ? $request->model_export : 'ALL';
 
         $param1 = $situation === 'ALL' ? 'All Situation' : $situation;
         $param2 = $section === 'ALL' ? 'All Section' : $section;
