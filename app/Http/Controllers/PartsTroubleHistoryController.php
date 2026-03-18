@@ -81,7 +81,6 @@ class PartsTroubleHistoryController extends Controller
             $id = $pth_details->id;
 
             if ($isActive) {
-
                 if ($canManage) {
                     $result .= $this->actionButton('btn-secondary btnEdit', 'fa-pen-to-square', $id, 'mr-1');
                     $result .= $this->actionButton('btn-danger btnDisable', 'fa-ban', $id);
@@ -91,7 +90,6 @@ class PartsTroubleHistoryController extends Controller
             }
 
             if ($isDisabled) {
-
                 $result .= $this->actionButton('btn-info btnView', 'fa-eye', $id, 'mr-1');
 
                 if ($canManage) {
@@ -222,21 +220,24 @@ class PartsTroubleHistoryController extends Controller
 
                 // DELETE OLD Improvement Actions ON UPDATE
                 PthsImprovements::where('history_id', $request->history_id)->delete();
-
                 // SAVE NEW Improvement Actions
                 if ($request->factor){
                     foreach ($request->factor as $i => $value){
+                        $pics = (array) ($request->pic ?? []);
+                        $picMerged = implode(',', $pics);
+
                         PthsImprovements::insert([
                             'history_id'          => $history_id,
                             'factor'              => $request->factor[$i],
                             'cause'               => $request->cause[$i],
                             'analysis'            => $request->analysis[$i],
                             'counter_measure'     => $request->counter_measure[$i],
-                            'pic'                 => $request->pic[$i],
+                            'pic'                 => $picMerged,
                             'implementation_date' => $request->implementation_date[$i]
-                            // 'improvement_actions'  => $request->improvement_action[$i],
-                            // 'remarks'              => $request->improvement_action_remarks[$i]
                         ]);
+
+                        // 'improvement_actions'  => $request->improvement_action[$i],
+                        // 'remarks'              => $request->improvement_action_remarks[$i]
                     }
                 }
 

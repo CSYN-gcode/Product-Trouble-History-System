@@ -10,6 +10,7 @@ $(document).ready(function () {
     const $tableIA = $('#tblImprovementActions');                   //table for improvement actions
     const $addButtonIA = $('#btnAddImprovementAction');             //button for adding improvement actions
     const $exportReportButton = $('#btnShowExportReportModal');             //button for adding improvement actions
+    let rowIndex = 0;
     // --------------------------------------
     // Initialize global AJAX setup (once per project)
     // --------------------------------------
@@ -40,7 +41,8 @@ $(document).ready(function () {
         dtPTH,
         $tableIA,
         $addButtonIA,
-        $exportReportButton
+        $exportReportButton,
+        rowIndex
     );
 });
 
@@ -48,10 +50,18 @@ $(document).ready(function () {
  * Reset a form and clear hidden fields
  * @param {string|jQuery} formSelector - the form element or selector
  */
-function resetPartsTroubleHistoryForm(formSelector, tableImprovementActions) {
+function resetPartsTroubleHistoryForm(formSelector, tableImprovementActions, rowIndex) {
     const $formSelector = $(formSelector);
     $formSelector[0].reset();
     $formSelector.find('input[type="hidden"]').val('');
+
+    $formSelector.find('#btnAddImprovementAction').prop('disabled', false);
+    $formSelector.find('#btnAddImprovementAction').prop('hidden', false);
+    $formSelector.find('#btnSubmitPartsTroubleHistory').prop('disabled', false);
+    $formSelector.find('#btnSubmitPartsTroubleHistory').prop('hidden', false);
+    $formSelector.find('input, textarea, select').prop('disabled', false);
+    $formSelector.find('#btnReuploadTrigger').prop('disabled', false);
+    $formSelector.find('#btnReuploadTrigger').prop('checked', true);
 
     // hide image preview
     $('#previewImage').hide();
@@ -65,32 +75,39 @@ function resetPartsTroubleHistoryForm(formSelector, tableImprovementActions) {
     // Clear template row inputs
     $(tableImprovementActions).find('.data-row input').val('');
 
+    // initial row
+    // $('#tableBody').append(getRow(rowIndex));
+    // rowIndex++;
+
+    const $tbody = $(tableImprovementActions).find('tbody');
+          $tbody.html(getRow(rowIndex));
+
     // Remove any additional rows except the default one
-    const defaultRow = `
-        <tr class="data-row">
-            <td id="removeIA">
-                <center><button class="btn btn-md btn-danger removeIA" title="Remove Row" type="button"><i class="fa fa-times"></i></button></center>
-            </td>
-            <td>
-                <textarea class="form-control form-control-sm" name="factor[]" required></textarea>
-            </td>
-            <td>
-                <textarea class="form-control form-control-sm" name="cause[]" required></textarea>
-            </td>
-            <td>
-                <textarea class="form-control form-control-sm" name="analysis[]" required></textarea>
-            </td>
-            <td>
-                <textarea class="form-control form-control-sm" name="counter_measure[]" required></textarea>
-            </td>
-            <td>
-                <select class="form-control form-control-lg select2bs5 selectPic" name="pic[]" required></select>
-            </td>
-            <td>
-                <input type="date" class="form-control form-control-lg" name="implementation_date[]" required></input>
-            </td>
-        </tr>
-    `;
+    // const defaultRow = `
+    //     <tr class="data-row">
+    //         <td id="removeIA">
+    //             <center><button class="btn btn-md btn-danger removeIA" title="Remove Row" type="button"><i class="fa fa-times"></i></button></center>
+    //         </td>
+    //         <td>
+    //             <textarea class="form-control form-control-sm" name="factor[0]" required></textarea>
+    //         </td>
+    //         <td>
+    //             <textarea class="form-control form-control-sm" name="cause[0]" required></textarea>
+    //         </td>
+    //         <td>
+    //             <textarea class="form-control form-control-sm" name="analysis[0]" required></textarea>
+    //         </td>
+    //         <td>
+    //             <textarea class="form-control form-control-sm" name="counter_measure[0]" required></textarea>
+    //         </td>
+    //         <td>
+    //             <select class="form-control form-control-lg select2bs5 selectPic" name="pic[0][]" multiple required></select>
+    //         </td>
+    //         <td>
+    //             <input type="date" class="form-control form-control-lg" name="implementation_date[0]" required></input>
+    //         </td>
+    //     </tr>
+    // `;
 
     // clark comment 12/29/2025 remove remarks column
     // <td>
@@ -100,8 +117,8 @@ function resetPartsTroubleHistoryForm(formSelector, tableImprovementActions) {
     //     <textarea class="form-control form-control-sm" name="remarks[]" required></textarea>
     // </td>
 
-    const $tbody = $(tableImprovementActions).find('tbody');
-    $tbody.html(defaultRow);
+    // const $tbody = $(tableImprovementActions).find('tbody');
+    // $tbody.html(defaultRow);
 
     // Hide Reupload Div & Exisiting Filename
     formSelector.find("#btnReuploadTriggerDiv").addClass('d-none');
@@ -118,6 +135,38 @@ function resetPartsTroubleHistoryForm(formSelector, tableImprovementActions) {
     formSelector.find("#downloadFile").addClass('d-none');
 
     updateRemoveButtons(tableImprovementActions);
+}
+
+function getRow(index) {
+    return `
+    <tr class="data-row">
+        <td>
+            <center>
+                <button class="btn btn-md btn-danger removeIA" type="button">
+                    <i class="fa fa-times"></i>
+                </button>
+            </center>
+        </td>
+        <td>
+            <textarea class="form-control form-control-sm" name="factor[${index}]" required></textarea>
+        </td>
+        <td>
+            <textarea class="form-control form-control-sm" name="cause[${index}]" required></textarea>
+        </td>
+        <td>
+            <textarea class="form-control form-control-sm" name="analysis[${index}]" required></textarea>
+        </td>
+        <td>
+            <textarea class="form-control form-control-sm" name="counter_measure[${index}]" required></textarea>
+        </td>
+        <td>
+            <select class="form-control form-control-lg select2bs5 selectPic" name="pic[${index}][]" multiple required></select>
+        </td>
+        <td>
+            <input type="date" class="form-control form-control-lg" name="implementation_date[${index}]" required>
+        </td>
+    </tr>
+    `;
 }
 
 /**
@@ -169,13 +218,13 @@ function initPartsTroubleHistoryTable($table, url = 'view_parts_trouble_history'
 /**
  * Bind events for buttons, forms, etc.
  */
-function bindPartsTroubleHistoryEvents($table, $form, $modal, $addButtonPTH, dtPTH, $tableIA, $addButtonIA, $exportReportButton) {
+function bindPartsTroubleHistoryEvents($table, $form, $modal, $addButtonPTH, dtPTH, $tableIA, $addButtonIA, $exportReportButton, rowIndex) {
 
     // initial check (on page load)
     updateRemoveButtons($tableIA);
 
     $addButtonPTH.on('click', function () {
-        resetPartsTroubleHistoryForm($form, $tableIA);
+        resetPartsTroubleHistoryForm($form, $tableIA, rowIndex);
         getDefects($('#defectId'));
         getSituations($('#selectSituation'));
         // getPic($('#tblImprovementActions #selectPic'));
@@ -245,41 +294,53 @@ function bindPartsTroubleHistoryEvents($table, $form, $modal, $addButtonPTH, dtP
     });
 
     $addButtonIA.on('click', function () {
+        rowIndex++;
         const $templateRow = $tableIA.find('.data-row').first();
 
-        // Clone WITHOUT events & select2 bindings
         let newRow = $templateRow.clone(false, false);
 
         // Clear inputs
         newRow.find('input, textarea').val('');
         newRow.find('.removeIA').prop('disabled', false);
 
-        // 🔥 Remove select2 generated container inside cloned row
+        // Remove select2 container
         newRow.find('.select2-container').remove();
 
         let $newSelect = newRow.find('.selectPic');
 
-        // 🔥 Clean select2 plugin traces from cloned select
+        // Clean select2 traces
         $newSelect
             .removeClass('select2-hidden-accessible')
             .removeAttr('data-select2-id')
             .removeAttr('tabindex')
             .removeAttr('aria-hidden')
-            .empty()        // ← THIS clears options
+            .empty()
             .val(null);
 
-        // Append new row first
+        // ✅ FIX: Update ALL fields (input, textarea, select)
+        newRow.find('input, textarea, select').each(function () {
+            let name = $(this).attr('name');
+
+            if (name) {
+                let updatedName = name.replace(/\[\d+\]/, `[${rowIndex}]`);
+                $(this).attr('name', updatedName);
+            }
+        });
+
+        // Append row
         $tableIA.find('tbody').append(newRow);
 
-        // 🔥 Reinitialize select2 ONLY for the new row
+        // Init select2 ONLY for this row
         $newSelect.select2({
             theme: 'bootstrap-5',
             width: '100%'
         });
 
-        // Update button states
-        updateRemoveButtons($tableIA);
         getPic($newSelect);
+
+        rowIndex++;
+
+        updateRemoveButtons($tableIA);
     });
 
     // --------------------
@@ -417,7 +478,7 @@ function getDeviceName(cboElement, section, deviceName = null, mode = null){
         beforeSend: function(){
             result = '<option value="" disabled selected>--Loading--</option>';
         },
-        success: function (response) {
+        success: function (response){
             console.log('response', response);
             $('#selectDeviceName').prop('disabled', false);
             if(response.length > 0){
@@ -620,6 +681,8 @@ function fetchPartsTroubleHistoryById(id, $modal, $tableIA, $form, $mode) {
 
             $tableIA.find('tbody').empty();
             for(let index = 0; index < response.improvements.length; index++){
+                let pic = response.improvements[index].pic;
+                let picArray = pic.split(',');
 
                 let rowImprovements = `
                     <tr class="data-row">
@@ -639,7 +702,7 @@ function fetchPartsTroubleHistoryById(id, $modal, $tableIA, $form, $mode) {
                             <textarea ${$mode === 'view' ? 'disabled' : ''} class="form-control form-control-sm" name="counter_measure[]">${response.improvements[index].counter_measure}</textarea>
                         </td>
                         <td>
-                            <select ${$mode === 'view' ? 'disabled' : ''} class="form-control form-control-lg select2bs5 selectPic" name="pic[]"></select>
+                            <select ${$mode === 'view' ? 'disabled' : ''} class="form-control form-control-lg select2bs5 selectPic" multiple name="pic[]"></select>
                         </td>
                         <td>
                             <input ${$mode === 'view' ? 'disabled' : ''} type="date" class="form-control form-control-lg" name="implementation_date[]" value="${response.improvements[index].implementation_date}">
@@ -656,7 +719,7 @@ function fetchPartsTroubleHistoryById(id, $modal, $tableIA, $form, $mode) {
                 // </td>
 
                 $tableIA.find('tbody').append(rowImprovements);
-                getPic($('#tblImprovementActions tr:last').find('.selectPic'), response.improvements[index].pic, $mode);
+                getPic($('#tblImprovementActions tr:last').find('.selectPic'), picArray, $mode);
             }
 
             $modal.modal('show');
