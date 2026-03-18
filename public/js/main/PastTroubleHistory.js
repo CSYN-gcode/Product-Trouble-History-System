@@ -706,8 +706,13 @@ function fetchPartsTroubleHistoryById(id, $modal, $tableIA, $form, $mode) {
 
             $tableIA.find('tbody').empty();
             for(let index = 0; index < response.improvements.length; index++){
-                let pic = response.improvements[index].pic;
-                let picArray = pic.split(',');
+                let picArray;
+                if(response.improvements[index].pic != null){
+                    let pic = response.improvements[index].pic;
+                    picArray = pic.split(',');
+                }else{
+                    picArray = [];
+                }
 
                 let rowImprovements = `
                     <tr class="data-row">
