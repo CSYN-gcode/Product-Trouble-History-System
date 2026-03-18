@@ -163,6 +163,8 @@ function saveUsers($form, $modal, dtUsers) {
                 $modal.modal('hide');
                 $form[0].reset();
                 showSuccess('Successfully saved!');
+            }else{
+                showError(response.error);
             }
         },
         error: function (xhr) {

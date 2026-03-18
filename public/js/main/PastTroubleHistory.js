@@ -11,6 +11,7 @@ $(document).ready(function () {
     const $addButtonIA = $('#btnAddImprovementAction');             //button for adding improvement actions
     const $exportReportButton = $('#btnShowExportReportModal');             //button for adding improvement actions
     let rowIndex = 0;
+    getSituations($('.selFilterSituation'), '', 'Filter');
     // --------------------------------------
     // Initialize global AJAX setup (once per project)
     // --------------------------------------
@@ -176,16 +177,24 @@ function initPartsTroubleHistoryTable($table, url = 'view_parts_trouble_history'
     return $table.DataTable({
         processing: true,
         serverSide: true,
-        ajax: { url: url },
+        ajax: {
+            url: url,
+            data: function (param){
+                param.filter_year = $('.selFilterYear').val();
+                param.filter_month = $('.selFilterMonth').val();
+                param.filter_situation = $('.selFilterSituation').val();
+                param.filter_section = $('.selFilterSection').val();
+            },
+        },
         fixedHeader: true,
         columns: [
             { data: 'action', orderable: false, searchable: false },
             { data: 'status_label' },
-            { data: 'date_encountered' },    // customize this per parts_trouble_history
-            { data: 'situation_label' },    // customize this per parts_trouble_history
-            { data: 'section' },    // customize this per parts_trouble_history
-            { data: 'model' },    // customize this per parts_trouble_history
-            { data: 'defects.defect_item.defect_name' },    // customize this per parts_trouble_history
+            { data: 'date_encountered' },
+            { data: 'situation_label' },
+            { data: 'section' },
+            { data: 'model' },
+            { data: 'defects.defect_item.defect_name' },
             {
                 data: 'defects.illustration_of_defect',
                 orderable: false,
@@ -291,6 +300,22 @@ function bindPartsTroubleHistoryEvents($table, $form, $modal, $addButtonPTH, dtP
         console.log('set readonly false');
         $('#selectDeviceName').prop('disabled', false);
         getDeviceName($('#selectDeviceName'), $(this).val());
+    });
+
+    $('.selFilterYear').on('change', function(e){
+        dtPTH.draw();
+    });
+
+    $('.selFilterMonth').on('change', function(e){
+        dtPTH.draw();
+    });
+
+    $('.selFilterSituation').on('change', function(e){
+        dtPTH.draw();
+    });
+
+    $('.selFilterSection').on('change', function(e){
+        dtPTH.draw();
     });
 
     $addButtonIA.on('click', function () {
@@ -526,7 +551,7 @@ function getSituations(cboElement, situationId = null, mode = null){
             if(response.length > 0){
                     result = '<option value="" disabled selected> Select Situation </option>';
 
-                if(mode == 'Export'){
+                if(mode == 'Export' || mode == 'Filter'){
                     result += '<option value="ALL"> ALL </option>';
                 }
 

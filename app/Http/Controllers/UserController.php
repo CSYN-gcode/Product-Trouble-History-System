@@ -33,17 +33,27 @@ class UserController extends Controller
             $result .= "<center>";
 
             if($user_details->position == 0){
-                $result .= "<span class='badge rounded-pill bg-primary'>Admin</span>";
+                $result .= "<span class='badge rounded-pill bg-dark'>Admin</span>";
             }else if($user_details->position == 1){
-                $result .= "<span class='badge rounded-pill bg-info'>QC Inspector</span>";
+                $result .= "<span class='badge rounded-pill bg-primary'>QC Inspector</span>";
             }else if($user_details->position == 2){
-                $result .= "<span class='badge rounded-pill bg-warning'>QC Supervisor</span>";
+                $result .= "<span class='badge rounded-pill bg-primary'>QC Supervisor</span>";
             }else if($user_details->position == 3){
-                $result .= "<span class='badge rounded-pill bg-secondary'>Section Head</span>";
+                $result .= "<span class='badge rounded-pill bg-info'>Operator/MH</span>";
             }else if($user_details->position == 4){
-                $result .= "<span class='badge rounded-pill bg-dark'>QAS Validator</span>";
+                $result .= "<span class='badge rounded-pill bg-info'>Technician</span>";
+            }else if($user_details->position == 5){
+                $result .= "<span class='badge rounded-pill bg-info'>Inspector(IQC/IPQC/OQC)</span>";
+            }else if($user_details->position == 6){
+                $result .= "<span class='badge rounded-pill bg-info'>Process Engineer</span>";
+            }else if($user_details->position == 7){
+                $result .= "<span class='badge rounded-pill bg-info'>Production Supervisor</span>";
+            }else if($user_details->position == 8){
+                $result .= "<span class='badge rounded-pill bg-primary'>Section Head</span>";
+            }else if($user_details->position == 9){
+                $result .= "<span class='badge rounded-pill bg-warning'>QAS Validator</span>";
             }else{
-                $result .= "<span class='badge rounded-pill bg-danger'>Inactive</span>";
+                $result .= "<span class='badge rounded-pill bg-secondary'>N/A</span>";
             }
             $result .= "</center>";
 
@@ -92,9 +102,13 @@ class UserController extends Controller
                     User::where('id', $request->id)
                     ->update($users_data_array);
                 }else{ // ADD
-                    User::insert($users_data_array);
+                    $checkExistingUser = User::where('rapidx_user_id', $request->rapidx_user_id)->exists();
+                    if($checkExistingUser){
+                        return response()->json(['result' => 0, 'error' => 'User Already Exist']);
+                    }else{
+                        User::insert($users_data_array);
+                    }
                 }
-
                 DB::commit();
                 return response()->json(['result' => 1, 'msg' => 'Transaction Succesful']);
             }catch(Exemption $e){

@@ -128,8 +128,13 @@
                                         <option value="0">Admin</option>
                                         <option value="1">QC Inspector</option>
                                         <option value="2">QC Supervisor</option>
-                                        <option value="3">Section Head</option>
-                                        <option value="4">QAS Validator</option>
+                                        <option value="3">Operator/MH</option>
+                                        <option value="4">Technician</option>
+                                        <option value="5">Inpectors(IQC/IPQC/OQC)</option>
+                                        <option value="6">Process Engineer</option>
+                                        <option value="7">Production Supervisor</option>
+                                        <option value="8">Section Head</option>
+                                        <option value="9">QAS Validator</option>
                                     </select>
                                 </div>
                             </div>

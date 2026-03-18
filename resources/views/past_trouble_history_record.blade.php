@@ -68,7 +68,7 @@
                                 <div class="float-sm-left col-2">
                                     {{-- <form id="frmSearchYear" class="form-inline"> --}}
                                         <label><strong>Filter Year : &nbsp;</strong></label>
-                                        <input type="text" id="SearchYear" class="form-control" name="year" title="<?php echo date('Y'); ?>" value="<?php echo date('Y'); ?>">
+                                        <input type="text" class="form-control selFilterYear" title="<?php echo date('Y'); ?>" value="<?php echo date('Y'); ?>">
 
                                         {{-- <button class="btn btn-primary" type="submit">Search</button> --}}
                                     {{-- </form> --}}
@@ -78,7 +78,7 @@
 
                                 <div class="float-sm-left mb-4 col-2">
                                     <label><strong>Month :</strong></label>
-                                    <select class="form-control selectMonth" name="month_value" id="SelectMonth">
+                                    <select class="form-control selFilterMonth">
                                         <option value="<?php echo date('m'); ?>" readonly><?php echo date('F'); ?></option><!-- selected -->
                                         <option value="" selected>All</option>
                                         <option value="01">January</option>
@@ -94,6 +94,29 @@
                                         <option value="11">November</option>
                                         <option value="12">December</option>
                                     </select>
+                                </div>
+
+                                <div class="float-sm-left mb-4 col-2">
+                                    <div class="form-group">
+                                        <label>Situation</label>
+                                        <select class="form-control select2bs5 selFilterSituation">
+                                            <option value="" disabled selected>All</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="float-sm-left mb-4 col-2">
+                                    <div class="form-group">
+                                        <label>Section</label>
+                                        <select class="form-control selFilterSection">
+                                            <option value="ALL" selected>Select Section</option>
+                                            <option value="ALL">ALL</option>
+                                            <option value="TS">TS</option>
+                                            <option value="CN">CN</option>
+                                            <option value="PPD">PPD</option>
+                                            <option value="YF">YF</option>
+                                        </select>
+                                    </div>
                                 </div>
 
                                 <div class="table-responsive">

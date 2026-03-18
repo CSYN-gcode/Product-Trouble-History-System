@@ -28,10 +28,10 @@
                     </a>
                 </li>
 
-                {{-- Allowed positions 0-ISS, 2-QC Supervisor, 3-Section Head --}}
-                @if ( $globalUser && in_array( $globalUser->position, [0,2,3]))
-                    <li class="nav-header font-weight-bold">Data Management</li>
+                <li class="nav-header font-weight-bold">Data Management</li>
 
+                {{-- Allowed positions 0-ISS, 2-QC Supervisor --}}
+                @if ( $globalUser && in_array( $globalUser->position, [0,2]))
                     <li class="nav-item has-treeview">
                         <a href="{{ route('users') }}" class="nav-link">
                         {{-- <i class="far fa-circle nav-icon"></i> --}}
@@ -39,7 +39,10 @@
                         <p>Users</p>
                         </a>
                     </li>
+                @endif
 
+                {{-- Allowed positions 0-ISS, 1-QC Inspector, 2-QC Supervisor --}}
+                @if ( $globalUser && in_array( $globalUser->position, [0,1,2]))
                     <li class="nav-item has-treeview">
                         <a href="{{ route('defects') }}" class="nav-link">
                         {{-- <i class="far fa-circle nav-icon"></i> --}}

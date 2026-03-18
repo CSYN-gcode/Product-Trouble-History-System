@@ -67,14 +67,35 @@ class PartsTroubleHistoryController extends Controller
 
     public function viewPartsTroubleHistoryInfo(Request $request){
         $globalUser = session('global_user');
-        $pth_details = PartTroubleHistory::with(['defects.defect_item', 'situations', 'improvements'])->whereNull('deleted_at')->orderBy('id', 'DESC')->get();
+        $pth_details = PartTroubleHistory::with(['defects.defect_item', 'situations', 'improvements'])
+                                            ->when($request->filter_year && !$request->filter_month, function ($query) use ($request) {
+                                                return $query->where('date_encountered', 'like', $request->filter_year . '%');
+                                            })
+                                            ->when($request->filter_year && $request->filter_month, function ($query) use ($request) {
+                                                return $query->where('date_encountered', 'like', $request->filter_year . '-' . str_pad($request->filter_month, 2, '0', STR_PAD_LEFT) . '%');
+                                            })
+                                            ->when(
+                                                $request->filled('filter_situation') && $request->filter_situation !== 'ALL',
+                                                function ($query) use ($request) {
+                                                    return $query->where('situation', $request->filter_situation);
+                                                }
+                                            )
+                                            ->when(
+                                                $request->filled('filter_section') && $request->filter_section !== 'ALL',
+                                                function ($query) use ($request) {
+                                                    return $query->where('section', $request->filter_section);
+                                                }
+                                            )
+                                            ->whereNull('deleted_at')
+                                            ->orderBy('id', 'DESC')
+                                            ->get();
 
         return DataTables::of($pth_details)
         ->addColumn('action', function($pth_details) use ($globalUser){
             $result = "";
             $result .= "<center>";
 
-            $canManage  = $globalUser && in_array($globalUser->position, [0,1,2,3]);
+            $canManage  = $globalUser && in_array($globalUser->position, [0,1,2]);
             $isActive   = $pth_details->status == 0;
             $isDisabled = $pth_details->status == 1;
 
@@ -335,6 +356,13 @@ class PartsTroubleHistoryController extends Controller
         $filename = "PTHS_Report_{$param1}_{$param2}_{$param3}_{$param4}_{$from}_to_{$to}.xlsx";
 
         return Excel::download( new ExportPartsTroubleHistory($from, $to, $situation, $section, $defect, $model), $filename );
+
+    //     for testing only
+    //     $test_export = new ExportPartsTroubleHistory($from, $to, $situation, $section, $defect, $model);
+    //     // OPTION A: return raw data
+    //     return $test_export->collection();
+    //     // OPTION B: debug
+    //     dd($test_export->collection());
     }
 
     private function getMaterialsFrom($connection){

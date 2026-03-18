@@ -149,6 +149,7 @@ class ExportPartsTroubleHistory implements FromCollection, WithHeadings, WithEve
                         $improvement ? $improvement->cause : '',
                         $improvement ? $improvement->analysis : '',
                         $improvement ? $improvement->counter_measure : '',
+                        $improvement ? $improvement->pic_users : '',
                         $improvement ? $improvement->implementation_date : '',
                         // $improvement ? $improvement->remarks : '',
                     ]);
@@ -181,6 +182,7 @@ class ExportPartsTroubleHistory implements FromCollection, WithHeadings, WithEve
             'Cause',
             'Analysis',
             'Counter Measure',
+            'Person In-charge',
             'Implementation Date',
         ];
     }
@@ -194,7 +196,7 @@ class ExportPartsTroubleHistory implements FromCollection, WithHeadings, WithEve
             AfterSheet::class => function (AfterSheet $event) {
 
                 $sheet = $event->sheet->getDelegate();
-                $lastCol = 'L';
+                $lastCol = 'M';
                 $lastRow = $sheet->getHighestRow();
 
                 /**
@@ -223,7 +225,7 @@ class ExportPartsTroubleHistory implements FromCollection, WithHeadings, WithEve
 
                 // 1. Title row
                 $sheet->setCellValue('A1', 'TS-F1 PRODUCTS PAST TROUBLE HISTORY');
-                $sheet->mergeCells('A1:L1');
+                $sheet->mergeCells('A1:M1');
                 $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(14);
                 $sheet->getStyle('A1')->getAlignment()
                     ->setHorizontal(Alignment::HORIZONTAL_CENTER)
