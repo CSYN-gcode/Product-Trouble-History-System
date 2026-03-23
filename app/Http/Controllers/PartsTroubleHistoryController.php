@@ -173,6 +173,23 @@ class PartsTroubleHistoryController extends Controller
         );
 
         $data = $request->all();
+
+        // foreach ($request->factor as $i => $value){
+        //     return $i;
+        //                 // Get pics for this factor, default to empty array
+        //                 $pics = (array) $request->pic[$i] ?? [];
+
+        //                 // Ensure it's an array (in case only 1 pic submitted)
+        //                 $flatPics = is_array($pics) ? $pics : [$pics];
+        //                 // Flatten just in case
+        //                 // $flatPics = is_array($pics) ? $pics : [$pics];
+
+        //                 // Merge into comma-separated string
+        //                 $picMerged = implode(',', $flatPics);
+
+        //                 return $picMerged;
+        // }
+        // return 'stop';
         $validator = Validator::make($data, $validation);
 
         if ($validator->fails()) {
@@ -244,8 +261,17 @@ class PartsTroubleHistoryController extends Controller
                 // SAVE NEW Improvement Actions
                 if ($request->factor){
                     foreach ($request->factor as $i => $value){
-                        $pics = (array) ($request->pic ?? []);
-                        $picMerged = implode(',', $pics);
+                        // Get pics for this factor, default to empty array
+                        $pics = (array) $request->pic[$i] ?? [];
+
+                        // Ensure it's an array (in case only 1 pic submitted)
+                        $flatPics = is_array($pics) ? $pics : [$pics];
+                        // Flatten just in case
+                        // $flatPics = is_array($pics) ? $pics : [$pics];
+
+                        // Merge into comma-separated string
+                        $picMerged = implode(',', $flatPics);
+                        // return $picMerged;
 
                         PthsImprovements::insert([
                             'history_id'          => $history_id,

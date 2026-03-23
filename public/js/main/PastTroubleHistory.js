@@ -76,10 +76,6 @@ function resetPartsTroubleHistoryForm(formSelector, tableImprovementActions, row
     // Clear template row inputs
     $(tableImprovementActions).find('.data-row input').val('');
 
-    // initial row
-    // $('#tableBody').append(getRow(rowIndex));
-    // rowIndex++;
-
     const $tbody = $(tableImprovementActions).find('tbody');
           $tbody.html(getRow(rowIndex));
 
@@ -228,6 +224,7 @@ function initPartsTroubleHistoryTable($table, url = 'view_parts_trouble_history'
  * Bind events for buttons, forms, etc.
  */
 function bindPartsTroubleHistoryEvents($table, $form, $modal, $addButtonPTH, dtPTH, $tableIA, $addButtonIA, $exportReportButton, rowIndex) {
+    console.log('rowIndex', rowIndex);
 
     // initial check (on page load)
     updateRemoveButtons($tableIA);
@@ -250,13 +247,13 @@ function bindPartsTroubleHistoryEvents($table, $form, $modal, $addButtonPTH, dtP
     // Edit button
     $table.on('click', '.btnEdit', function () {
         const id = $(this).data('id');
-        fetchPartsTroubleHistoryById(id, $modal, $tableIA, $form, 'edit');
+        fetchPartsTroubleHistoryById(id, $modal, $tableIA, $form, 'edit', rowIndex);
     });
 
     // View button
     $table.on('click', '.btnView', function () {
         const id = $(this).data('id');
-        fetchPartsTroubleHistoryById(id, $modal, $tableIA, $form, 'view');
+        fetchPartsTroubleHistoryById(id, $modal, $tableIA, $form, 'view', rowIndex);
         // if($mode == 'view'){
         // $('#mySelect').prop('disabled', true).trigger('change.select2');
         // setTimeout(function() {
@@ -319,7 +316,9 @@ function bindPartsTroubleHistoryEvents($table, $form, $modal, $addButtonPTH, dtP
     });
 
     $addButtonIA.on('click', function () {
-        rowIndex++;
+        console.log('rowIndex vlaue', rowIndex);
+        rowIndex = $tableIA.find('.data-row').length;
+        // rowIndex++;
         const $templateRow = $tableIA.find('.data-row').first();
 
         let newRow = $templateRow.clone(false, false);
@@ -362,8 +361,6 @@ function bindPartsTroubleHistoryEvents($table, $form, $modal, $addButtonPTH, dtP
         });
 
         getPic($newSelect);
-
-        rowIndex++;
 
         updateRemoveButtons($tableIA);
     });
@@ -654,7 +651,7 @@ function savePartsTroubleHistory($form, $modal, dtPartsTroubleHistory) {
 /**
  * Fetch parts_trouble_history data by ID
  */
-function fetchPartsTroubleHistoryById(id, $modal, $tableIA, $form, $mode) {
+function fetchPartsTroubleHistoryById(id, $modal, $tableIA, $form, $mode, rowIndex) {
     $.ajax({
         type: 'GET',
         url: 'get_parts_trouble_history_by_id',
@@ -704,6 +701,7 @@ function fetchPartsTroubleHistoryById(id, $modal, $tableIA, $form, $mode) {
             $form.find('#rootCause').val(response.defects.root_cause);
             // $('#improvementActionsRemarks').val(response.improvements.improvement_actions_remarks);
 
+            rowIndex = 0;
             $tableIA.find('tbody').empty();
             for(let index = 0; index < response.improvements.length; index++){
                 let picArray;
@@ -720,25 +718,27 @@ function fetchPartsTroubleHistoryById(id, $modal, $tableIA, $form, $mode) {
                             <center><button ${$mode === 'view' ? 'disabled' : ''} class="btn btn-md btn-danger removeIA" title="Remove Row" type="button"><i class="fa fa-times"></i></button></center>
                         </td>
                         <td>
-                            <textarea ${$mode === 'view' ? 'disabled' : ''} class="form-control form-control-sm" name="factor[]">${response.improvements[index].factor}</textarea>
+                            <textarea ${$mode === 'view' ? 'disabled' : ''} class="form-control form-control-sm" name="factor[${rowIndex}]">${response.improvements[index].factor}</textarea>
                         </td>
                         <td>
-                            <textarea ${$mode === 'view' ? 'disabled' : ''} class="form-control form-control-sm" name="cause[]">${response.improvements[index].cause}</textarea>
+                            <textarea ${$mode === 'view' ? 'disabled' : ''} class="form-control form-control-sm" name="cause[${rowIndex}]">${response.improvements[index].cause}</textarea>
                         </td>
                         <td>
-                            <textarea ${$mode === 'view' ? 'disabled' : ''} class="form-control form-control-sm" name="analysis[]">${response.improvements[index].analysis}</textarea>
+                            <textarea ${$mode === 'view' ? 'disabled' : ''} class="form-control form-control-sm" name="analysis[${rowIndex}]">${response.improvements[index].analysis}</textarea>
                         </td>
                         <td>
-                            <textarea ${$mode === 'view' ? 'disabled' : ''} class="form-control form-control-sm" name="counter_measure[]">${response.improvements[index].counter_measure}</textarea>
+                            <textarea ${$mode === 'view' ? 'disabled' : ''} class="form-control form-control-sm" name="counter_measure[${rowIndex}]">${response.improvements[index].counter_measure}</textarea>
                         </td>
                         <td>
-                            <select ${$mode === 'view' ? 'disabled' : ''} class="form-control form-control-lg select2bs5 selectPic" multiple name="pic[]"></select>
+                            <select ${$mode === 'view' ? 'disabled' : ''} class="form-control form-control-lg select2bs5 selectPic" multiple name="pic[${rowIndex}][]"></select>
                         </td>
                         <td>
-                            <input ${$mode === 'view' ? 'disabled' : ''} type="date" class="form-control form-control-lg" name="implementation_date[]" value="${response.improvements[index].implementation_date}">
+                            <input ${$mode === 'view' ? 'disabled' : ''} type="date" class="form-control form-control-lg" name="implementation_date[${rowIndex}]" value="${response.improvements[index].implementation_date}">
                         </td>
                     </tr>
                 `;
+
+                rowIndex++;
 
                 // clark comment 12/29/2025 remove remarks column
                 // <td>
