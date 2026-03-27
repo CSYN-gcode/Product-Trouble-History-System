@@ -1,3 +1,11 @@
+// Global AJAX error handler
+$(document).ajaxError(function(event, xhr) {
+    if (xhr.status === 401) {
+        alert('Session expired. Redirecting...');
+        window.location.href = '/';
+    }
+});
+
 $(document).ready(function () {
     // --------------------------------------
     // Cache DOM elements
@@ -17,7 +25,8 @@ $(document).ready(function () {
     // --------------------------------------
     $.ajaxSetup({
         headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+            'X-Requested-With': 'XMLHttpRequest'
         }
     });
 

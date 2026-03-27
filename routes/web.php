@@ -98,4 +98,3 @@ Route::middleware('check_session')->group(function(){
         Route::get('/get_users', 'getUsers')->name('get_users');
     });
 });
-

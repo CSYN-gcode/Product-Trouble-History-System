@@ -20,6 +20,13 @@ class CheckSession
     {
         session_start();
         if(!isset($_SESSION['rapidx_user_id'])){
+            // 🔥 Detect AJAX / API request
+            if ($request->expectsJson() || $request->ajax()) {
+                return response()->json([
+                    'message' => 'Session expired'
+                ], 401);
+            }
+            
             return redirect('../');
         }
 

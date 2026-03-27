@@ -28,7 +28,7 @@ $user_level = 0;
 
                         // Check if the main system sent a user ID
                         // $currentUser = \App\Models\User::where('rapidx_user_id', $_SESSION['rapidx_user_id'] ?? null)->first();
-                        
+
                     @endphp
                     @break
                 @endif
@@ -85,10 +85,7 @@ $user_level = 0;
                 @yield('content_page')
                 @include('shared.pages.footer')
             </div>
-            <script type="text/javascript">
-                $(document).ready(function () {
-
-                });
+            <script>
             </script>
         </body>
     </html>

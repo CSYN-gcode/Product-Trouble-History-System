@@ -17,5 +17,12 @@ class Authenticate extends Middleware
         if (! $request->expectsJson()) {
             return route('login');
         }
+
+        // // Force JSON for AJAX/fetch
+        // if ($request->ajax() || $request->wantsJson()) {
+        //     return response()->json(['message' => 'Session expired'], 401);
+        // }
+
+        return redirect()->guest(route('login'));
     }
 }
