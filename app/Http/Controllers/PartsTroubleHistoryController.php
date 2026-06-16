@@ -409,7 +409,7 @@ class PartsTroubleHistoryController extends Controller
     public function getDeviceName(Request $request){
         $self = $this;
 
-        $section = $request->input('section'); // ts, cn, yf, ppd
+        $section = $request->input('section'); // ts, ts-f3, cn, yf, ppd
         $materials = collect();
 
         // Only run queries if a section is provided
@@ -418,7 +418,13 @@ class PartsTroubleHistoryController extends Controller
             // TS section
             if ($section == 'TS') {
                 $materials = $materials->merge($self->getMaterialsFrom('wbs_ts'));
+                $materials = $materials->merge($self->getMaterialsFrom('wbs_ts_f3'));
             }
+
+            // TS section
+            // if ($section == 'TS_F3') {
+            //     $materials = $materials->merge($self->getMaterialsFrom('wbs_ts_f3'));
+            // }
 
             // CN section
             if ($section == 'CN') {
