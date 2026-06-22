@@ -652,7 +652,13 @@ function savePartsTroubleHistory($form, $modal, dtPartsTroubleHistory) {
         },
         error: function (xhr) {
             console.error('Save failed:', xhr.responseText);
-            showError('Failed to save data.');
+            if(xhr.responseJSON.message == "CSRF token mismatch."){
+                showError('Session expired. Please re-login.');
+            }else{
+                showError('Failed to save data.', xhr.responseJSON.message);
+            }
+            // console.error('message:', xhr.responseJSON.message);
+            // showError('Failed to save data.', xhr.responseJSON.message);
         }
     });
 }
@@ -765,7 +771,7 @@ function fetchPartsTroubleHistoryById(id, $modal, $tableIA, $form, $mode, rowInd
         },
         error: function (xhr) {
             console.error('Fetch failed:', xhr.responseText);
-            showError('Failed to fetch data.');
+            showError('Failed to fetch data.', xhr.responseJSON.message);
         }
     });
 }
@@ -797,7 +803,7 @@ function updatePartsTroubleHistoryStatus(id, dtPTH) {
         },
         error: function (xhr) {
             console.error('Status update failed:', xhr.responseText);
-            showError('Failed to update status.');
+            showError('Failed to update status.', xhr.responseJSON.message);
         }
     });
 }
@@ -833,11 +839,12 @@ function showSuccess(message) {
 /**
  * SweetAlert error helper
  */
-function showError(message) {
+function showError(message, msgDetails = '') {
     Swal.fire({
         icon: 'error',
-        text: message,
-        timer: 2000,
+        // text: message + '\n' + (msgDetails ? ` Error: ${msgDetails}` : ''),
+        html: `${message} ${msgDetails ? `<br><br>Error: ${msgDetails}` : ''}`,
+        timer: 5000,
         showConfirmButton: false
     });
 }
