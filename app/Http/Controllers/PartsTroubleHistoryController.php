@@ -437,7 +437,7 @@ class PartsTroubleHistoryController extends Controller
             }
 
             // PPD section (different DB, only run if selected)
-            if ($section == 'PPD') {
+            if ($section == 'PPD' || $section == 'PPD-F3') {
                 $ppd_results = DB::connection('mysql_rapid')->select("
                     SELECT DeviceName
                     FROM tbl_dieset t1
