@@ -115,6 +115,8 @@
                                             <option value="CN">CN</option>
                                             <option value="PPD">PPD</option>
                                             <option value="YF">YF</option>
+                                            <option value="TS-F3">TS-F3</option>
+                                            <option value="PPD-F3">PPD-F3</option>
                                         </select>
                                     </div>
                                 </div>
@@ -184,6 +186,8 @@
                                         <option value="CN">CN</option>
                                         <option value="PPD">PPD</option>
                                         <option value="YF">YF</option>
+                                        <option value="TS-F3">TS-F3</option>
+                                        <option value="PPD-F3">PPD-F3</option>
                                     </select>
                                 </div>
 
@@ -330,6 +334,8 @@
                                     <option value="CN">CN</option>
                                     <option value="PPD">PPD</option>
                                     <option value="YF">YF</option>
+                                    <option value="TS-F3">TS-F3</option>
+                                    <option value="PPD-F3">PPD-F3</option>
                                 </select>
                             </div>
 
