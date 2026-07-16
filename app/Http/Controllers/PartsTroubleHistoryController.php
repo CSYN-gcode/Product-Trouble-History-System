@@ -418,13 +418,13 @@ class PartsTroubleHistoryController extends Controller
             // TS section
             if ($section == 'TS') {
                 $materials = $materials->merge($self->getMaterialsFrom('wbs_ts'));
-                $materials = $materials->merge($self->getMaterialsFrom('wbs_ts_f3'));
+                // $materials = $materials->merge($self->getMaterialsFrom('wbs_ts_f3'));
             }
 
-            // TS section
-            // if ($section == 'TS_F3') {
-            //     $materials = $materials->merge($self->getMaterialsFrom('wbs_ts_f3'));
-            // }
+            // TS-F3 section
+            if ($section == 'TS-F3') {
+                $materials = $materials->merge($self->getMaterialsFrom('wbs_ts_f3'));
+            }
 
             // CN section
             if ($section == 'CN') {
