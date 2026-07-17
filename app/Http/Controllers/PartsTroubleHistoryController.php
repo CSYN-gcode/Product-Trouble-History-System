@@ -396,8 +396,8 @@ class PartsTroubleHistoryController extends Controller
             ->table('tbl_wbs_material_kitting')
             ->select('device_name')
             ->whereNotNull('device_name')
-            ->groupBy('device_name')
-            ->orderBy('device_name')
+            ->where('device_name', '<>', '') // optional: exclude empty strings
+            ->distinct()
             ->pluck('device_name');
     }
 
@@ -438,27 +438,36 @@ class PartsTroubleHistoryController extends Controller
 
             // PPD section (different DB, only run if selected)
             if ($section == 'PPD' || $section == 'PPD-F3') {
-                $ppd_results = DB::connection('mysql_rapid')->select("
-                    SELECT DeviceName
-                    FROM tbl_dieset t1
-                    WHERE Rev = (
-                        SELECT MAX(NULLIF(Rev, ''))
-                        FROM tbl_dieset t2
-                        WHERE t2.DeviceName = t1.DeviceName
-                    )
-                    OR (Rev = '' AND NOT EXISTS (
-                        SELECT 1
-                        FROM tbl_dieset t3
-                        WHERE t3.DeviceName = t1.DeviceName
-                            AND t3.Rev <> ''
-                    ))
-                    ORDER BY DeviceName
-                ");
+                // $ppd_results = DB::connection('mysql_rapid')->select("
+                //     SELECT DeviceName
+                //     FROM tbl_dieset t1
+                //     WHERE Rev = (
+                //         SELECT MAX(NULLIF(Rev, ''))
+                //         FROM tbl_dieset t2
+                //         WHERE t2.DeviceName = t1.DeviceName
+                //     )
+                //     OR (Rev = '' AND NOT EXISTS (
+                //         SELECT 1
+                //         FROM tbl_dieset t3
+                //         WHERE t3.DeviceName = t1.DeviceName
+                //             AND t3.Rev <> ''
+                //     ))
+                //     ORDER BY DeviceName
+                // ");
 
-                // Extract only DeviceName and wrap for JSON
-                foreach ($ppd_results as $row) {
-                    $materials->push($row->DeviceName);
-                }
+                // // Extract only DeviceName and wrap for JSON
+                // foreach ($ppd_results as $row) {
+                //     $materials->push($row->DeviceName);
+                // }
+
+                $ppd_results = DB::connection('mysql_rapid')->select("
+                                SELECT DISTINCT DeviceName
+                                FROM tbl_dieset WHERE DeviceName <> '';
+                            ");
+
+                $materials = $materials->merge(
+                    collect($ppd_results)->pluck('DeviceName')
+                );
             }
 
             // Deduplicate, sort, and format for JSON
