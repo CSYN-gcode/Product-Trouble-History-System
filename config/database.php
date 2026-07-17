@@ -123,6 +123,26 @@ return [
             ]) : [],
         ],
 
+        'wbs_ts_oqc' => [
+            'driver' => 'mysql',
+            'url' => env('DATABASE_URL'),
+            'host' => env('DB_HOST_PMI_TS_OQC', '192.168.3.246'),
+            'port' => env('DB_PORT_PMI_TS_OQC', '3306'),
+            'database' => env('DB_DATABASE_PMI_TS_OQC', 'forge'),
+            'username' => env('DB_USERNAME_PMI_TS_OQC', 'forge'),
+            'password' => env('DB_PASSWORD_PMI_TS_OQC', ''),
+            'unix_socket' => env('DB_SOCKET', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'strict' => true,
+            'engine' => null,
+            'options' => extension_loaded('pdo_mysql') ? array_filter([
+                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+            ]) : [],
+        ],
+
         'wbs_ts_f3' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
@@ -131,6 +151,26 @@ return [
             'database' => env('DB_DATABASE_PMI_F3_TS', 'forge'),
             'username' => env('DB_USERNAME_PMI_F3_TS', 'forge'),
             'password' => env('DB_PASSWORD_PMI_F3_TS', ''),
+            'unix_socket' => env('DB_SOCKET', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'strict' => true,
+            'engine' => null,
+            'options' => extension_loaded('pdo_mysql') ? array_filter([
+                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+            ]) : [],
+        ],
+
+        'wbs_ts_f3_oqc' => [
+            'driver' => 'mysql',
+            'url' => env('DATABASE_URL'),
+            'host' => env('DB_HOST_PMI_F3_TS_OQC', '192.168.180.11'),
+            'port' => env('DB_PORT_PMI_F3_TS_OQC', '3306'),
+            'database' => env('DB_DATABASE_PMI_F3_TS_OQC', 'forge'),
+            'username' => env('DB_USERNAME_PMI_F3_TS_OQC', 'forge'),
+            'password' => env('DB_PASSWORD_PMI_F3_TS_OQC', ''),
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',

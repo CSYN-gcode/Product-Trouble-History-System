@@ -401,6 +401,16 @@ class PartsTroubleHistoryController extends Controller
             ->pluck('device_name');
     }
 
+    private function getOQCMaterialsFrom($connection){
+        return DB::connection($connection)
+            ->table('oqc_inspections')
+            ->select('device_name')
+            ->whereNotNull('device_name')
+            ->where('device_name', '<>', '') // optional: exclude empty strings
+            ->distinct()
+            ->pluck('device_name');
+    }
+
     public function getUsers(Request $request){
         $users = User::where('status', 0)->get();
         return response()->json(['users_data' => $users]);
@@ -418,12 +428,13 @@ class PartsTroubleHistoryController extends Controller
             // TS section
             if ($section == 'TS') {
                 $materials = $materials->merge($self->getMaterialsFrom('wbs_ts'));
-                // $materials = $materials->merge($self->getMaterialsFrom('wbs_ts_f3'));
+                $materials = $materials->merge($self->getOQCMaterialsFrom('wbs_ts_oqc'));
             }
 
             // TS-F3 section
             if ($section == 'TS-F3') {
                 $materials = $materials->merge($self->getMaterialsFrom('wbs_ts_f3'));
+                $materials = $materials->merge($self->getOQCMaterialsFrom('wbs_ts_f3_oqc'));
             }
 
             // CN section
@@ -438,28 +449,6 @@ class PartsTroubleHistoryController extends Controller
 
             // PPD section (different DB, only run if selected)
             if ($section == 'PPD' || $section == 'PPD-F3') {
-                // $ppd_results = DB::connection('mysql_rapid')->select("
-                //     SELECT DeviceName
-                //     FROM tbl_dieset t1
-                //     WHERE Rev = (
-                //         SELECT MAX(NULLIF(Rev, ''))
-                //         FROM tbl_dieset t2
-                //         WHERE t2.DeviceName = t1.DeviceName
-                //     )
-                //     OR (Rev = '' AND NOT EXISTS (
-                //         SELECT 1
-                //         FROM tbl_dieset t3
-                //         WHERE t3.DeviceName = t1.DeviceName
-                //             AND t3.Rev <> ''
-                //     ))
-                //     ORDER BY DeviceName
-                // ");
-
-                // // Extract only DeviceName and wrap for JSON
-                // foreach ($ppd_results as $row) {
-                //     $materials->push($row->DeviceName);
-                // }
-
                 $ppd_results = DB::connection('mysql_rapid')->select("
                                 SELECT DISTINCT DeviceName
                                 FROM tbl_dieset WHERE DeviceName <> '';
