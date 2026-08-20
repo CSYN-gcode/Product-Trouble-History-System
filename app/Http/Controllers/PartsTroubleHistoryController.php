@@ -397,6 +397,7 @@ class PartsTroubleHistoryController extends Controller
             ->select('device_name')
             ->whereNotNull('device_name')
             ->where('device_name', '<>', '') // optional: exclude empty strings
+            ->whereIn('status', ['X','O']) // optional: exclude empty strings
             ->distinct()
             ->pluck('device_name');
     }
@@ -407,6 +408,7 @@ class PartsTroubleHistoryController extends Controller
             ->select('device_name')
             ->whereNotNull('device_name')
             ->where('device_name', '<>', '') // optional: exclude empty strings
+            ->where('lot_accepted', '=', 1)
             ->distinct()
             ->pluck('device_name');
     }
@@ -450,12 +452,21 @@ class PartsTroubleHistoryController extends Controller
             // PPD section (different DB, only run if selected)
             if ($section == 'PPD' || $section == 'PPD-F3') {
                 $ppd_results = DB::connection('mysql_rapid')->select("
-                                SELECT DISTINCT DeviceName
-                                FROM tbl_dieset WHERE DeviceName <> '';
+                                SELECT DISTINCT ItemName
+                                FROM tbl_POReceived WHERE ItemName <> '';
                             ");
 
+                $special_devices = DB::connection('mysql')->table('special_device_names')
+                                    ->select('device_name')
+                                    ->where('status', 0)
+                                    ->get();
+
                 $materials = $materials->merge(
-                    collect($ppd_results)->pluck('DeviceName')
+                    collect($ppd_results)->pluck('ItemName')
+                );
+
+                $materials = $materials->merge(
+                    collect($special_devices)->pluck('device_name')
                 );
             }
 
