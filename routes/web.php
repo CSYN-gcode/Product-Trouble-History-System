@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 // Controllers
 use App\Http\Controllers\DefectsController;
+use App\Http\Controllers\SpecialDeviceNameController;
 use App\Http\Controllers\SituationsController;
 use App\Http\Controllers\PartsTroubleHistoryController;
 
@@ -49,6 +50,10 @@ Route::middleware('check_session')->group(function(){
         return view('situations');
     })->name('situations');
 
+    Route::get('/special_device_name', function () {
+        return view('special_device_name');
+    })->name('special_device_name');
+
     Route::get('/past_trouble_history_record', function () {
         return view('past_trouble_history_record');
     })->name('past_trouble_history_record');
@@ -82,6 +87,14 @@ Route::middleware('check_session')->group(function(){
         Route::get('/get_situations_by_id', 'getSituationsById')->name('get_situations_by_id');
         Route::post('/update_situations_status', 'updateSituationsStatus')->name('update_situations_status');
         Route::get('/get_situations', 'getSituations')->name('get_situations');
+    });
+
+    // Special Device Names CONTROLLER
+    Route::controller(SpecialDeviceNameController::class)->group(function () {
+        Route::get('/view_special_device_names', 'viewSpecialDeviceNamesInfo')->name('view_special_device_names');
+        Route::post('/add_special_device_names', 'addSpecialDeviceNamesInfo')->name('add_special_device_names');
+        Route::get('/get_special_device_names_by_id', 'getSpecialDeviceNamesById')->name('get_special_device_names_by_id');
+        Route::post('/update_special_device_names_status', 'updateSpecialDeviceNamesStatus')->name('update_special_device_names_status');
     });
 
     // Past Trouble History CONTROLLER

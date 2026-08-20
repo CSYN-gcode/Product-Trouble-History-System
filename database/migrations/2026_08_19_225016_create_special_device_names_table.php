@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSituationsTable extends Migration
+class CreateSpecialDeviceNamesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateSituationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('situations', function (Blueprint $table) {
+        Schema::create('special_device_names', function (Blueprint $table) {
             $table->id();
-            $table->string('situation_name');
+            $table->string('device_name');
             $table->text('description')->nullable();
             $table->string('status')->default(0)->comment('0 - Active, 1 - Inactive');
             $table->timestamps();
@@ -29,6 +29,6 @@ class CreateSituationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('situations');
+        Schema::dropIfExists('special_device_names');
     }
 }

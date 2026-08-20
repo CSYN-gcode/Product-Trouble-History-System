@@ -44,6 +44,13 @@
                     </a>
                 </li>
 
+                <li class="nav-item has-treeview">
+                    <a href="{{ route('special_device_names') }}" class="nav-link">
+                      <i class="far fa-times-circle nav-icon"></i>
+                      <p>Special Device Names</p>
+                    </a>
+                </li>
+
                 <li class="nav-header font-weight-bold">Records</li>
 
                 <li class="nav-item has-treeview">

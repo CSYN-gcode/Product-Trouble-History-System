@@ -58,6 +58,13 @@
                         <p>Situations</p>
                         </a>
                     </li>
+
+                    <li class="nav-item has-treeview">
+                        <a href="{{ route('special_device_name') }}" class="nav-link">
+                        <i class="fas fa-list-ul nav-icon"></i>
+                        <p>Special Device Names</p>
+                        </a>
+                    </li>
                 @endif
 
                 <li class="nav-header font-weight-bold">Records</li>
